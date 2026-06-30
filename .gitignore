@@ -1,0 +1,8 @@
+# Directories
+.serena/
+dist/
+node_modules/
+
+# Files
+*.env
+*.tgz
