@@ -3696,6 +3696,14 @@
     "decimals": 6
   },
   {
+    "chainId": 1890,
+    "slug": "lightlink",
+    "address": "0x81a1f39f7394c4849e4261aa02aac73865d13774",
+    "symbol": "WBNB.b",
+    "name": "Wrapped BNB",
+    "decimals": 18
+  },
+  {
     "chainId": 2020,
     "slug": "ronin",
     "address": "0x0b7007c13325c48911f73a2dad5fa5dcbf808adc",
@@ -3941,6 +3949,14 @@
     "address": "0x8c9037d1ef5c6d1f6816278c7aaf5491d24cd527",
     "symbol": "MOXIE",
     "name": "Moxie",
+    "decimals": 18
+  },
+  {
+    "chainId": 8453,
+    "slug": "base",
+    "address": "0x8d2757ea27aabf172da4cca4e5474c76016e3dc5",
+    "symbol": "clBTC",
+    "name": "clBTC",
     "decimals": 18
   },
   {
