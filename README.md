@@ -1,11 +1,11 @@
 # @prb/token-registry
 
-> Typed, isomorphic registry of EVM chains and ERC-20 tokens with **zero runtime dependencies**.
+> Typed, isomorphic registry of EVM chains and ERC-20 tokens with **viem as its only runtime dependency**.
 
 A single source of truth for EVM chain metadata and curated ERC-20 token data — addresses, symbols, decimals, and
 CoinGecko ids — with a discriminated-union type model that distinguishes plain tokens from **stablecoins**, **wrapped
-natives**, and **native mirrors**. The package is pure data plus lookup helpers: no network access, no `node:*` imports,
-so it runs unchanged in Node and the browser.
+natives**, and **native mirrors**. The package is data plus lookup helpers: no network access, no `node:*` imports, and
+only `viem` at runtime, so it runs unchanged in Node and the browser.
 
 - **34** EVM chains
 - **615** ERC-20 tokens across four kinds
@@ -75,8 +75,7 @@ case-sensitive.
 **Types & guards** — `Chain`, `NativeCurrency`, `Token`, `Stablecoin`, `WrappedToken`, `MirrorToken`, `StandardToken`,
 `Address`, and the guards `isStandard` / `isStablecoin` / `isWrapped` / `isMirror`.
 
-Addresses are stored lowercased; lookups are case-insensitive. No keccak/EIP-55 checksumming is performed, which keeps
-the package dependency-free.
+Addresses are stored lowercased; lookups are case-insensitive. No keccak/EIP-55 checksumming is performed.
 
 ## Contributing
 

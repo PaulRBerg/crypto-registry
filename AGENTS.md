@@ -1,12 +1,13 @@
 # AGENTS.md
 
-Agent guidance for `@prb/token-registry`. Keep changes surgical and the package zero-dependency and isomorphic.
+Agent guidance for `@prb/token-registry`. Keep changes surgical and the package viem-only at runtime and isomorphic.
 
 ## Stack
 
 - TypeScript, ESM-only (`"type": "module"`), built with `tsc` (no bundler).
 - Package manager: **bun** (`bun@1.3.14`). Configs come from `@prb/devkit`.
 - Recipes via **just**. Typecheck uses `tsgo` (`@typescript/native-preview`).
+- Runtime dependency: **viem** only.
 
 ## Commands
 
@@ -56,8 +57,8 @@ If any command fails, fix only the errors in files you changed.
 
 ## Hard constraints
 
-- **Zero runtime dependencies.** Nothing in `src/` may import a third-party package or a `node:*` module — the package
-  must run unchanged in the browser. `viem` is a dev-only dependency used solely by `scripts/`.
+- **Runtime dependencies.** `viem` is the only third-party package allowed in `src/`. Nothing in `src/` may import a
+  `node:*` module; the package must run unchanged in the browser.
 - ESM-only. Use explicit `.js` extensions on every relative import in `src/` (e.g.
   `import { Token } from "./types.js"`); `tsc` emits them verbatim.
 - Addresses are stored lowercased; comparisons are case-insensitive and keccak-free. Do not add EIP-55 checksumming.
@@ -73,8 +74,8 @@ then run `just enrich`:
   writes `enriched.json`, then runs codegen. Re-run codegen only (no network) with `bun scripts/enrich.ts --cached`.
 - `scripts/codegen.ts` — classifies (precedence: stablecoin > wrapped > mirror > standard) and emits the four data
   modules.
-- `src/chains/chains.ts` is also generated (from the prb-finance chain registry); regenerate it from that source rather
-  than editing entries by hand.
+- `src/chains/chains.ts` keeps the supported evm-atlas chain set local, maps those slugs to `viem/chains`, and layers
+  local Atlas/accounting metadata on top. Do not widen support to every viem chain.
 
 These generated files are excluded from Biome in `biome.jsonc` to stay compact (one row per line); they are still
 typechecked.

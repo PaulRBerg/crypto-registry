@@ -6,5 +6,18 @@
     // The only entries needed here are the committed-but-generated artifacts of
     // scripts/enrich.ts, kept compact (one row per line) instead of Biome-reflowed.
     "includes": ["**/*.{js,json,jsonc,ts}", "!src/tokens/data", "!scripts/enriched.json"]
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["package.json"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            // viem is intentionally both bundled runtime dependency and peer contract.
+            "noDuplicateDependencies": "off"
+          }
+        }
+      }
+    }
+  ]
 }

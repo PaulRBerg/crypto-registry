@@ -1,8 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { CHAINS } from "./chains.js";
+import { CHAINS, VIEM_CHAINS_BY_SLUG } from "./chains.js";
 import { allChains, getChain, getChainByName, getChainBySlug } from "./lookup.js";
 
 const LOWERCASE_ADDRESS = /^0x[0-9a-f]{40}$/;
+const viemChainsBySlug = VIEM_CHAINS_BY_SLUG as Record<
+  string,
+  (typeof VIEM_CHAINS_BY_SLUG)[keyof typeof VIEM_CHAINS_BY_SLUG]
+>;
 
 describe("chain registry", () => {
   it("exposes every chain", () => {
@@ -17,6 +21,21 @@ describe("chain registry", () => {
 
   it("every native currency uses 18 decimals", () => {
     for (const chain of CHAINS) expect(chain.nativeCurrency.decimals).toBe(18);
+  });
+
+  it("sources chain ids and native currencies from the supported viem mapping", () => {
+    expect(Object.keys(VIEM_CHAINS_BY_SLUG).sort()).toEqual(
+      CHAINS.map((chain) => chain.slug).sort()
+    );
+
+    for (const chain of CHAINS) {
+      const viemChain = viemChainsBySlug[chain.slug];
+      expect(viemChain).toBeDefined();
+      expect(chain.chainId).toBe(viemChain.id);
+      expect(chain.nativeCurrency.decimals).toBe(viemChain.nativeCurrency.decimals);
+      expect(chain.nativeCurrency.name).toBe(viemChain.nativeCurrency.name);
+      expect(chain.nativeCurrency.symbol).toBe(viemChain.nativeCurrency.symbol);
+    }
   });
 
   it("wrapped/mirror addresses are lowercase 40-hex", () => {
@@ -53,6 +72,13 @@ describe("getChainByName", () => {
     expect(getChainByName("ethereum")?.slug).toBe("mainnet");
     expect(getChainByName("matic")?.slug).toBe("polygon");
     expect(getChainByName("avax")?.slug).toBe("avalanche");
+  });
+
+  it("resolves differing viem display names as aliases", () => {
+    for (const chain of CHAINS) {
+      const viemName = viemChainsBySlug[chain.slug].name;
+      if (viemName !== chain.name) expect(getChainByName(viemName)?.chainId).toBe(chain.chainId);
+    }
   });
 
   it("returns undefined for unknown names", () => {

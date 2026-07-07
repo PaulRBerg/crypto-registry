@@ -13,10 +13,9 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { PublicClient, Chain as ViemChain } from "viem";
+import type { PublicClient } from "viem";
 import { createPublicClient, fromHex, http } from "viem";
-import * as viemChains from "viem/chains";
-import { CHAINS } from "../src/chains/chains.js";
+import { CHAINS, VIEM_CHAINS_BY_SLUG } from "../src/chains/chains.js";
 import { STABLECOIN_FAMILIES } from "./classification.js";
 import { generate } from "./codegen.js";
 
@@ -26,16 +25,6 @@ const TOKEN_SOURCE_DIR =
 const CACHE_PATH = join(HERE, "enriched.json");
 const CHAIN_ID_BY_SLUG = new Map(CHAINS.map((chain) => [chain.slug, chain.chainId]));
 const TOKEN_SOURCE_SLUG: Partial<Record<string, string>> = { mainnet: "ethereum" };
-
-/** Map registry slug -> viem/chains export key (only where they differ). */
-const VIEM_KEY: Partial<Record<string, keyof typeof viemChains>> = {
-  "arbitrum-nova": "arbitrumNova",
-  "core-dao": "coreDao",
-  hyperevm: "hyperEvm",
-  lightlink: "lightlinkPhoenix",
-  mainnet: "mainnet",
-  "world-chain": "worldchain",
-};
 
 /** Preferred RPC overrides (from cryptfolio RpcUrl), keyed by slug. */
 const RPC_OVERRIDE: Partial<Record<string, string>> = {
@@ -124,7 +113,13 @@ export type EnrichedToken = {
 const lc = (a: string): `0x${string}` => a.toLowerCase() as `0x${string}`;
 const ADDRESS_RE = /^0x[0-9a-f]{40}$/;
 const ADDRESS_IN_URL = /0x[0-9a-fA-F]{40}/;
-const VIEM_CHAINS = viemChains as Record<string, ViemChain>;
+
+function viemChainForSlug(slug: string) {
+  if (Object.hasOwn(VIEM_CHAINS_BY_SLUG, slug)) {
+    return VIEM_CHAINS_BY_SLUG[slug as keyof typeof VIEM_CHAINS_BY_SLUG];
+  }
+  return undefined;
+}
 
 function isNullableString(value: unknown): value is string | null {
   return value === null || typeof value === "string";
@@ -206,9 +201,8 @@ function buildUniverse(): Map<string, Set<`0x${string}`>> {
 }
 
 function clientFor(slug: string, useDefault = false): PublicClient {
-  const viemKey = VIEM_KEY[slug] ?? slug;
-  const chain = VIEM_CHAINS[viemKey];
-  if (!chain) throw new Error(`no viem chain mapping for ${slug} (tried ${viemKey})`);
+  const chain = viemChainForSlug(slug);
+  if (!chain) throw new Error(`no viem chain mapping for ${slug}`);
 
   const override = RPC_OVERRIDE[slug];
   const transport = !useDefault && override ? http(override) : http();

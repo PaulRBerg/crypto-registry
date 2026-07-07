@@ -3,7 +3,7 @@
  *
  * All addresses in this registry are stored {@link normalizeAddress | normalized}
  * to lowercase. No EIP-55 checksum casing is applied — comparisons are
- * case-insensitive and keccak-free to keep the package dependency-free.
+ * case-insensitive and keccak-free.
  */
 export type Address = `0x${string}`;
 

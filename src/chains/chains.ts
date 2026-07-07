@@ -1,458 +1,419 @@
-import type { Chain } from "./types.js";
+import type { Chain as ViemChain } from "viem/chains";
+import {
+  abstract,
+  arbitrum,
+  arbitrumNova,
+  avalanche,
+  base,
+  berachain,
+  blast,
+  bsc,
+  celo,
+  chiliz,
+  coreDao,
+  fantom,
+  gnosis,
+  hyperEvm,
+  iotex,
+  lightlinkPhoenix,
+  linea,
+  mainnet,
+  mode,
+  monad,
+  morph,
+  optimism,
+  polygon,
+  ronin,
+  scroll,
+  sei,
+  sonic,
+  sophon,
+  superseed,
+  unichain,
+  worldchain,
+  xdc,
+  zksync,
+  zora,
+} from "viem/chains";
+import type { Address } from "../address.js";
+import type { Chain, ChainExplorer } from "./types.js";
 
-/**
- * Every EVM chain supported by the registry.
- *
- * Generated from the prb-finance chain registry; addresses are lowercased.
- * Native-currency symbol/name/decimals and chain ids come from viem.
- */
-export const CHAINS: readonly Chain[] = [
-  {
-    aliases: [],
-    chainId: 2741,
+const CHAIN_SLUGS = [
+  "abstract",
+  "arbitrum",
+  "arbitrum-nova",
+  "avalanche",
+  "base",
+  "berachain",
+  "blast",
+  "bsc",
+  "celo",
+  "chiliz",
+  "core-dao",
+  "mainnet",
+  "fantom",
+  "gnosis",
+  "hyperevm",
+  "iotex",
+  "lightlink",
+  "linea",
+  "mode",
+  "monad",
+  "morph",
+  "optimism",
+  "polygon",
+  "ronin",
+  "scroll",
+  "sei",
+  "sonic",
+  "sophon",
+  "superseed",
+  "unichain",
+  "world-chain",
+  "xdc",
+  "zksync",
+  "zora",
+] as const;
+
+type ChainSlug = (typeof CHAIN_SLUGS)[number];
+
+const TRAILING_SLASHES = /\/+$/;
+
+/** @internal viem chains for the evm-atlas target set only. */
+export const VIEM_CHAINS_BY_SLUG = {
+  abstract,
+  arbitrum,
+  "arbitrum-nova": arbitrumNova,
+  avalanche,
+  base,
+  berachain,
+  blast,
+  bsc,
+  celo,
+  chiliz,
+  "core-dao": coreDao,
+  mainnet,
+  fantom,
+  gnosis,
+  hyperevm: hyperEvm,
+  iotex,
+  lightlink: lightlinkPhoenix,
+  linea,
+  mode,
+  monad,
+  morph,
+  optimism,
+  polygon,
+  ronin,
+  scroll,
+  sei,
+  sonic,
+  sophon,
+  superseed,
+  unichain,
+  "world-chain": worldchain,
+  xdc,
+  zksync,
+  zora,
+} as const satisfies Record<ChainSlug, ViemChain>;
+
+type LocalChainMetadata = {
+  aliases?: readonly string[];
+  coinGeckoPlatformId?: string;
+  explorer?: ChainExplorer;
+  mirrorAddresses?: readonly Address[];
+  name: string;
+  nativeCoinGeckoId: string;
+  wrappedNativeAddress?: Address;
+};
+
+const LOCAL_CHAIN_METADATA = {
+  abstract: {
     coinGeckoPlatformId: "abstract",
     name: "Abstract",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "ETH", symbol: "ETH" },
-    slug: "abstract",
-    explorer: {
-      addressUrl: "https://abscan.org/address/{address}",
-      txUrl: "https://abscan.org/tx/{tx_hash}",
-    },
+    nativeCoinGeckoId: "ethereum",
   },
-  {
+  arbitrum: {
     aliases: ["Arbitrum One"],
-    chainId: 42_161,
     coinGeckoPlatformId: "arbitrum-one",
     name: "Arbitrum",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "arbitrum",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
-    explorer: {
-      addressUrl: "https://arbiscan.io/address/{address}",
-      txUrl: "https://arbiscan.io/tx/{tx_hash}",
-    },
   },
-  {
-    aliases: [],
-    chainId: 42_170,
+  "arbitrum-nova": {
     coinGeckoPlatformId: "arbitrum-nova",
     name: "Arbitrum Nova",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "arbitrum-nova",
+    nativeCoinGeckoId: "ethereum",
     explorer: {
       addressUrl: "https://arbitrum-nova.blockscout.com/address/{address}",
       txUrl: "https://arbitrum-nova.blockscout.com/tx/{tx_hash}",
     },
   },
-  {
+  avalanche: {
     aliases: ["avalanche c-chain", "avax"],
-    chainId: 43_114,
     coinGeckoPlatformId: "avalanche",
     name: "Avalanche",
-    nativeCurrency: { coinGeckoId: "avalanche-2", decimals: 18, name: "Avalanche", symbol: "AVAX" },
-    slug: "avalanche",
+    nativeCoinGeckoId: "avalanche-2",
     wrappedNativeAddress: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
     explorer: {
       addressUrl: "https://snowscan.xyz/address/{address}",
       txUrl: "https://snowscan.xyz/tx/{tx_hash}",
     },
   },
-  {
-    aliases: [],
-    chainId: 8453,
+  base: {
     coinGeckoPlatformId: "base",
     mirrorAddresses: ["0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000"],
     name: "Base",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "base",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x4200000000000000000000000000000000000006",
-    explorer: {
-      addressUrl: "https://basescan.org/address/{address}",
-      txUrl: "https://basescan.org/tx/{tx_hash}",
-    },
   },
-  {
-    aliases: [],
-    chainId: 80_094,
+  berachain: {
     coinGeckoPlatformId: "berachain",
     name: "Berachain",
-    slug: "berachain",
+    nativeCoinGeckoId: "berachain-bera",
     wrappedNativeAddress: "0x6969696969696969696969696969696969696969",
-    explorer: {
-      addressUrl: "https://berascan.com/address/{address}",
-      txUrl: "https://berascan.com/tx/{tx_hash}",
-    },
-    nativeCurrency: {
-      coinGeckoId: "berachain-bera",
-      decimals: 18,
-      name: "BERA Token",
-      symbol: "BERA",
-    },
   },
-  {
-    aliases: [],
-    chainId: 81_457,
+  blast: {
     coinGeckoPlatformId: "blast",
     name: "Blast",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "blast",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x4300000000000000000000000000000000000004",
-    explorer: {
-      addressUrl: "https://blastscan.io/address/{address}",
-      txUrl: "https://blastscan.io/tx/{tx_hash}",
-    },
   },
-  {
+  bsc: {
     aliases: ["binance smart chain", "bnb", "BNB Smart Chain"],
-    chainId: 56,
     coinGeckoPlatformId: "binance-smart-chain",
     name: "BNB Chain",
-    nativeCurrency: { coinGeckoId: "binancecoin", decimals: 18, name: "BNB", symbol: "BNB" },
-    slug: "bsc",
+    nativeCoinGeckoId: "binancecoin",
     wrappedNativeAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
-    explorer: {
-      addressUrl: "https://bscscan.com/address/{address}",
-      txUrl: "https://bscscan.com/tx/{tx_hash}",
-    },
   },
-  {
-    aliases: [],
-    chainId: 42_220,
+  celo: {
     coinGeckoPlatformId: "celo",
     mirrorAddresses: ["0x471ece3750da237f93b8e339c536989b8978a438"],
     name: "Celo",
-    nativeCurrency: { coinGeckoId: "celo", decimals: 18, name: "CELO", symbol: "CELO" },
-    slug: "celo",
-    explorer: {
-      addressUrl: "https://celoscan.io/address/{address}",
-      txUrl: "https://celoscan.io/tx/{tx_hash}",
-    },
+    nativeCoinGeckoId: "celo",
   },
-  {
+  chiliz: {
     aliases: ["Chiliz Chain"],
-    chainId: 88_888,
     coinGeckoPlatformId: "chiliz",
     name: "Chiliz",
-    nativeCurrency: { coinGeckoId: "chiliz", decimals: 18, name: "CHZ", symbol: "CHZ" },
-    slug: "chiliz",
-    explorer: {
-      addressUrl: "https://scan.chiliz.com/address/{address}",
-      txUrl: "https://scan.chiliz.com/tx/{tx_hash}",
-    },
+    nativeCoinGeckoId: "chiliz",
   },
-  {
-    aliases: [],
-    chainId: 1116,
+  "core-dao": {
     coinGeckoPlatformId: "core",
     name: "Core Dao",
-    nativeCurrency: { coinGeckoId: "coredaoorg", decimals: 18, name: "Core", symbol: "CORE" },
-    slug: "core-dao",
-    explorer: {
-      addressUrl: "https://scan.coredao.org/address/{address}",
-      txUrl: "https://scan.coredao.org/tx/{tx_hash}",
-    },
+    nativeCoinGeckoId: "coredaoorg",
   },
-  {
-    aliases: ["eth", "ethereum", "ethereum mainnet"],
-    chainId: 1,
-    coinGeckoPlatformId: "ethereum",
-    name: "Ethereum",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "mainnet",
-    wrappedNativeAddress: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-    explorer: {
-      addressUrl: "https://etherscan.io/address/{address}",
-      txUrl: "https://etherscan.io/tx/{tx_hash}",
-    },
-  },
-  {
+  fantom: {
     aliases: ["fantom opera", "ftm"],
-    chainId: 250,
     coinGeckoPlatformId: "fantom",
     name: "Fantom",
-    nativeCurrency: { coinGeckoId: "fantom", decimals: 18, name: "Fantom", symbol: "FTM" },
-    slug: "fantom",
+    nativeCoinGeckoId: "fantom",
     wrappedNativeAddress: "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83",
-    explorer: {
-      addressUrl: "https://ftmscan.com/address/{address}",
-      txUrl: "https://ftmscan.com/tx/{tx_hash}",
-    },
   },
-  {
+  gnosis: {
     aliases: ["gnosis chain"],
-    chainId: 100,
     coinGeckoPlatformId: "xdai",
     name: "Gnosis",
-    nativeCurrency: { coinGeckoId: "dai", decimals: 18, name: "xDAI", symbol: "XDAI" },
-    slug: "gnosis",
+    nativeCoinGeckoId: "dai",
     wrappedNativeAddress: "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
-    explorer: {
-      addressUrl: "https://gnosisscan.io/address/{address}",
-      txUrl: "https://gnosisscan.io/tx/{tx_hash}",
-    },
   },
-  {
+  hyperevm: {
     aliases: ["hyper evm", "hyperliquid"],
-    chainId: 999,
     coinGeckoPlatformId: "hyperevm",
     name: "HyperEVM",
-    nativeCurrency: { coinGeckoId: "hyperliquid", decimals: 18, name: "HYPE", symbol: "HYPE" },
-    slug: "hyperevm",
+    nativeCoinGeckoId: "hyperliquid",
     wrappedNativeAddress: "0x5555555555555555555555555555555555555555",
-    explorer: {
-      addressUrl: "https://hyperevmscan.io/address/{address}",
-      txUrl: "https://hyperevmscan.io/tx/{tx_hash}",
-    },
   },
-  {
-    aliases: [],
-    chainId: 4689,
+  iotex: {
     coinGeckoPlatformId: "iotex",
     name: "IoTeX",
-    nativeCurrency: { coinGeckoId: "iotex", decimals: 18, name: "IoTeX", symbol: "IOTX" },
-    slug: "iotex",
-    explorer: {
-      addressUrl: "https://iotexscan.io/address/{address}",
-      txUrl: "https://iotexscan.io/tx/{tx_hash}",
-    },
+    nativeCoinGeckoId: "iotex",
   },
-  {
+  lightlink: {
     aliases: ["lightlink phoenix", "LightLink Phoenix Mainnet"],
-    chainId: 1890,
     coinGeckoPlatformId: "lightlink",
     name: "Lightlink",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "lightlink",
-    explorer: {
-      addressUrl: "https://phoenix.lightlink.io/address/{address}",
-      txUrl: "https://phoenix.lightlink.io/tx/{tx_hash}",
-    },
+    nativeCoinGeckoId: "ethereum",
   },
-  {
+  linea: {
     aliases: ["Linea Mainnet"],
-    chainId: 59_144,
     coinGeckoPlatformId: "linea",
     name: "Linea",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Linea Ether", symbol: "ETH" },
-    slug: "linea",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f",
-    explorer: {
-      addressUrl: "https://lineascan.build/address/{address}",
-      txUrl: "https://lineascan.build/tx/{tx_hash}",
-    },
   },
-  {
+  mainnet: {
+    aliases: ["eth", "ethereum", "ethereum mainnet"],
+    coinGeckoPlatformId: "ethereum",
+    name: "Ethereum",
+    nativeCoinGeckoId: "ethereum",
+    wrappedNativeAddress: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  },
+  mode: {
     aliases: ["Mode Mainnet"],
-    chainId: 34_443,
     coinGeckoPlatformId: "mode",
     name: "Mode",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "mode",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x4200000000000000000000000000000000000006",
     explorer: {
       addressUrl: "https://explorer.mode.network/address/{address}",
       txUrl: "https://explorer.mode.network/tx/{tx_hash}",
     },
   },
-  {
-    aliases: [],
-    chainId: 143,
+  monad: {
     coinGeckoPlatformId: "monad",
     name: "Monad",
-    nativeCurrency: { coinGeckoId: "monad", decimals: 18, name: "Monad", symbol: "MON" },
-    slug: "monad",
+    nativeCoinGeckoId: "monad",
     wrappedNativeAddress: "0x3bd359c1119da7da1d913d1c4d2b7c461115433a",
-    explorer: {
-      addressUrl: "https://monadscan.com/address/{address}",
-      txUrl: "https://monadscan.com/tx/{tx_hash}",
-    },
   },
-  {
-    aliases: [],
-    chainId: 2818,
+  morph: {
     coinGeckoPlatformId: "morph-l2",
     name: "Morph",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "morph",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x5300000000000000000000000000000000000011",
-    explorer: {
-      addressUrl: "https://explorer.morphl2.io/address/{address}",
-      txUrl: "https://explorer.morphl2.io/tx/{tx_hash}",
-    },
   },
-  {
+  optimism: {
     aliases: ["op", "OP Mainnet"],
-    chainId: 10,
     coinGeckoPlatformId: "optimistic-ethereum",
     mirrorAddresses: ["0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000"],
     name: "Optimism",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "optimism",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x4200000000000000000000000000000000000006",
-    explorer: {
-      addressUrl: "https://optimistic.etherscan.io/address/{address}",
-      txUrl: "https://optimistic.etherscan.io/tx/{tx_hash}",
-    },
   },
-  {
+  polygon: {
     aliases: ["matic", "pol"],
-    chainId: 137,
     coinGeckoPlatformId: "polygon-pos",
     mirrorAddresses: ["0x0000000000000000000000000000000000001010"],
     name: "Polygon",
-    slug: "polygon",
+    nativeCoinGeckoId: "polygon-ecosystem-token",
     wrappedNativeAddress: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
-    explorer: {
-      addressUrl: "https://polygonscan.com/address/{address}",
-      txUrl: "https://polygonscan.com/tx/{tx_hash}",
-    },
-    nativeCurrency: {
-      coinGeckoId: "polygon-ecosystem-token",
-      decimals: 18,
-      name: "POL",
-      symbol: "POL",
-    },
   },
-  {
-    aliases: [],
-    chainId: 2020,
+  ronin: {
     coinGeckoPlatformId: "ronin",
     name: "Ronin",
-    nativeCurrency: { coinGeckoId: "ronin", decimals: 18, name: "RON", symbol: "RON" },
-    slug: "ronin",
-    explorer: {
-      addressUrl: "https://app.roninchain.com/address/{address}",
-      txUrl: "https://app.roninchain.com/tx/{tx_hash}",
-    },
+    nativeCoinGeckoId: "ronin",
   },
-  {
-    aliases: [],
-    chainId: 534_352,
+  scroll: {
     coinGeckoPlatformId: "scroll",
     name: "Scroll",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "scroll",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x5300000000000000000000000000000000000004",
-    explorer: {
-      addressUrl: "https://scrollscan.com/address/{address}",
-      txUrl: "https://scrollscan.com/tx/{tx_hash}",
-    },
   },
-  {
+  sei: {
     aliases: ["Sei Network"],
-    chainId: 1329,
     coinGeckoPlatformId: "sei-v2",
     name: "Sei",
-    nativeCurrency: { coinGeckoId: "sei-network", decimals: 18, name: "Sei", symbol: "SEI" },
-    slug: "sei",
+    nativeCoinGeckoId: "sei-network",
     wrappedNativeAddress: "0xe30fedd158a2e3b13e9badaeabafc5516e95e8c7",
     explorer: {
       addressUrl: "https://seitrace.com/address/{address}",
       txUrl: "https://seitrace.com/tx/{tx_hash}",
     },
   },
-  {
-    aliases: [],
-    chainId: 146,
+  sonic: {
     coinGeckoPlatformId: "sonic",
     name: "Sonic",
-    nativeCurrency: { coinGeckoId: "sonic-3", decimals: 18, name: "Sonic", symbol: "S" },
-    slug: "sonic",
+    nativeCoinGeckoId: "sonic-3",
     wrappedNativeAddress: "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38",
-    explorer: {
-      addressUrl: "https://sonicscan.org/address/{address}",
-      txUrl: "https://sonicscan.org/tx/{tx_hash}",
-    },
   },
-  {
-    aliases: [],
-    chainId: 50_104,
+  sophon: {
     coinGeckoPlatformId: "sophon",
     name: "Sophon",
-    nativeCurrency: { coinGeckoId: "sophon", decimals: 18, name: "Sophon", symbol: "SOPH" },
-    slug: "sophon",
-    explorer: {
-      addressUrl: "https://explorer.sophon.xyz/address/{address}",
-      txUrl: "https://explorer.sophon.xyz/tx/{tx_hash}",
-    },
+    nativeCoinGeckoId: "sophon",
   },
-  {
-    aliases: [],
-    chainId: 5330,
+  superseed: {
     coinGeckoPlatformId: "superseed",
     name: "Superseed",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "superseed",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x4200000000000000000000000000000000000006",
-    explorer: {
-      addressUrl: "https://explorer.superseed.xyz/address/{address}",
-      txUrl: "https://explorer.superseed.xyz/tx/{tx_hash}",
-    },
   },
-  {
-    aliases: [],
-    chainId: 130,
+  unichain: {
     coinGeckoPlatformId: "unichain",
     name: "Unichain",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "unichain",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x4200000000000000000000000000000000000006",
-    explorer: {
-      addressUrl: "https://uniscan.xyz/address/{address}",
-      txUrl: "https://uniscan.xyz/tx/{tx_hash}",
-    },
   },
-  {
+  "world-chain": {
     aliases: ["worldchain"],
-    chainId: 480,
     coinGeckoPlatformId: "world-chain",
     name: "World Chain",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "world-chain",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x4200000000000000000000000000000000000006",
-    explorer: {
-      addressUrl: "https://worldscan.org/address/{address}",
-      txUrl: "https://worldscan.org/tx/{tx_hash}",
-    },
   },
-  {
+  xdc: {
     aliases: ["XDC Network"],
-    chainId: 50,
     coinGeckoPlatformId: "xdc-network",
     name: "XDC",
-    nativeCurrency: { coinGeckoId: "xdce-crowd-sale", decimals: 18, name: "XDC", symbol: "XDC" },
-    slug: "xdc",
+    nativeCoinGeckoId: "xdce-crowd-sale",
     wrappedNativeAddress: "0x951857744785e80e2de051c32ee7b25f9c458c42",
-    explorer: {
-      addressUrl: "https://xdcscan.com/address/{address}",
-      txUrl: "https://xdcscan.com/tx/{tx_hash}",
-    },
   },
-  {
-    aliases: [],
-    chainId: 324,
+  zksync: {
     coinGeckoPlatformId: "zksync",
     mirrorAddresses: ["0x000000000000000000000000000000000000800a"],
     name: "ZKsync Era",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "zksync",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x5aea5775959fbc2557cc8789bc1bf90a239d9a91",
     explorer: {
       addressUrl: "https://era.zksync.network/address/{address}",
       txUrl: "https://era.zksync.network/tx/{tx_hash}",
     },
   },
-  {
+  zora: {
     aliases: ["zora network"],
-    chainId: 7_777_777,
     coinGeckoPlatformId: "zora-network",
     name: "Zora",
-    nativeCurrency: { coinGeckoId: "ethereum", decimals: 18, name: "Ether", symbol: "ETH" },
-    slug: "zora",
+    nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x4200000000000000000000000000000000000006",
-    explorer: {
-      addressUrl: "https://explorer.zora.energy/address/{address}",
-      txUrl: "https://explorer.zora.energy/tx/{tx_hash}",
-    },
   },
-];
+} as const satisfies Record<ChainSlug, LocalChainMetadata>;
+
+const explorerFromViem = (chain: ViemChain): ChainExplorer => {
+  const url = chain.blockExplorers?.default.url?.replace(TRAILING_SLASHES, "");
+  if (!url) throw new Error(`missing viem default explorer for ${chain.name}`);
+
+  return {
+    addressUrl: `${url}/address/{address}`,
+    txUrl: `${url}/tx/{tx_hash}`,
+  };
+};
+
+const aliasesWithViemName = (
+  name: string,
+  aliases: readonly string[],
+  viemName: string
+): readonly string[] => {
+  if (name === viemName || aliases.includes(viemName)) return aliases;
+  return [...aliases, viemName];
+};
+
+const buildChain = (slug: ChainSlug): Chain => {
+  const viemChain = VIEM_CHAINS_BY_SLUG[slug];
+  const metadata: LocalChainMetadata = LOCAL_CHAIN_METADATA[slug];
+
+  return {
+    aliases: aliasesWithViemName(metadata.name, metadata.aliases ?? [], viemChain.name),
+    chainId: viemChain.id,
+    ...(metadata.coinGeckoPlatformId ? { coinGeckoPlatformId: metadata.coinGeckoPlatformId } : {}),
+    explorer: metadata.explorer ?? explorerFromViem(viemChain),
+    ...(metadata.mirrorAddresses ? { mirrorAddresses: metadata.mirrorAddresses } : {}),
+    name: metadata.name,
+    nativeCurrency: {
+      coinGeckoId: metadata.nativeCoinGeckoId,
+      decimals: viemChain.nativeCurrency.decimals,
+      name: viemChain.nativeCurrency.name,
+      symbol: viemChain.nativeCurrency.symbol,
+    },
+    slug,
+    ...(metadata.wrappedNativeAddress
+      ? { wrappedNativeAddress: metadata.wrappedNativeAddress }
+      : {}),
+  };
+};
+
+/**
+ * Every EVM chain supported by the registry.
+ *
+ * The supported set and Atlas-facing metadata stay local; chain ids and native
+ * currency fields are sourced from viem/chains.
+ */
+export const CHAINS: readonly Chain[] = CHAIN_SLUGS.map(buildChain);

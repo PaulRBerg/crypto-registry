@@ -1,6 +1,6 @@
 {
   "name": "@prb/token-registry",
-  "description": "Typed, isomorphic registry of EVM chains and ERC-20 tokens (stablecoins, wrapped, native mirrors) with zero runtime dependencies.",
+  "description": "Typed, isomorphic viem-backed registry of EVM chains and ERC-20 tokens (stablecoins, wrapped, native mirrors).",
   "homepage": "https://github.com/PaulRBerg/token-registry#readme",
   "license": "MIT",
   "main": "./dist/index.js",
@@ -27,6 +27,9 @@
   "bugs": {
     "url": "https://github.com/PaulRBerg/token-registry/issues"
   },
+  "dependencies": {
+    "viem": "^2.54.6"
+  },
   "devDependencies": {
     "@biomejs/biome": "^2.5.1",
     "@prb/devkit": "^1.0.0",
@@ -35,8 +38,10 @@
     "prettier": "^3.8.4",
     "typescript": "^5.9.3",
     "ultracite": "^7.8.3",
-    "viem": "^2.21.0",
     "vitest": "^4.0.16"
+  },
+  "peerDependencies": {
+    "viem": "^2.54.6"
   },
   "exports": {
     ".": {
