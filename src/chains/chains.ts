@@ -197,8 +197,13 @@ const LOCAL_CHAIN_METADATA = {
     coinGeckoPlatformId: "chiliz",
     name: "Chiliz",
     nativeCoinGeckoId: "chiliz",
+    explorer: {
+      addressUrl: "https://chiliscan.com/address/{address}",
+      txUrl: "https://chiliscan.com/tx/{tx_hash}",
+    },
   },
   "core-dao": {
+    aliases: ["coreDao"],
     coinGeckoPlatformId: "core",
     name: "Core Dao",
     nativeCoinGeckoId: "coredaoorg",
@@ -306,8 +311,8 @@ const LOCAL_CHAIN_METADATA = {
     nativeCoinGeckoId: "sei-network",
     wrappedNativeAddress: "0xe30fedd158a2e3b13e9badaeabafc5516e95e8c7",
     explorer: {
-      addressUrl: "https://seitrace.com/address/{address}",
-      txUrl: "https://seitrace.com/tx/{tx_hash}",
+      addressUrl: "https://seiscan.io/address/{address}",
+      txUrl: "https://seiscan.io/tx/{tx_hash}",
     },
   },
   sonic: {
@@ -354,8 +359,8 @@ const LOCAL_CHAIN_METADATA = {
     nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x5aea5775959fbc2557cc8789bc1bf90a239d9a91",
     explorer: {
-      addressUrl: "https://era.zksync.network/address/{address}",
-      txUrl: "https://era.zksync.network/tx/{tx_hash}",
+      addressUrl: "https://explorer.zksync.io/address/{address}",
+      txUrl: "https://explorer.zksync.io/tx/{tx_hash}",
     },
   },
   zora: {

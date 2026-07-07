@@ -1,6 +1,6 @@
 {
   "name": "@prb/crypto-registry",
-  "description": "Typed, isomorphic viem-backed registry of EVM chains and ERC-20 tokens (stablecoins, wrapped, native mirrors).",
+  "description": "Typed, isomorphic registry of EVM chains, ERC-20 tokens, and HD derivation metadata.",
   "homepage": "https://github.com/PaulRBerg/crypto-registry#readme",
   "license": "MIT",
   "main": "./dist/index.js",
@@ -15,6 +15,10 @@
     "erc20",
     "ethereum",
     "evm",
+    "bip32",
+    "derivation-path",
+    "hd-wallet",
+    "slip44",
     "stablecoin",
     "token-list",
     "tokens",
@@ -47,6 +51,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./derivations": {
+      "types": "./dist/derivations/index.d.ts",
+      "import": "./dist/derivations/index.js"
     },
     "./internal/*": null,
     "./package.json": "./package.json"

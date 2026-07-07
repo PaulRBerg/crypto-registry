@@ -1,14 +1,17 @@
 # @prb/crypto-registry
 
-> Typed, isomorphic registry of EVM chains and ERC-20 tokens with **viem as its only runtime dependency**.
+> Typed, isomorphic registry of EVM chains, ERC-20 tokens, and HD derivation metadata with **viem as its only runtime
+> dependency**.
 
 A single source of truth for EVM chain metadata and curated ERC-20 token data — addresses, symbols, decimals, and
 CoinGecko ids — with a discriminated-union type model that distinguishes plain tokens from **stablecoins**, **wrapped
 natives**, and **native mirrors**. The package is data plus lookup helpers: no network access, no `node:*` imports, and
-only `viem` at runtime, so it runs unchanged in Node and the browser.
+only `viem` at runtime, so it runs unchanged in Node and the browser. The `derivations` subpath adds HD derivation path
+types, SLIP-44 data, and registered path profiles.
 
 - **34** EVM chains
 - **615** ERC-20 tokens across four kinds
+- HD derivation path profiles and SLIP registries under `@prb/crypto-registry/derivations`
 - ESM-only, ships `.d.ts`, tree-shakeable (`sideEffects: false`)
 
 ## Install
@@ -57,6 +60,14 @@ getTokensBySymbol("USDC").length; // every USDC across all chains
 getStablecoins().length; // 96
 ```
 
+```ts
+import { COIN_TYPES, recognizePath, renderProfilePath } from "@prb/crypto-registry/derivations";
+
+COIN_TYPES.ETHEREUM; // 60
+renderProfilePath("evm-bip44-address-index", { index: 3 }); // "m/44'/60'/0'/0/3"
+recognizePath("m/84'/0'/0'", "bitcoin")?.standard; // "bip84-native-segwit"
+```
+
 ## API
 
 **Chains** — `CHAINS`, `allChains()`, `getChain(chainId)`, `getChainBySlug(slug)`, `getChainByName(name)`
@@ -74,6 +85,9 @@ case-sensitive.
 
 **Types & guards** — `Chain`, `NativeCurrency`, `Token`, `Stablecoin`, `WrappedToken`, `MirrorToken`, `StandardToken`,
 `Address`, and the guards `isStandard` / `isStablecoin` / `isWrapped` / `isMirror`.
+
+**Derivations** — `@prb/crypto-registry/derivations` exposes path parsing/building, profile recognition/rendering,
+SLIP-44 coin types, purposes, schemes, SLIP-132 version bytes, UTXO descriptor helpers, and Substrate SURI utilities.
 
 Addresses are stored lowercased; lookups are case-insensitive. No keccak/EIP-55 checksumming is performed.
 
