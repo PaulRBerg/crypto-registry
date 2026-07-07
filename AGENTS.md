@@ -79,6 +79,16 @@ then run `just enrich`:
 These generated files are excluded from Biome in `biome.jsonc` to stay compact (one row per line); they are still
 typechecked.
 
+## Hand-authored ticker vocabulary
+
+`src/tokens/tickers.ts` is **hand-authored** (not generated). It holds the chain-agnostic accounting ticker vocabulary:
+`STABLECOIN_TICKERS_BY_PEG` (fiat-equivalent quote tickers grouped by peg), `PRICE_ASSET_ALIASES` (wrapped/decorated
+ticker → underlying price asset), and `NATIVE_ASSET_CHAINS` (native gas ticker → canonical source-ref chain). These are
+deliberate curated supersets of the on-chain token data: they add fiat-only and exchange-specific tickers (`USD`,
+`BSC-USD`, `LinkUSD`, `mUSD`, `xDAI`) and non-native wrappers (`WBTC`, `WMATIC`, `clBTC`, `wNXM`) that don't exist as
+canonical on-chain symbols. Downstream consumers (e.g. the prb-finance Go tax CLI codegen) treat this as the source of
+truth, so edit the literals here and keep `src/tokens/tickers.test.ts` green.
+
 ## Data provenance & privacy
 
 - The standard-token set is enriched from `included.tsv` files in a sibling repo (`TOKEN_SOURCE_DIR`, default

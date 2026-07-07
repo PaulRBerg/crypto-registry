@@ -65,6 +65,11 @@ getStablecoins().length; // 96
 **Tokens** — `TOKENS`, `getToken(chainId, address)`, `getTokensByChain(chainId)`, `getTokensBySymbol(symbol)`,
 `getStablecoins()`, `getWrappedTokens()`, `getMirrorTokens()`, `getStandardTokens()`.
 
+**Tickers** — `STABLECOIN_TICKERS_BY_PEG` (fiat-equivalent quote tickers grouped by `USD` / `EUR` peg),
+`PRICE_ASSET_ALIASES` (wrapped/decorated ticker → the underlying asset whose price values it), and `NATIVE_ASSET_CHAINS`
+(native gas ticker → canonical source-ref chain). Chain-agnostic curated vocabularies for accounting/pricing;
+case-sensitive.
+
 **Addresses** — `isAddress(value)`, `normalizeAddress(value)` (validates and lowercases), `isAddressEqual(a, b)`.
 
 **Types & guards** — `Chain`, `NativeCurrency`, `Token`, `Stablecoin`, `WrappedToken`, `MirrorToken`, `StandardToken`,
