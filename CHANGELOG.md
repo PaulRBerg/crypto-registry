@@ -12,4 +12,4 @@ reserved for breaking changes. Review the changelog before upgrading.
 
 _Initial release._
 
-[1.0.0]: https://github.com/PaulRBerg/token-registry/releases/tag/v1.0.0
+[1.0.0]: https://github.com/PaulRBerg/crypto-registry/releases/tag/v1.0.0

@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "@prb/token-registry",
+      "name": "@prb/crypto-registry",
       "dependencies": {
         "viem": "^2.54.6",
       },

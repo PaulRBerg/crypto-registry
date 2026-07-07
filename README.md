@@ -1,4 +1,4 @@
-# @prb/token-registry
+# @prb/crypto-registry
 
 > Typed, isomorphic registry of EVM chains and ERC-20 tokens with **viem as its only runtime dependency**.
 
@@ -14,7 +14,7 @@ only `viem` at runtime, so it runs unchanged in Node and the browser.
 ## Install
 
 ```sh
-bun add @prb/token-registry   # or: npm i / pnpm add / yarn add
+bun add @prb/crypto-registry   # or: npm i / pnpm add / yarn add
 ```
 
 Requires an ESM environment (Node ≥ 20, or any modern bundler/browser).
@@ -41,7 +41,7 @@ import {
   getTokensBySymbol,
   getStablecoins,
   isStablecoin,
-} from "@prb/token-registry";
+} from "@prb/crypto-registry";
 
 getChain(1)?.slug; // "mainnet"
 getChainByName("matic")?.chainId; // 137 (resolves names, slugs, and aliases)

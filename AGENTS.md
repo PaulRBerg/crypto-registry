@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Agent guidance for `@prb/token-registry`. Keep changes surgical and the package viem-only at runtime and isomorphic.
+Agent guidance for `@prb/crypto-registry`. Keep changes surgical and the package viem-only at runtime and isomorphic.
 
 ## Stack
 
