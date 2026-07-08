@@ -4904,6 +4904,14 @@
     "decimals": 18
   },
   {
+    "chainId": 167000,
+    "slug": "taiko",
+    "address": "0xa51894664a773981c6c112c43ce576f315d5b1b6",
+    "symbol": "WETH",
+    "name": "Wrapped Ether",
+    "decimals": 18
+  },
+  {
     "chainId": 534352,
     "slug": "scroll",
     "address": "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4",
