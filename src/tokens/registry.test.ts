@@ -115,6 +115,21 @@ describe("stablecoins", () => {
     expect(gusd && isStablecoin(gusd)).toBe(true);
   });
 
+  it("classifies Polygon Polymarket USD by exact address and metadata", () => {
+    const pusd = getToken(137, "0xC011a7E12a19f7B1f670d46F03B03f3342E82DFB");
+    expect(pusd).toMatchObject({
+      address: "0xc011a7e12a19f7b1f670d46f03b03f3342e82dfb",
+      backing: "fiat",
+      bridged: false,
+      chainId: 137,
+      decimals: 6,
+      issuer: "Polymarket",
+      kind: "stablecoin",
+      peg: "USD",
+      symbol: "pUSD",
+    });
+  });
+
   it("do NOT classify LP/receipt tokens that merely contain USD/DAI in the symbol", () => {
     const aUsdc = getToken(1, "0x9ba00d6856a4edf4665bca2c2309936572473b7e"); // Aave aUSDC
     expect(aUsdc, "aUSDC should be in the registry").toBeDefined();

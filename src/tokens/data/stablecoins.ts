@@ -44,6 +44,7 @@ export const STABLECOINS: readonly Stablecoin[] = [
   { address: "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063", chainId: 137, decimals: 18, name: "(PoS) Dai Stablecoin", symbol: "DAI", backing: "crypto", bridged: true, issuer: "MakerDAO", kind: "stablecoin", peg: "USD" },
   { address: "0x9417669fbf23357d2774e9d421307bd5ea1006d2", chainId: 137, decimals: 6, name: "Tether USD", symbol: "USDT", backing: "fiat", bridged: false, issuer: "Tether", kind: "stablecoin", peg: "USD" },
   { address: "0x9c9e5fd8bbc25984b178fdce6117defa39d2db39", chainId: 137, decimals: 18, name: "BUSD Token", symbol: "BUSD", backing: "fiat", bridged: false, issuer: "Paxos", kind: "stablecoin", peg: "USD" },
+  { address: "0xc011a7e12a19f7b1f670d46f03b03f3342e82dfb", chainId: 137, decimals: 6, name: "Polymarket USD", symbol: "pUSD", backing: "fiat", bridged: false, issuer: "Polymarket", kind: "stablecoin", peg: "USD" },
   { address: "0xc2132d05d31c914a87c6611c10748aeb04b58e8f", chainId: 137, decimals: 6, name: "USDT0", symbol: "USDT0", backing: "fiat", bridged: true, issuer: "Tether", kind: "stablecoin", peg: "USD" },
   { address: "0x754704bc059f8c67012fed69bc8a327a5aafb603", chainId: 143, decimals: 6, name: "USDC", symbol: "USDC", backing: "fiat", bridged: false, issuer: "Circle", kind: "stablecoin", peg: "USD" },
   { address: "0x29219dd400f2bf60e5a23d13be72b486d4038894", chainId: 146, decimals: 6, name: "USDC", symbol: "USDC", backing: "fiat", bridged: false, issuer: "Circle", kind: "stablecoin", peg: "USD" },

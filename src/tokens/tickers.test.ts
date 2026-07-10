@@ -12,9 +12,11 @@ describe("stablecoin tickers", () => {
       "LinkUSD",
       "USD",
       "USDC",
+      "USDC.e",
       "USDT",
       "WxDAI",
       "mUSD",
+      "pUSD",
       "sUSD",
       "xDAI",
     ]);

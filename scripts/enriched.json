@@ -3162,6 +3162,14 @@
   {
     "chainId": 137,
     "slug": "polygon",
+    "address": "0xc011a7e12a19f7b1f670d46f03b03f3342e82dfb",
+    "symbol": "pUSD",
+    "name": "Polymarket USD",
+    "decimals": 6
+  },
+  {
+    "chainId": 137,
+    "slug": "polygon",
     "address": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
     "symbol": "USDT0",
     "name": "USDT0",

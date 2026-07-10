@@ -94,6 +94,17 @@ export const STABLECOIN_FAMILIES: readonly StablecoinFamily[] = [
   },
   {
     backing: "fiat",
+    display: "pUSD",
+    issuer: "Polymarket",
+    nativeSymbols: ["pUSD"],
+    peg: "USD",
+    symbols: ["pUSD"],
+    contracts: {
+      polygon: ["0xc011a7e12a19f7b1f670d46f03b03f3342e82dfb"],
+    },
+  },
+  {
+    backing: "fiat",
     display: "USDT",
     issuer: "Tether",
     nativeSymbols: ["USDT", "USDt", "USD₮"],

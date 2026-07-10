@@ -16,8 +16,8 @@ import type { StablecoinPeg } from "./types.js";
  * `LinkUSD`, `mUSD`) that never appear as canonical on-chain ERC-20 symbols.
  *
  * Conversely it intentionally omits several on-chain stablecoin symbols
- * (`TUSD`, `USDB`, bridged `USDC.e` / `USDbC`, …) that are not part of the
- * fiat-equivalent quote vocabulary.
+ * (`TUSD`, `USDB`, `USDbC`, …) that are not part of the fiat-equivalent quote
+ * vocabulary.
  *
  * Membership tests against these tickers are **case-sensitive**, so preserve
  * the exact casing.
@@ -34,9 +34,11 @@ export const STABLECOIN_TICKERS_BY_PEG: Readonly<Record<StablecoinPeg, readonly 
     "sUSD",
     "USD",
     "USDC",
+    "USDC.e",
     "USDT",
     "WxDAI",
     "xDAI",
+    "pUSD",
   ],
 };
 
