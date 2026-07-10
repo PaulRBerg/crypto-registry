@@ -2611,8 +2611,8 @@
     "chainId": 100,
     "slug": "gnosis",
     "address": "0xd4e420bbf00b0f409188b338c5d87df761d6c894",
-    "symbol": "agWXDAI",
-    "name": "Agave interest bearing WXDAI",
+    "symbol": "agWxDAI",
+    "name": "Agave interest bearing WxDAI",
     "decimals": 18
   },
   {
@@ -2651,8 +2651,8 @@
     "chainId": 100,
     "slug": "gnosis",
     "address": "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
-    "symbol": "WXDAI",
-    "name": "Wrapped XDAI",
+    "symbol": "WxDAI",
+    "name": "Wrapped xDAI",
     "decimals": 18
   },
   {

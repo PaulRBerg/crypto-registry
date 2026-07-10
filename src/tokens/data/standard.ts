@@ -287,7 +287,7 @@ export const STANDARD_TOKENS: readonly StandardToken[] = [
   { address: "0x83ff60e2f93f8edd0637ef669c69d5fb4f64ca8e", chainId: 100, decimals: 18, name: "Bright on xDai", symbol: "BRIGHT", kind: "standard" },
   { address: "0xbf65bfcb5da067446cee6a706ba3fe2fb1a9fdfd", chainId: 100, decimals: 18, name: "yearn.finance on xDai", symbol: "YFI", kind: "standard" },
   { address: "0xc20c9c13e853fc64d054b73ff21d3636b2d97eab", chainId: 100, decimals: 18, name: "CoW Protocol Virtual Token", symbol: "vCOW", kind: "standard" },
-  { address: "0xd4e420bbf00b0f409188b338c5d87df761d6c894", chainId: 100, decimals: 18, name: "Agave interest bearing WXDAI", symbol: "agWXDAI", kind: "standard" },
+  { address: "0xd4e420bbf00b0f409188b338c5d87df761d6c894", chainId: 100, decimals: 18, name: "Agave interest bearing WxDAI", symbol: "agWxDAI", kind: "standard" },
   { address: "0xdfc20ae04ed70bd9c7d720f449eedae19f659d65", chainId: 100, decimals: 18, name: "Badger on xDai", symbol: "BADGER", kind: "standard" },
   { address: "0xe2e73a1c69ecf83f464efce6a5be353a37ca09b2", chainId: 100, decimals: 18, name: "ChainLink Token on xDai", symbol: "LINK", kind: "standard" },
   { address: "0xef66491eab4bbb582c57b14778afd8dfb70d8a1a", chainId: 130, decimals: 18, name: "ChainLink Token", symbol: "LINK", kind: "standard" },

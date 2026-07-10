@@ -127,6 +127,7 @@ type LocalChainMetadata = {
   mirrorAddresses?: readonly Address[];
   name: string;
   nativeCoinGeckoId: string;
+  nativeSymbol?: string;
   wrappedNativeAddress?: Address;
 };
 
@@ -223,6 +224,7 @@ const LOCAL_CHAIN_METADATA = {
     coinGeckoPlatformId: "xdai",
     name: "Gnosis",
     nativeCoinGeckoId: "dai",
+    nativeSymbol: "xDAI",
     wrappedNativeAddress: "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
   },
   hyperevm: {
@@ -416,7 +418,7 @@ const buildChain = (slug: ChainSlug): Chain => {
       coinGeckoId: metadata.nativeCoinGeckoId,
       decimals: viemChain.nativeCurrency.decimals,
       name: viemChain.nativeCurrency.name,
-      symbol: viemChain.nativeCurrency.symbol,
+      symbol: metadata.nativeSymbol ?? viemChain.nativeCurrency.symbol,
     },
     slug,
     ...(metadata.wrappedNativeAddress

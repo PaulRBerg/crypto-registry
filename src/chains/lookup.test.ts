@@ -34,7 +34,9 @@ describe("chain registry", () => {
       expect(chain.chainId).toBe(viemChain.id);
       expect(chain.nativeCurrency.decimals).toBe(viemChain.nativeCurrency.decimals);
       expect(chain.nativeCurrency.name).toBe(viemChain.nativeCurrency.name);
-      expect(chain.nativeCurrency.symbol).toBe(viemChain.nativeCurrency.symbol);
+      expect(chain.nativeCurrency.symbol).toBe(
+        chain.slug === "gnosis" ? "xDAI" : viemChain.nativeCurrency.symbol
+      );
     }
   });
 

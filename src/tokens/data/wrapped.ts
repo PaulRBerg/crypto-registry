@@ -6,7 +6,7 @@ export const WRAPPED_TOKENS: readonly WrappedToken[] = [
   { address: "0x4200000000000000000000000000000000000006", chainId: 10, decimals: 18, name: "Wrapped Ether", symbol: "WETH", kind: "wrapped", underlyingSymbol: "ETH" },
   { address: "0x951857744785e80e2de051c32ee7b25f9c458c42", chainId: 50, decimals: 18, name: "Wrapped XDC", symbol: "WXDC", kind: "wrapped", underlyingSymbol: "XDC" },
   { address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", chainId: 56, decimals: 18, name: "Wrapped BNB", symbol: "WBNB", kind: "wrapped", underlyingSymbol: "BNB" },
-  { address: "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d", chainId: 100, decimals: 18, name: "Wrapped XDAI", symbol: "WXDAI", kind: "wrapped", underlyingSymbol: "XDAI" },
+  { address: "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d", chainId: 100, decimals: 18, name: "Wrapped xDAI", symbol: "WxDAI", kind: "wrapped", underlyingSymbol: "xDAI" },
   { address: "0x4200000000000000000000000000000000000006", chainId: 130, decimals: 18, name: "Wrapped Ether", symbol: "WETH", kind: "wrapped", underlyingSymbol: "ETH" },
   { address: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270", chainId: 137, decimals: 18, name: "Wrapped Polygon Ecosystem Token", symbol: "WPOL", kind: "wrapped", underlyingSymbol: "POL" },
   { address: "0x3bd359c1119da7da1d913d1c4d2b7c461115433a", chainId: 143, decimals: 18, name: "Wrapped MON", symbol: "WMON", kind: "wrapped", underlyingSymbol: "MON" },

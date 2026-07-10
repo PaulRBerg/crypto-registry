@@ -25,6 +25,13 @@ const TOKEN_SOURCE_DIR =
 const CACHE_PATH = join(HERE, "enriched.json");
 const CHAIN_ID_BY_SLUG = new Map(CHAINS.map((chain) => [chain.slug, chain.chainId]));
 const TOKEN_SOURCE_SLUG: Partial<Record<string, string>> = { mainnet: "ethereum" };
+const TOKEN_METADATA_OVERRIDES = new Map<string, Partial<Pick<EnrichedToken, "name" | "symbol">>>([
+  [
+    "100:0xd4e420bbf00b0f409188b338c5d87df761d6c894",
+    { name: "Agave interest bearing WxDAI", symbol: "agWxDAI" },
+  ],
+  ["100:0xe91d153e0b41518a2ce8dd3d7944fa863463a97d", { name: "Wrapped xDAI", symbol: "WxDAI" }],
+]);
 
 /** Preferred RPC overrides (from cryptfolio RpcUrl), keyed by slug. */
 const RPC_OVERRIDE: Partial<Record<string, string>> = {
@@ -113,6 +120,7 @@ export type EnrichedToken = {
 const lc = (a: string): `0x${string}` => a.toLowerCase() as `0x${string}`;
 const ADDRESS_RE = /^0x[0-9a-f]{40}$/;
 const ADDRESS_IN_URL = /0x[0-9a-fA-F]{40}/;
+const tokenKey = (chainId: number, address: string) => `${chainId}:${address.toLowerCase()}`;
 
 function viemChainForSlug(slug: string) {
   if (Object.hasOwn(VIEM_CHAINS_BY_SLUG, slug)) {
@@ -152,6 +160,15 @@ function parseCachedTokens(raw: string): EnrichedToken[] {
     throw new Error(`${CACHE_PATH} entry ${invalidIndex} is not a valid enriched token`);
   }
   return value;
+}
+
+function applyMetadataOverrides(token: EnrichedToken): EnrichedToken {
+  const override = TOKEN_METADATA_OVERRIDES.get(tokenKey(token.chainId, token.address));
+  return override ? { ...token, ...override } : token;
+}
+
+function canonicalizeTokens(tokens: EnrichedToken[]): EnrichedToken[] {
+  return tokens.map(applyMetadataOverrides);
 }
 
 /** Parse `included.tsv` ERC-20 rows for a chain; returns lowercased addresses. */
@@ -353,10 +370,13 @@ async function main() {
   const cached = process.argv.includes("--cached");
   let tokens: EnrichedToken[];
   if (cached) {
-    tokens = parseCachedTokens(readFileSync(CACHE_PATH, "utf8"));
+    const raw = readFileSync(CACHE_PATH, "utf8");
+    tokens = canonicalizeTokens(parseCachedTokens(raw));
+    const normalized = `${JSON.stringify(tokens, null, 2)}\n`;
+    if (normalized !== raw) writeFileSync(CACHE_PATH, normalized);
     console.log(`Loaded ${tokens.length} tokens from cache.`);
   } else {
-    tokens = await fetchAll();
+    tokens = canonicalizeTokens(await fetchAll());
     tokens.sort((a, b) => a.chainId - b.chainId || a.address.localeCompare(b.address));
     writeFileSync(CACHE_PATH, `${JSON.stringify(tokens, null, 2)}\n`);
     const failed = tokens.filter((t) => t.decimals === null);
