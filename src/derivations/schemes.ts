@@ -38,6 +38,7 @@ export const ADDRESS_KINDS = [
   "evm",
   "fuel",
   "handshake",
+  "hedera-account",
   "iota-rebased",
   "iota-stardust",
   "multiversx",

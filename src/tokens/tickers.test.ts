@@ -13,8 +13,7 @@ describe("stablecoin tickers", () => {
       "USD",
       "USDC",
       "USDT",
-      "WXDAI",
-      "XDAI",
+      "WxDAI",
       "mUSD",
       "sUSD",
       "xDAI",
@@ -48,10 +47,9 @@ describe("price-asset aliases", () => {
       WMON: "MON",
       WPOL: "POL",
       WSEI: "SEI",
-      WXDAI: "xDAI",
       WXDC: "XDC",
+      WxDAI: "xDAI",
       wNXM: "NXM",
-      wxDAI: "xDAI",
     });
   });
 
@@ -79,6 +77,7 @@ describe("native asset chains", () => {
       BTC: "Bitcoin",
       EOS: "EOS",
       ETH: "Ethereum",
+      HBAR: "Hedera",
       NEO: "NEO",
       POL: "Polygon",
       SC: "Sia",

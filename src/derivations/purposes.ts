@@ -50,6 +50,8 @@ export const STANDARDS = [
   "eos-bip44",
   "fuel-bip44",
   "handshake-bip44",
+  "hedera-ed25519",
+  "hedera-ed25519-legacy",
   "hush-webwallet",
   "iota-ed25519",
   "iota-secp256k1",

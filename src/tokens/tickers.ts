@@ -11,16 +11,16 @@ import type { StablecoinPeg } from "./types.js";
  * fiat-equivalent when valuing a trade's quote side. It is deliberately a
  * curated *superset* of the on-chain stablecoin symbols in the {@link STABLECOINS}
  * data (accessible via {@link getStablecoins}): it also folds in the plain fiat
- * quote `USD`, fiat-collateralized native tokens on Gnosis (`xDAI` / `XDAI` /
- * `WXDAI`), and exchange- or issuer-specific pegged tickers (`BSC-USD`,
+ * quote `USD`, fiat-collateralized native tokens on Gnosis (`xDAI` /
+ * `WxDAI`), and exchange- or issuer-specific pegged tickers (`BSC-USD`,
  * `LinkUSD`, `mUSD`) that never appear as canonical on-chain ERC-20 symbols.
  *
  * Conversely it intentionally omits several on-chain stablecoin symbols
  * (`TUSD`, `USDB`, bridged `USDC.e` / `USDbC`, …) that are not part of the
  * fiat-equivalent quote vocabulary.
  *
- * Membership tests against these tickers are **case-sensitive** — `xDAI` and
- * `XDAI` are both listed on purpose — so preserve the exact casing.
+ * Membership tests against these tickers are **case-sensitive**, so preserve
+ * the exact casing.
  */
 export const STABLECOIN_TICKERS_BY_PEG: Readonly<Record<StablecoinPeg, readonly string[]>> = {
   EUR: ["EURe"],
@@ -35,8 +35,7 @@ export const STABLECOIN_TICKERS_BY_PEG: Readonly<Record<StablecoinPeg, readonly 
     "USD",
     "USDC",
     "USDT",
-    "WXDAI",
-    "XDAI",
+    "WxDAI",
     "xDAI",
   ],
 };
@@ -48,10 +47,9 @@ export const STABLECOIN_TICKERS_BY_PEG: Readonly<Record<StablecoinPeg, readonly 
  *
  * A curated *superset* of the on-chain wrapped-native relation (a
  * {@link WrappedToken}'s `underlyingSymbol`): it also covers cross-chain bridged
- * wraps (`WBNB.b`), the legacy Polygon name (`WMATIC`), non-native wrappers
- * priced at the underlying (`WBTC`, `WCELO`, `clBTC`, `wNXM`), and the lowercase
- * `wxDAI` variant. Keys are matched **case-sensitively** by design (`WXDAI` maps
- * to `xDAI`, mirroring the accounting ledger's lowercase Gnosis native ticker).
+ * wraps (`WBNB.b`), the legacy Polygon name (`WMATIC`), and non-native wrappers
+ * priced at the underlying (`WBTC`, `WCELO`, `clBTC`, `wNXM`). Keys are matched
+ * **case-sensitively** by design.
  */
 export const PRICE_ASSET_ALIASES: Readonly<Record<string, string>> = {
   clBTC: "BTC",
@@ -68,10 +66,9 @@ export const PRICE_ASSET_ALIASES: Readonly<Record<string, string>> = {
   WMON: "MON",
   WPOL: "POL",
   WSEI: "SEI",
-  WXDAI: "xDAI",
   WXDC: "XDC",
+  WxDAI: "xDAI",
   wNXM: "NXM",
-  wxDAI: "xDAI",
 };
 
 /**
@@ -89,6 +86,7 @@ export const NATIVE_ASSET_CHAINS: Readonly<Record<string, string>> = {
   BTC: "Bitcoin",
   EOS: "EOS",
   ETH: "Ethereum",
+  HBAR: "Hedera",
   NEO: "NEO",
   POL: "Polygon",
   SC: "Sia",

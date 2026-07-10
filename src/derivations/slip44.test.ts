@@ -16,6 +16,7 @@ describe("slip44 lookups", () => {
     expect(COIN_TYPES.ETHEREUM).toBe(60);
     expect(COIN_TYPES.BITCOIN).toBe(0);
     expect(COIN_TYPES.MONERO).toBe(128);
+    expect(COIN_TYPES.HEDERA).toBe(3030);
     expect(COIN_TYPES.FUEL).toBe(1_179_993_420);
   });
 
@@ -25,6 +26,7 @@ describe("slip44 lookups", () => {
     expect(coinTypeName(60)).toBe("Ethereum");
     expect(coinTypeName(0)).toBe("Bitcoin");
     expect(coinTypeName(128)).toBe("Monero");
+    expect(coinTypeName(3030)).toBe("Hedera");
   });
 
   it("reports membership", () => {

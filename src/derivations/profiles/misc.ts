@@ -166,6 +166,33 @@ const ROWS: readonly Row[] = [
     template: bip44Shape(COIN_TYPES.HANDSHAKE),
   },
   {
+    addressKind: "hedera-account",
+    chain: "hedera",
+    coinType: COIN_TYPES.HEDERA,
+    id: "hedera-ed25519-account",
+    scheme: "ed25519",
+    standard: "hedera-ed25519",
+    standardName: "Hedera ED25519",
+    template: [
+      lit(44, true),
+      lit(COIN_TYPES.HEDERA, true),
+      lit(0, true),
+      lit(0, true),
+      vr("index", true),
+    ],
+  },
+  {
+    // Deprecated Hedera SDK default used before the indexed standard helper was introduced.
+    addressKind: "hedera-account",
+    chain: "hedera",
+    coinType: COIN_TYPES.HEDERA,
+    id: "hedera-ed25519-legacy",
+    scheme: "ed25519",
+    standard: "hedera-ed25519-legacy",
+    standardName: "Hedera Legacy ED25519",
+    template: [lit(44, true), lit(COIN_TYPES.HEDERA, true), lit(0, true), lit(0, true)],
+  },
+  {
     addressKind: "navcoin",
     chain: "navcoin",
     coinType: COIN_TYPES.NAVCOIN,
@@ -284,7 +311,8 @@ const ROWS: readonly Row[] = [
 
 /**
  * Single-chain account profiles: Stellar/Waves/Algorand/Aptos/Nano (ed25519), Neo Legacy (secp256r1), and the
- * secp256k1 BIP44 chains (Aptos, Handshake, NavCoin, Ripple, Verge, EOS-Vaulta, Fuel). Aptos carries both an ed25519
+ * Hedera ED25519 accounts, and secp256k1 BIP44 chains (Aptos, Handshake, NavCoin, Ripple, Verge, EOS-Vaulta, Fuel).
+ * Aptos carries both an ed25519
  * fully-hardened Ledger path and a secp256k1 BIP44 path (last two levels unhardened), matching the Aptos SDK.
  * Algorand likewise carries two ed25519 shapes: the fully-hardened Ledger path and the ARC-52 BIP32-Ed25519 path whose
  * last two levels are soft. Ripple and Tron each carry two secp256k1 shapes, mirroring the EVM pair: a generic/wallet

@@ -75,6 +75,8 @@ describe("registry integrity", () => {
     );
     expect(profileById("nano-legacy-seed-account")?.examplePath).toBe("index=0");
     expect(profileById("nano-legacy-seed-account")?.template).toBe("index={index}");
+    expect(profileById("hedera-ed25519-account")?.examplePath).toBe("m/44'/3030'/0'/0'/0'");
+    expect(profileById("hedera-ed25519-legacy")?.examplePath).toBe("m/44'/3030'/0'/0'");
   });
 
   it("renders registered profile paths from authored segments", () => {
@@ -115,6 +117,30 @@ describe("recognizePath", () => {
     expect(recognizePath("m/44'/60'/0'/0/3")).toMatchObject({
       profileId: "evm-bip44-address-index",
       values: { index: 3 },
+    });
+  });
+
+  it("recognizes the fully hardened Hedera ED25519 index", () => {
+    expect(recognizePath("m/44'/3030'/0'/0'/3'", "hedera")).toMatchObject({
+      chain: "hedera",
+      coinType: 3030,
+      profileId: "hedera-ed25519-account",
+      scheme: "ed25519",
+      standard: "hedera-ed25519",
+      standardName: "Hedera ED25519",
+      values: { index: 3 },
+    });
+  });
+
+  it("recognizes the deprecated four-level Hedera ED25519 path", () => {
+    expect(recognizePath("m/44'/3030'/0'/0'", "hedera")).toMatchObject({
+      chain: "hedera",
+      coinType: 3030,
+      profileId: "hedera-ed25519-legacy",
+      scheme: "ed25519",
+      standard: "hedera-ed25519-legacy",
+      standardName: "Hedera Legacy ED25519",
+      values: {},
     });
   });
 
