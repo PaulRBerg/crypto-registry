@@ -3456,6 +3456,14 @@
     "decimals": 18
   },
   {
+    "chainId": 252,
+    "slug": "fraxtal",
+    "address": "0xfc00000000000000000000000000000000000002",
+    "symbol": "WFRAX",
+    "name": "Wrapped Frax",
+    "decimals": 18
+  },
+  {
     "chainId": 324,
     "slug": "zksync",
     "address": "0x000000000000000000000000000000000000800a",
