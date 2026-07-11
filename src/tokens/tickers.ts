@@ -5,6 +5,21 @@
 import type { StablecoinPeg } from "./types.js";
 
 /**
+ * Historical ticker spellings that identify the same asset and unit system.
+ *
+ * Keys are legacy/provider spellings and values are the current accounting
+ * ticker. Migrations with a unit change or separate accounting pools do not
+ * belong here.
+ */
+export const CANONICAL_TICKER_ALIASES: Readonly<Record<string, string>> = {
+  HAV: "SNX",
+  INST: "FLUID",
+  MATIC: "POL",
+  XNO: "NANO",
+  XRB: "NANO",
+};
+
+/**
  * Fiat-pegged quote tickers, grouped by peg currency.
  *
  * This is the canonical, chain-agnostic vocabulary of ticker symbols treated as

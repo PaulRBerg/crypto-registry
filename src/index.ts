@@ -19,6 +19,7 @@ export {
 } from "./tokens/lookup.js";
 export { TOKENS } from "./tokens/registry.js";
 export {
+  CANONICAL_TICKER_ALIASES,
   NATIVE_ASSET_CHAINS,
   PRICE_ASSET_ALIASES,
   STABLECOIN_TICKERS_BY_PEG,

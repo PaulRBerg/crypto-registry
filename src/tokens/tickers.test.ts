@@ -1,6 +1,35 @@
 import { describe, expect, it } from "vitest";
 import { getWrappedTokens } from "./lookup.js";
-import { NATIVE_ASSET_CHAINS, PRICE_ASSET_ALIASES, STABLECOIN_TICKERS_BY_PEG } from "./tickers.js";
+import {
+  CANONICAL_TICKER_ALIASES,
+  NATIVE_ASSET_CHAINS,
+  PRICE_ASSET_ALIASES,
+  STABLECOIN_TICKERS_BY_PEG,
+} from "./tickers.js";
+
+describe("canonical ticker aliases", () => {
+  it("matches the exact curated identity map", () => {
+    expect(CANONICAL_TICKER_ALIASES).toEqual({
+      HAV: "SNX",
+      INST: "FLUID",
+      MATIC: "POL",
+      XNO: "NANO",
+      XRB: "NANO",
+    });
+  });
+
+  it("uses sorted uppercase keys and values without self-aliases", () => {
+    const entries = Object.entries(CANONICAL_TICKER_ALIASES);
+    expect(entries.map(([ticker]) => ticker)).toEqual(
+      entries.map(([ticker]) => ticker).toSorted()
+    );
+    for (const [from, to] of entries) {
+      expect(from).toMatch(/^[A-Z0-9]+$/u);
+      expect(to).toMatch(/^[A-Z0-9]+$/u);
+      expect(from).not.toBe(to);
+    }
+  });
+});
 
 describe("stablecoin tickers", () => {
   it("lists the exact USD-equivalent quote vocabulary", () => {
