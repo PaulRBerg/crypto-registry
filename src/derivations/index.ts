@@ -69,15 +69,6 @@ export {
   type UtxoChain,
   ZCASH_SHIELDED_PROFILES,
 } from "./profiles/index.js";
-// Raw-key address descriptors (pathless single-keypair cross-ecosystem re-encoding).
-export {
-  RAW_KEY_DESCRIPTORS,
-  type RawKeyDescriptor,
-  type RawKeyEncoding,
-  type RawKeyEncodingParams,
-  rawKeyDescriptorsForScheme,
-  schemeForEcosystem,
-} from "./raw-key.js";
 // Purposes + standards.
 export {
   PURPOSE_LABELS,
@@ -87,6 +78,15 @@ export {
   STANDARDS,
   type Standard,
 } from "./purposes.js";
+// Raw-key address descriptors (pathless single-keypair cross-ecosystem re-encoding).
+export {
+  RAW_KEY_DESCRIPTORS,
+  type RawKeyDescriptor,
+  type RawKeyEncoding,
+  type RawKeyEncodingParams,
+  rawKeyDescriptorsForScheme,
+  schemeForEcosystem,
+} from "./raw-key.js";
 // Signature schemes + address kinds.
 export {
   ADDRESS_KINDS,

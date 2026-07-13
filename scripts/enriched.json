@@ -3458,6 +3458,14 @@
   {
     "chainId": 252,
     "slug": "fraxtal",
+    "address": "0xfc00000000000000000000000000000000000001",
+    "symbol": "frxUSD",
+    "name": "Frax USD",
+    "decimals": 18
+  },
+  {
+    "chainId": 252,
+    "slug": "fraxtal",
     "address": "0xfc00000000000000000000000000000000000002",
     "symbol": "WFRAX",
     "name": "Wrapped Frax",

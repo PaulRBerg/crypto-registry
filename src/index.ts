@@ -5,7 +5,12 @@ export { isAddress, isAddressEqual, normalizeAddress } from "./address.js";
 // Chains
 export { CHAINS } from "./chains/chains.js";
 export { allChains, getChain, getChainByName, getChainBySlug } from "./chains/lookup.js";
-export type { Chain, ChainExplorer, NativeCurrency } from "./chains/types.js";
+export type {
+  Chain,
+  ChainExplorer,
+  FormerNativeCurrency,
+  NativeCurrency,
+} from "./chains/types.js";
 
 // Tokens
 export {

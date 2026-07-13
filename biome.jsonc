@@ -4,8 +4,9 @@
   "files": {
     // node_modules/dist/.serena are skipped via vcs.useIgnoreFile (.gitignore).
     // The only entries needed here are the committed-but-generated artifacts of
-    // scripts/enrich.ts, kept compact (one row per line) instead of Biome-reflowed.
-    "includes": ["**/*.{js,json,jsonc,ts}", "!src/tokens/data", "!scripts/enriched.json"]
+    // scripts/enrich.ts and scripts/emit-json.ts, kept in their deterministic
+    // generated formatting instead of Biome-reflowed.
+    "includes": ["**/*.{js,json,jsonc,ts}", "!src/tokens/data", "!scripts/enriched.json", "!data"]
   },
   "overrides": [
     {

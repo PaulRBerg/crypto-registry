@@ -74,10 +74,28 @@ type UtxoChainSpec = {
 // secp256k1 transparent UTXO chains. Segwit fields are present only where the chain actually deployed segwit: Bitcoin
 // Cash, Dash, and transparent Zcash never did, so they enumerate P2PKH forms only.
 const UTXO_CHAIN_SPECS: readonly UtxoChainSpec[] = [
-  { bech32Hrp: "bc", coinType: COIN_TYPES.BITCOIN, ecosystem: "bitcoin", p2pkhVersion: 0x00, p2shVersion: 0x05 },
+  {
+    bech32Hrp: "bc",
+    coinType: COIN_TYPES.BITCOIN,
+    ecosystem: "bitcoin",
+    p2pkhVersion: 0x00,
+    p2shVersion: 0x05,
+  },
   { coinType: COIN_TYPES.BITCOIN_CASH, ecosystem: "bitcoin-cash", p2pkhVersion: 0x00 },
-  { bech32Hrp: "btg", coinType: COIN_TYPES.BITCOIN_GOLD, ecosystem: "bitcoin-gold", p2pkhVersion: 0x26, p2shVersion: 0x17 },
-  { bech32Hrp: "ltc", coinType: COIN_TYPES.LITECOIN, ecosystem: "litecoin", p2pkhVersion: 0x30, p2shVersion: 0x32 },
+  {
+    bech32Hrp: "btg",
+    coinType: COIN_TYPES.BITCOIN_GOLD,
+    ecosystem: "bitcoin-gold",
+    p2pkhVersion: 0x26,
+    p2shVersion: 0x17,
+  },
+  {
+    bech32Hrp: "ltc",
+    coinType: COIN_TYPES.LITECOIN,
+    ecosystem: "litecoin",
+    p2pkhVersion: 0x30,
+    p2shVersion: 0x32,
+  },
   { coinType: COIN_TYPES.DASH, ecosystem: "dash", p2pkhVersion: 0x4c },
   { coinType: COIN_TYPES.ZCASH, ecosystem: "zcash", p2pkhVersion: [0x1c, 0xb8] },
   { coinType: COIN_TYPES.VERGE, ecosystem: "verge", p2pkhVersion: 0x1e },
@@ -90,7 +108,11 @@ function utxoDescriptors(spec: UtxoChainSpec): RawKeyDescriptor[] {
     { ...base, encoding: "utxo-p2pkh-compressed", params: { p2pkhVersion: spec.p2pkhVersion } },
   ];
   if (spec.p2shVersion !== undefined) {
-    descriptors.push({ ...base, encoding: "utxo-p2sh-p2wpkh", params: { p2shVersion: spec.p2shVersion } });
+    descriptors.push({
+      ...base,
+      encoding: "utxo-p2sh-p2wpkh",
+      params: { p2shVersion: spec.p2shVersion },
+    });
   }
   if (spec.bech32Hrp !== undefined) {
     descriptors.push({ ...base, encoding: "utxo-p2wpkh", params: { bech32Hrp: spec.bech32Hrp } });
@@ -109,12 +131,22 @@ const ED25519_DESCRIPTORS: readonly RawKeyDescriptor[] = [
   { coinType: COIN_TYPES.SOLANA, ecosystem: "solana", encoding: "solana", scheme: "ed25519" },
   { coinType: COIN_TYPES.STELLAR, ecosystem: "stellar", encoding: "stellar", scheme: "ed25519" },
   { coinType: COIN_TYPES.ALGORAND, ecosystem: "algorand", encoding: "algorand", scheme: "ed25519" },
-  { coinType: COIN_TYPES.MULTIVERSX, ecosystem: "multiversx", encoding: "multiversx", scheme: "ed25519" },
+  {
+    coinType: COIN_TYPES.MULTIVERSX,
+    ecosystem: "multiversx",
+    encoding: "multiversx",
+    scheme: "ed25519",
+  },
   { coinType: COIN_TYPES.WAVES, ecosystem: "waves", encoding: "waves", scheme: "ed25519" },
 ];
 
 const SECP256R1_DESCRIPTORS: readonly RawKeyDescriptor[] = [
-  { coinType: COIN_TYPES.NEO, ecosystem: "neo-legacy", encoding: "neo-legacy", scheme: "secp256r1" },
+  {
+    coinType: COIN_TYPES.NEO,
+    ecosystem: "neo-legacy",
+    encoding: "neo-legacy",
+    scheme: "secp256r1",
+  },
 ];
 
 /**

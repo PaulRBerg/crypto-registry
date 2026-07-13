@@ -38,7 +38,7 @@ import {
   zora,
 } from "viem/chains";
 import type { Address } from "../address.js";
-import type { Chain, ChainExplorer } from "./types.js";
+import type { Chain, ChainExplorer, FormerNativeCurrency } from "./types.js";
 
 const CHAIN_SLUGS = [
   "abstract",
@@ -127,6 +127,7 @@ type LocalChainMetadata = {
   aliases?: readonly string[];
   coinGeckoPlatformId?: string;
   explorer?: ChainExplorer;
+  formerNativeCurrencies?: readonly FormerNativeCurrency[];
   mirrorAddresses?: readonly Address[];
   name: string;
   nativeCoinGeckoId: string;
@@ -228,6 +229,17 @@ const LOCAL_CHAIN_METADATA = {
     name: "Fraxtal",
     nativeCoinGeckoId: "frax-share",
     wrappedNativeAddress: "0xfc00000000000000000000000000000000000002",
+    // frxETH was the native gas asset until the Northstar hardfork replaced it with FRAX (ex-FXS).
+    // Activation: Fraxtal block 19571383, tx 0x30ecd5d4d33e823badbdef1eb2e2c040b1bb9c5cff7c76c1b7fb1dae6c2dad93
+    // upgraded both predeploys (0x…0002 FXS → wFRAX, 0x…0006 wfrxETH → frxETH).
+    formerNativeCurrencies: [
+      {
+        coinGeckoId: "frax-ether",
+        symbol: "frxETH",
+        untilUtc: "2025-04-29T19:04:37Z",
+        wrappedNativeAddress: "0xfc00000000000000000000000000000000000006",
+      },
+    ],
   },
   gnosis: {
     aliases: ["gnosis chain"],
@@ -422,6 +434,9 @@ const buildChain = (slug: ChainSlug): Chain => {
     chainId: viemChain.id,
     ...(metadata.coinGeckoPlatformId ? { coinGeckoPlatformId: metadata.coinGeckoPlatformId } : {}),
     explorer: metadata.explorer ?? explorerFromViem(viemChain),
+    ...(metadata.formerNativeCurrencies
+      ? { formerNativeCurrencies: metadata.formerNativeCurrencies }
+      : {}),
     ...(metadata.mirrorAddresses ? { mirrorAddresses: metadata.mirrorAddresses } : {}),
     name: metadata.name,
     nativeCurrency: {

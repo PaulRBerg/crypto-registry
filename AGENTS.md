@@ -17,6 +17,8 @@ Agent guidance for `@prb/crypto-registry`. Keep changes surgical and the package
 - `just build` — clean `dist/`, compile with `tsconfig.build.json`, `npm pack`.
 - `just enrich` — regenerate token data (see below). Network + reads an external source dir; not part of the normal
   build.
+- `just json-gen` — regenerate committed JSON artifacts for non-TypeScript consumers after hand edits to
+  `src/chains/chains.ts` or `scripts/classification.ts`.
 
 ## Lint Rules
 
@@ -79,6 +81,11 @@ then run `just enrich`:
 
 These generated files are excluded from Biome in `biome.jsonc` to stay compact (one row per line); they are still
 typechecked.
+
+`data/tokens.json` and `data/chains.json` are canonical JSON artifacts for non-TypeScript consumers (Go, jq, Python).
+TypeScript consumers should use the typed `@prb/crypto-registry` entry; Node ESM JSON imports need
+`with { type: "json" }`. Regenerate them with `just json-gen` after hand edits to `chains.ts` or the stablecoin
+classification.
 
 ## Hand-authored ticker vocabulary
 

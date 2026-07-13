@@ -43,6 +43,7 @@ export const STABLECOIN_TICKERS_BY_PEG: Readonly<Record<StablecoinPeg, readonly 
     "BSC-USD",
     "BUSD",
     "DAI",
+    "frxUSD",
     "GUSD",
     "LinkUSD",
     "mUSD",
@@ -86,6 +87,7 @@ export const PRICE_ASSET_ALIASES: Readonly<Record<string, string>> = {
   WSEI: "SEI",
   WXDC: "XDC",
   WxDAI: "xDAI",
+  wfrxETH: "frxETH",
   wNXM: "NXM",
 };
 
@@ -105,6 +107,7 @@ export const NATIVE_ASSET_CHAINS: Readonly<Record<string, string>> = {
   EOS: "EOS",
   ETH: "Ethereum",
   FRAX: "Fraxtal",
+  frxETH: "Fraxtal",
   HBAR: "Hedera",
   NEO: "NEO",
   POL: "Polygon",

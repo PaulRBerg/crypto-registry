@@ -183,6 +183,7 @@ function classify(t: EnrichedToken, meta: Resolved): { bucket: Bucket; line: str
       ...base,
       ["backing", str(family.backing)],
       ["bridged", String(bridged)],
+      ["family", str(family.display)],
       ["issuer", str(family.issuer)],
       ["kind", str("stablecoin")],
       ["peg", str(family.peg)],

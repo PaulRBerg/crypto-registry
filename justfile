@@ -55,3 +55,7 @@ alias tui := test-ui
 # Regenerate src/tokens/data/*.ts from on-chain enrichment (pass --cached to skip the network)
 @enrich *args:
     bun scripts/enrich.ts {{ args }}
+
+# Regenerate committed JSON data artifacts without network access
+@json-gen:
+    bun scripts/emit-json.ts

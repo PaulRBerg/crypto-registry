@@ -35,6 +35,8 @@ export type StablecoinBacking = "fiat" | "crypto";
 /** A token that targets a fixed value in a reference currency. */
 export type Stablecoin = TokenBase & {
   kind: "stablecoin";
+  /** Canonical accounting quote ticker for this stablecoin family. */
+  family: string;
   /** The currency the token tracks. */
   peg: StablecoinPeg;
   /** Collateral type backing the peg. */

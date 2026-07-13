@@ -7,6 +7,8 @@ import {
   STABLECOIN_TICKERS_BY_PEG,
 } from "./tickers.js";
 
+const UPPERCASE_TICKER_RE = /^[A-Z0-9]+$/u;
+
 describe("canonical ticker aliases", () => {
   it("matches the exact curated identity map", () => {
     expect(CANONICAL_TICKER_ALIASES).toEqual({
@@ -20,12 +22,10 @@ describe("canonical ticker aliases", () => {
 
   it("uses sorted uppercase keys and values without self-aliases", () => {
     const entries = Object.entries(CANONICAL_TICKER_ALIASES);
-    expect(entries.map(([ticker]) => ticker)).toEqual(
-      entries.map(([ticker]) => ticker).toSorted()
-    );
+    expect(entries.map(([ticker]) => ticker)).toEqual(entries.map(([ticker]) => ticker).toSorted());
     for (const [from, to] of entries) {
-      expect(from).toMatch(/^[A-Z0-9]+$/u);
-      expect(to).toMatch(/^[A-Z0-9]+$/u);
+      expect(from).toMatch(UPPERCASE_TICKER_RE);
+      expect(to).toMatch(UPPERCASE_TICKER_RE);
       expect(from).not.toBe(to);
     }
   });
@@ -44,6 +44,7 @@ describe("stablecoin tickers", () => {
       "USDC.e",
       "USDT",
       "WxDAI",
+      "frxUSD",
       "mUSD",
       "pUSD",
       "sUSD",
@@ -81,6 +82,7 @@ describe("price-asset aliases", () => {
       WSEI: "SEI",
       WXDC: "XDC",
       WxDAI: "xDAI",
+      wfrxETH: "frxETH",
       wNXM: "NXM",
     });
   });
@@ -110,6 +112,7 @@ describe("native asset chains", () => {
       EOS: "EOS",
       ETH: "Ethereum",
       FRAX: "Fraxtal",
+      frxETH: "Fraxtal",
       HBAR: "Hedera",
       NEO: "NEO",
       POL: "Polygon",

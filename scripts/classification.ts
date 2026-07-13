@@ -219,6 +219,15 @@ export const STABLECOIN_FAMILIES: readonly StablecoinFamily[] = [
     peg: "USD",
     symbols: ["sUSD"],
   },
+  {
+    backing: "fiat",
+    contracts: { fraxtal: ["0xfc00000000000000000000000000000000000001"] },
+    display: "frxUSD",
+    issuer: "Frax Finance",
+    nativeSymbols: ["frxUSD"],
+    peg: "USD",
+    symbols: ["frxUSD"],
+  },
 ];
 
 /**

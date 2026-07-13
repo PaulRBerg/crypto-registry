@@ -12,6 +12,21 @@ export type NativeCurrency = {
   coinGeckoId: string;
 };
 
+/**
+ * An earlier native gas asset of a {@link Chain}. The era ends (exclusive) at
+ * `untilUtc`, the activation instant of the hardfork that replaced the asset.
+ */
+export type FormerNativeCurrency = {
+  /** Ticker symbol, e.g. `"frxETH"`. */
+  symbol: string;
+  /** CoinGecko coin id for pricing the former native asset. */
+  coinGeckoId: string;
+  /** Era end (exclusive), ISO 8601 UTC. */
+  untilUtc: string;
+  /** Wrapped-native token address during this era, when one existed. */
+  wrappedNativeAddress?: Address;
+};
+
 /** Explorer URL templates. `{address}` / `{tx_hash}` are substituted by callers. */
 export type ChainExplorer = {
   /** Address page template containing the `{address}` placeholder. */
@@ -32,6 +47,8 @@ export type Chain = {
   aliases: readonly string[];
   /** The chain's native gas asset. */
   nativeCurrency: NativeCurrency;
+  /** Earlier native gas assets, oldest first (e.g. Fraxtal's frxETH era). */
+  formerNativeCurrencies?: readonly FormerNativeCurrency[];
   /** Canonical wrapped-native token address (e.g. WETH), when one exists. */
   wrappedNativeAddress?: Address;
   /**

@@ -18,6 +18,7 @@ import { createPublicClient, fromHex, http } from "viem";
 import { CHAINS, VIEM_CHAINS_BY_SLUG } from "../src/chains/chains.js";
 import { STABLECOIN_FAMILIES } from "./classification.js";
 import { generate } from "./codegen.js";
+import { emitJson } from "./emit-json.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const TOKEN_SOURCE_DIR =
@@ -387,6 +388,7 @@ async function main() {
     }
   }
   generate(tokens);
+  emitJson();
 }
 
 main().catch((error) => {

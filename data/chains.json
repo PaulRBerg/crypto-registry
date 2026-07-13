@@ -1,0 +1,718 @@
+{
+  "chains": [
+    {
+      "aliases": [
+        "eth",
+        "ethereum",
+        "ethereum mainnet"
+      ],
+      "chainId": 1,
+      "coinGeckoPlatformId": "ethereum",
+      "explorer": {
+        "addressUrl": "https://etherscan.io/address/{address}",
+        "txUrl": "https://etherscan.io/tx/{tx_hash}"
+      },
+      "name": "Ethereum",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "mainnet",
+      "wrappedNativeAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+    },
+    {
+      "aliases": [
+        "op",
+        "OP Mainnet"
+      ],
+      "chainId": 10,
+      "coinGeckoPlatformId": "optimistic-ethereum",
+      "explorer": {
+        "addressUrl": "https://optimistic.etherscan.io/address/{address}",
+        "txUrl": "https://optimistic.etherscan.io/tx/{tx_hash}"
+      },
+      "mirrorAddresses": [
+        "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000"
+      ],
+      "name": "Optimism",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "optimism",
+      "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "aliases": [
+        "XDC Network"
+      ],
+      "chainId": 50,
+      "coinGeckoPlatformId": "xdc-network",
+      "explorer": {
+        "addressUrl": "https://xdcscan.com/address/{address}",
+        "txUrl": "https://xdcscan.com/tx/{tx_hash}"
+      },
+      "name": "XDC",
+      "nativeCurrency": {
+        "coinGeckoId": "xdce-crowd-sale",
+        "decimals": 18,
+        "name": "XDC",
+        "symbol": "XDC"
+      },
+      "slug": "xdc",
+      "wrappedNativeAddress": "0x951857744785e80e2de051c32ee7b25f9c458c42"
+    },
+    {
+      "aliases": [
+        "binance smart chain",
+        "bnb",
+        "BNB Smart Chain"
+      ],
+      "chainId": 56,
+      "coinGeckoPlatformId": "binance-smart-chain",
+      "explorer": {
+        "addressUrl": "https://bscscan.com/address/{address}",
+        "txUrl": "https://bscscan.com/tx/{tx_hash}"
+      },
+      "name": "BNB Chain",
+      "nativeCurrency": {
+        "coinGeckoId": "binancecoin",
+        "decimals": 18,
+        "name": "BNB",
+        "symbol": "BNB"
+      },
+      "slug": "bsc",
+      "wrappedNativeAddress": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+    },
+    {
+      "aliases": [
+        "gnosis chain"
+      ],
+      "chainId": 100,
+      "coinGeckoPlatformId": "xdai",
+      "explorer": {
+        "addressUrl": "https://gnosisscan.io/address/{address}",
+        "txUrl": "https://gnosisscan.io/tx/{tx_hash}"
+      },
+      "name": "Gnosis",
+      "nativeCurrency": {
+        "coinGeckoId": "dai",
+        "decimals": 18,
+        "name": "xDAI",
+        "symbol": "xDAI"
+      },
+      "slug": "gnosis",
+      "wrappedNativeAddress": "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d"
+    },
+    {
+      "aliases": [],
+      "chainId": 130,
+      "coinGeckoPlatformId": "unichain",
+      "explorer": {
+        "addressUrl": "https://uniscan.xyz/address/{address}",
+        "txUrl": "https://uniscan.xyz/tx/{tx_hash}"
+      },
+      "name": "Unichain",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "unichain",
+      "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "aliases": [
+        "matic",
+        "pol"
+      ],
+      "chainId": 137,
+      "coinGeckoPlatformId": "polygon-pos",
+      "explorer": {
+        "addressUrl": "https://polygonscan.com/address/{address}",
+        "txUrl": "https://polygonscan.com/tx/{tx_hash}"
+      },
+      "mirrorAddresses": [
+        "0x0000000000000000000000000000000000001010"
+      ],
+      "name": "Polygon",
+      "nativeCurrency": {
+        "coinGeckoId": "polygon-ecosystem-token",
+        "decimals": 18,
+        "name": "POL",
+        "symbol": "POL"
+      },
+      "slug": "polygon",
+      "wrappedNativeAddress": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270"
+    },
+    {
+      "aliases": [],
+      "chainId": 143,
+      "coinGeckoPlatformId": "monad",
+      "explorer": {
+        "addressUrl": "https://monadscan.com/address/{address}",
+        "txUrl": "https://monadscan.com/tx/{tx_hash}"
+      },
+      "name": "Monad",
+      "nativeCurrency": {
+        "coinGeckoId": "monad",
+        "decimals": 18,
+        "name": "Monad",
+        "symbol": "MON"
+      },
+      "slug": "monad",
+      "wrappedNativeAddress": "0x3bd359c1119da7da1d913d1c4d2b7c461115433a"
+    },
+    {
+      "aliases": [],
+      "chainId": 146,
+      "coinGeckoPlatformId": "sonic",
+      "explorer": {
+        "addressUrl": "https://sonicscan.org/address/{address}",
+        "txUrl": "https://sonicscan.org/tx/{tx_hash}"
+      },
+      "name": "Sonic",
+      "nativeCurrency": {
+        "coinGeckoId": "sonic-3",
+        "decimals": 18,
+        "name": "Sonic",
+        "symbol": "S"
+      },
+      "slug": "sonic",
+      "wrappedNativeAddress": "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38"
+    },
+    {
+      "aliases": [
+        "fantom opera",
+        "ftm"
+      ],
+      "chainId": 250,
+      "coinGeckoPlatformId": "fantom",
+      "explorer": {
+        "addressUrl": "https://ftmscan.com/address/{address}",
+        "txUrl": "https://ftmscan.com/tx/{tx_hash}"
+      },
+      "name": "Fantom",
+      "nativeCurrency": {
+        "coinGeckoId": "fantom",
+        "decimals": 18,
+        "name": "Fantom",
+        "symbol": "FTM"
+      },
+      "slug": "fantom",
+      "wrappedNativeAddress": "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83"
+    },
+    {
+      "aliases": [
+        "frax"
+      ],
+      "chainId": 252,
+      "coinGeckoPlatformId": "fraxtal",
+      "explorer": {
+        "addressUrl": "https://fraxscan.com/address/{address}",
+        "txUrl": "https://fraxscan.com/tx/{tx_hash}"
+      },
+      "formerNativeCurrencies": [
+        {
+          "coinGeckoId": "frax-ether",
+          "symbol": "frxETH",
+          "untilUtc": "2025-04-29T19:04:37Z",
+          "wrappedNativeAddress": "0xfc00000000000000000000000000000000000006"
+        }
+      ],
+      "name": "Fraxtal",
+      "nativeCurrency": {
+        "coinGeckoId": "frax-share",
+        "decimals": 18,
+        "name": "Frax",
+        "symbol": "FRAX"
+      },
+      "slug": "fraxtal",
+      "wrappedNativeAddress": "0xfc00000000000000000000000000000000000002"
+    },
+    {
+      "aliases": [],
+      "chainId": 324,
+      "coinGeckoPlatformId": "zksync",
+      "explorer": {
+        "addressUrl": "https://explorer.zksync.io/address/{address}",
+        "txUrl": "https://explorer.zksync.io/tx/{tx_hash}"
+      },
+      "mirrorAddresses": [
+        "0x000000000000000000000000000000000000800a"
+      ],
+      "name": "ZKsync Era",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "zksync",
+      "wrappedNativeAddress": "0x5aea5775959fbc2557cc8789bc1bf90a239d9a91"
+    },
+    {
+      "aliases": [
+        "worldchain"
+      ],
+      "chainId": 480,
+      "coinGeckoPlatformId": "world-chain",
+      "explorer": {
+        "addressUrl": "https://worldscan.org/address/{address}",
+        "txUrl": "https://worldscan.org/tx/{tx_hash}"
+      },
+      "name": "World Chain",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "world-chain",
+      "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "aliases": [
+        "hyper evm",
+        "hyperliquid"
+      ],
+      "chainId": 999,
+      "coinGeckoPlatformId": "hyperevm",
+      "explorer": {
+        "addressUrl": "https://hyperevmscan.io/address/{address}",
+        "txUrl": "https://hyperevmscan.io/tx/{tx_hash}"
+      },
+      "name": "HyperEVM",
+      "nativeCurrency": {
+        "coinGeckoId": "hyperliquid",
+        "decimals": 18,
+        "name": "HYPE",
+        "symbol": "HYPE"
+      },
+      "slug": "hyperevm",
+      "wrappedNativeAddress": "0x5555555555555555555555555555555555555555"
+    },
+    {
+      "aliases": [
+        "coreDao"
+      ],
+      "chainId": 1116,
+      "coinGeckoPlatformId": "core",
+      "explorer": {
+        "addressUrl": "https://scan.coredao.org/address/{address}",
+        "txUrl": "https://scan.coredao.org/tx/{tx_hash}"
+      },
+      "name": "Core Dao",
+      "nativeCurrency": {
+        "coinGeckoId": "coredaoorg",
+        "decimals": 18,
+        "name": "Core",
+        "symbol": "CORE"
+      },
+      "slug": "core-dao"
+    },
+    {
+      "aliases": [
+        "Sei Network"
+      ],
+      "chainId": 1329,
+      "coinGeckoPlatformId": "sei-v2",
+      "explorer": {
+        "addressUrl": "https://seiscan.io/address/{address}",
+        "txUrl": "https://seiscan.io/tx/{tx_hash}"
+      },
+      "name": "Sei",
+      "nativeCurrency": {
+        "coinGeckoId": "sei-network",
+        "decimals": 18,
+        "name": "Sei",
+        "symbol": "SEI"
+      },
+      "slug": "sei",
+      "wrappedNativeAddress": "0xe30fedd158a2e3b13e9badaeabafc5516e95e8c7"
+    },
+    {
+      "aliases": [
+        "lightlink phoenix",
+        "LightLink Phoenix Mainnet"
+      ],
+      "chainId": 1890,
+      "coinGeckoPlatformId": "lightlink",
+      "explorer": {
+        "addressUrl": "https://phoenix.lightlink.io/address/{address}",
+        "txUrl": "https://phoenix.lightlink.io/tx/{tx_hash}"
+      },
+      "name": "Lightlink",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "lightlink"
+    },
+    {
+      "aliases": [],
+      "chainId": 2020,
+      "coinGeckoPlatformId": "ronin",
+      "explorer": {
+        "addressUrl": "https://app.roninchain.com/address/{address}",
+        "txUrl": "https://app.roninchain.com/tx/{tx_hash}"
+      },
+      "name": "Ronin",
+      "nativeCurrency": {
+        "coinGeckoId": "ronin",
+        "decimals": 18,
+        "name": "RON",
+        "symbol": "RON"
+      },
+      "slug": "ronin"
+    },
+    {
+      "aliases": [],
+      "chainId": 2741,
+      "coinGeckoPlatformId": "abstract",
+      "explorer": {
+        "addressUrl": "https://abscan.org/address/{address}",
+        "txUrl": "https://abscan.org/tx/{tx_hash}"
+      },
+      "name": "Abstract",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "ETH",
+        "symbol": "ETH"
+      },
+      "slug": "abstract"
+    },
+    {
+      "aliases": [],
+      "chainId": 2818,
+      "coinGeckoPlatformId": "morph-l2",
+      "explorer": {
+        "addressUrl": "https://explorer.morphl2.io/address/{address}",
+        "txUrl": "https://explorer.morphl2.io/tx/{tx_hash}"
+      },
+      "name": "Morph",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "morph",
+      "wrappedNativeAddress": "0x5300000000000000000000000000000000000011"
+    },
+    {
+      "aliases": [],
+      "chainId": 4689,
+      "coinGeckoPlatformId": "iotex",
+      "explorer": {
+        "addressUrl": "https://iotexscan.io/address/{address}",
+        "txUrl": "https://iotexscan.io/tx/{tx_hash}"
+      },
+      "name": "IoTeX",
+      "nativeCurrency": {
+        "coinGeckoId": "iotex",
+        "decimals": 18,
+        "name": "IoTeX",
+        "symbol": "IOTX"
+      },
+      "slug": "iotex"
+    },
+    {
+      "aliases": [],
+      "chainId": 5330,
+      "coinGeckoPlatformId": "superseed",
+      "explorer": {
+        "addressUrl": "https://explorer.superseed.xyz/address/{address}",
+        "txUrl": "https://explorer.superseed.xyz/tx/{tx_hash}"
+      },
+      "name": "Superseed",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "superseed",
+      "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "aliases": [],
+      "chainId": 8453,
+      "coinGeckoPlatformId": "base",
+      "explorer": {
+        "addressUrl": "https://basescan.org/address/{address}",
+        "txUrl": "https://basescan.org/tx/{tx_hash}"
+      },
+      "mirrorAddresses": [
+        "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000"
+      ],
+      "name": "Base",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "base",
+      "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "aliases": [
+        "Mode Mainnet"
+      ],
+      "chainId": 34443,
+      "coinGeckoPlatformId": "mode",
+      "explorer": {
+        "addressUrl": "https://explorer.mode.network/address/{address}",
+        "txUrl": "https://explorer.mode.network/tx/{tx_hash}"
+      },
+      "name": "Mode",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "mode",
+      "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "aliases": [
+        "Arbitrum One"
+      ],
+      "chainId": 42161,
+      "coinGeckoPlatformId": "arbitrum-one",
+      "explorer": {
+        "addressUrl": "https://arbiscan.io/address/{address}",
+        "txUrl": "https://arbiscan.io/tx/{tx_hash}"
+      },
+      "name": "Arbitrum",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "arbitrum",
+      "wrappedNativeAddress": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1"
+    },
+    {
+      "aliases": [],
+      "chainId": 42170,
+      "coinGeckoPlatformId": "arbitrum-nova",
+      "explorer": {
+        "addressUrl": "https://arbitrum-nova.blockscout.com/address/{address}",
+        "txUrl": "https://arbitrum-nova.blockscout.com/tx/{tx_hash}"
+      },
+      "name": "Arbitrum Nova",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "arbitrum-nova"
+    },
+    {
+      "aliases": [],
+      "chainId": 42220,
+      "coinGeckoPlatformId": "celo",
+      "explorer": {
+        "addressUrl": "https://celoscan.io/address/{address}",
+        "txUrl": "https://celoscan.io/tx/{tx_hash}"
+      },
+      "mirrorAddresses": [
+        "0x471ece3750da237f93b8e339c536989b8978a438"
+      ],
+      "name": "Celo",
+      "nativeCurrency": {
+        "coinGeckoId": "celo",
+        "decimals": 18,
+        "name": "CELO",
+        "symbol": "CELO"
+      },
+      "slug": "celo"
+    },
+    {
+      "aliases": [
+        "avalanche c-chain",
+        "avax"
+      ],
+      "chainId": 43114,
+      "coinGeckoPlatformId": "avalanche",
+      "explorer": {
+        "addressUrl": "https://snowscan.xyz/address/{address}",
+        "txUrl": "https://snowscan.xyz/tx/{tx_hash}"
+      },
+      "name": "Avalanche",
+      "nativeCurrency": {
+        "coinGeckoId": "avalanche-2",
+        "decimals": 18,
+        "name": "Avalanche",
+        "symbol": "AVAX"
+      },
+      "slug": "avalanche",
+      "wrappedNativeAddress": "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"
+    },
+    {
+      "aliases": [],
+      "chainId": 50104,
+      "coinGeckoPlatformId": "sophon",
+      "explorer": {
+        "addressUrl": "https://explorer.sophon.xyz/address/{address}",
+        "txUrl": "https://explorer.sophon.xyz/tx/{tx_hash}"
+      },
+      "name": "Sophon",
+      "nativeCurrency": {
+        "coinGeckoId": "sophon",
+        "decimals": 18,
+        "name": "Sophon",
+        "symbol": "SOPH"
+      },
+      "slug": "sophon"
+    },
+    {
+      "aliases": [
+        "Linea Mainnet"
+      ],
+      "chainId": 59144,
+      "coinGeckoPlatformId": "linea",
+      "explorer": {
+        "addressUrl": "https://lineascan.build/address/{address}",
+        "txUrl": "https://lineascan.build/tx/{tx_hash}"
+      },
+      "name": "Linea",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Linea Ether",
+        "symbol": "ETH"
+      },
+      "slug": "linea",
+      "wrappedNativeAddress": "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f"
+    },
+    {
+      "aliases": [],
+      "chainId": 80094,
+      "coinGeckoPlatformId": "berachain",
+      "explorer": {
+        "addressUrl": "https://berascan.com/address/{address}",
+        "txUrl": "https://berascan.com/tx/{tx_hash}"
+      },
+      "name": "Berachain",
+      "nativeCurrency": {
+        "coinGeckoId": "berachain-bera",
+        "decimals": 18,
+        "name": "BERA Token",
+        "symbol": "BERA"
+      },
+      "slug": "berachain",
+      "wrappedNativeAddress": "0x6969696969696969696969696969696969696969"
+    },
+    {
+      "aliases": [],
+      "chainId": 81457,
+      "coinGeckoPlatformId": "blast",
+      "explorer": {
+        "addressUrl": "https://blastscan.io/address/{address}",
+        "txUrl": "https://blastscan.io/tx/{tx_hash}"
+      },
+      "name": "Blast",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "blast",
+      "wrappedNativeAddress": "0x4300000000000000000000000000000000000004"
+    },
+    {
+      "aliases": [
+        "Chiliz Chain"
+      ],
+      "chainId": 88888,
+      "coinGeckoPlatformId": "chiliz",
+      "explorer": {
+        "addressUrl": "https://chiliscan.com/address/{address}",
+        "txUrl": "https://chiliscan.com/tx/{tx_hash}"
+      },
+      "name": "Chiliz",
+      "nativeCurrency": {
+        "coinGeckoId": "chiliz",
+        "decimals": 18,
+        "name": "CHZ",
+        "symbol": "CHZ"
+      },
+      "slug": "chiliz"
+    },
+    {
+      "aliases": [
+        "Taiko Alethia",
+        "Taiko Mainnet"
+      ],
+      "chainId": 167000,
+      "coinGeckoPlatformId": "taiko",
+      "explorer": {
+        "addressUrl": "https://taikoscan.io/address/{address}",
+        "txUrl": "https://taikoscan.io/tx/{tx_hash}"
+      },
+      "name": "Taiko",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "taiko",
+      "wrappedNativeAddress": "0xa51894664a773981c6c112c43ce576f315d5b1b6"
+    },
+    {
+      "aliases": [],
+      "chainId": 534352,
+      "coinGeckoPlatformId": "scroll",
+      "explorer": {
+        "addressUrl": "https://scrollscan.com/address/{address}",
+        "txUrl": "https://scrollscan.com/tx/{tx_hash}"
+      },
+      "name": "Scroll",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "scroll",
+      "wrappedNativeAddress": "0x5300000000000000000000000000000000000004"
+    },
+    {
+      "aliases": [
+        "zora network"
+      ],
+      "chainId": 7777777,
+      "coinGeckoPlatformId": "zora-network",
+      "explorer": {
+        "addressUrl": "https://explorer.zora.energy/address/{address}",
+        "txUrl": "https://explorer.zora.energy/tx/{tx_hash}"
+      },
+      "name": "Zora",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "zora",
+      "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
+    }
+  ],
+  "schemaVersion": 1
+}

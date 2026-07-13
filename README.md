@@ -27,12 +27,12 @@ Requires an ESM environment (Node ≥ 20, or any modern bundler/browser).
 Every token carries a `kind` discriminant. Narrow with the exported guards (`isStandard`, `isStablecoin`, `isWrapped`,
 `isMirror`).
 
-| Kind         | Meaning                                                                                       | Extra fields                          |
-| ------------ | --------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `standard`   | A plain ERC-20.                                                                               | —                                     |
-| `stablecoin` | USDC / USDT / DAI / EURe and their bridged variants.                                          | `peg`, `backing`, `bridged`, `issuer` |
-| `wrapped`    | The canonical wrapper of a chain's **native** gas token (e.g. WETH).                          | `underlyingSymbol`                    |
-| `mirror`     | An ERC-20-like contract that mirrors the native token (e.g. the POL precompile at `0x…1010`). | `mirrors`                             |
+| Kind         | Meaning                                                                                       | Extra fields                                    |
+| ------------ | --------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `standard`   | A plain ERC-20.                                                                               | —                                               |
+| `stablecoin` | USDC / USDT / DAI / EURe and their bridged variants.                                          | `family`, `peg`, `backing`, `bridged`, `issuer` |
+| `wrapped`    | The canonical wrapper of a chain's **native** gas token (e.g. WETH).                          | `underlyingSymbol`                              |
+| `mirror`     | An ERC-20-like contract that mirrors the native token (e.g. the POL precompile at `0x…1010`). | `mirrors`                                       |
 
 ## Usage
 
@@ -90,6 +90,13 @@ case-sensitive.
 SLIP-44 coin types, purposes, schemes, SLIP-132 version bytes, UTXO descriptor helpers, and Substrate SURI utilities.
 
 Addresses are stored lowercased; lookups are case-insensitive. No keccak/EIP-55 checksumming is performed.
+
+## JSON artifacts
+
+Non-TypeScript consumers (Go, jq, Python) can use the `@prb/crypto-registry/tokens.json` and
+`@prb/crypto-registry/chains.json` subpaths. Node ESM imports require `with { type: "json" }`; TypeScript consumers
+should keep using the typed `@prb/crypto-registry` entry. Run `just json-gen` after hand edits to `chains.ts` or the
+stablecoin classification.
 
 ## Contributing
 

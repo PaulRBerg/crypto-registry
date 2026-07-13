@@ -140,6 +140,7 @@ describe("stablecoins", () => {
     for (const token of getStablecoins()) {
       expect(["USD", "EUR"]).toContain(token.peg);
       expect(["fiat", "crypto"]).toContain(token.backing);
+      expect(token.family.length).toBeGreaterThan(0);
     }
   });
 });
