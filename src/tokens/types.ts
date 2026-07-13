@@ -35,8 +35,13 @@ export type StablecoinBacking = "fiat" | "crypto";
 /** A token that targets a fixed value in a reference currency. */
 export type Stablecoin = TokenBase & {
   kind: "stablecoin";
-  /** Canonical accounting quote ticker for this stablecoin family. */
-  family: string;
+  /**
+   * Truthful current ecosystem ticker for this exact contract. Defaults to the
+   * on-chain symbol, with hand-authored overrides where that symbol is stale or
+   * ambiguous (e.g. Polygon `0x2791…` reads `"USDC"` but the ecosystem ticker
+   * is `"USDC.e"`). Always ASCII matching the accounting bare-ticker shape.
+   */
+  ticker: string;
   /** The currency the token tracks. */
   peg: StablecoinPeg;
   /** Collateral type backing the peg. */

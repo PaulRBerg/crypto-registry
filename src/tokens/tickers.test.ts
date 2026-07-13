@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getWrappedTokens } from "./lookup.js";
+import { getStablecoins, getWrappedTokens } from "./lookup.js";
 import {
   CANONICAL_TICKER_ALIASES,
   NATIVE_ASSET_CHAINS,
@@ -37,14 +37,20 @@ describe("stablecoin tickers", () => {
       "BSC-USD",
       "BUSD",
       "DAI",
+      "DAI.e",
       "GUSD",
       "LinkUSD",
       "USD",
       "USDC",
       "USDC.e",
       "USDT",
+      "USDT0",
+      "USDbC",
+      "USDt",
       "WxDAI",
+      "axlUSDC",
       "frxUSD",
+      "lzUSDC",
       "mUSD",
       "pUSD",
       "sUSD",
@@ -59,6 +65,16 @@ describe("stablecoin tickers", () => {
   it("has no duplicates within or across pegs", () => {
     const all = [...STABLECOIN_TICKERS_BY_PEG.USD, ...STABLECOIN_TICKERS_BY_PEG.EUR];
     expect(new Set(all).size).toBe(all.length);
+  });
+
+  it("covers every registry ticker or names it as an explicit exception", () => {
+    const exceptions: readonly string[] = ["TUSD", "USDB", "EURT", "USDT-matic", "BUSD-bsc"];
+    for (const row of getStablecoins()) {
+      expect(
+        STABLECOIN_TICKERS_BY_PEG[row.peg].includes(row.ticker) || exceptions.includes(row.ticker),
+        `${row.chainId}:${row.address} ${row.ticker}`
+      ).toBe(true);
+    }
   });
 });
 

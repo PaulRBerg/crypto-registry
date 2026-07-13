@@ -10,7 +10,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { CHAINS } from "../src/chains/chains.js";
 import type { StablecoinFamily } from "./classification.js";
-import { DROPPED, FORCE_BRIDGED, STABLECOIN_FAMILIES } from "./classification.js";
+import { DROPPED, FORCE_BRIDGED, STABLECOIN_FAMILIES, TICKER_OVERRIDES } from "./classification.js";
 import type { EnrichedToken } from "./enrich.js";
 
 const DATA_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "tokens", "data");
@@ -102,6 +102,7 @@ for (const d of DROPPED) {
 }
 
 const forceBridged = new Set(FORCE_BRIDGED.map((s) => s.toLowerCase()));
+const BARE_TICKER_RE = /^[A-Za-z0-9][A-Za-z0-9_.-]*$/;
 
 const coinGeckoIdFor = (symbol: string): string | undefined => COINGECKO_ID[symbol.toUpperCase()];
 
@@ -175,6 +176,12 @@ function classify(t: EnrichedToken, meta: Resolved): { bucket: Bucket; line: str
 
   const family = stablecoinByKey.get(k) ?? stablecoinBySymbol.get(meta.symbol);
   if (family) {
+    const ticker = TICKER_OVERRIDES[k] ?? meta.symbol;
+    if (!BARE_TICKER_RE.test(ticker)) {
+      throw new Error(
+        `invalid stablecoin ticker ${str(ticker)} for ${t.slug} ${t.address}; add a TICKER_OVERRIDES entry in classification.ts`
+      );
+    }
     const bridged =
       !family.nativeSymbols.includes(meta.symbol) ||
       NAME_LOOKS_BRIDGED.test(meta.name ?? "") ||
@@ -183,10 +190,10 @@ function classify(t: EnrichedToken, meta: Resolved): { bucket: Bucket; line: str
       ...base,
       ["backing", str(family.backing)],
       ["bridged", String(bridged)],
-      ["family", str(family.display)],
       ["issuer", str(family.issuer)],
       ["kind", str("stablecoin")],
       ["peg", str(family.peg)],
+      ["ticker", str(ticker)],
     ]);
     return { bucket: "stablecoin", line };
   }

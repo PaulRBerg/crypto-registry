@@ -70,12 +70,13 @@ If any command fails, fix only the errors in files you changed.
 `src/tokens/data/{stablecoins,wrapped,mirrors,standard}.ts` and `scripts/enriched.json` are generated. Edit the inputs,
 then run `just enrich`:
 
-- `scripts/classification.ts` — hand-authored spec: stablecoin families (addresses + peg/backing/issuer) and the
-  documented `DROPPED` list.
+- `scripts/classification.ts` — hand-authored spec: stablecoin families (addresses + peg/backing/issuer), exact-contract
+  `TICKER_OVERRIDES`, and the documented `DROPPED` list.
 - `scripts/enrich.ts` — reads the token universe, fetches `decimals`/`symbol`/ `name` on-chain via viem Multicall3,
   writes `enriched.json`, then runs codegen. Re-run codegen only (no network) with `bun scripts/enrich.ts --cached`.
 - `scripts/codegen.ts` — classifies (precedence: stablecoin > wrapped > mirror > standard) and emits the four data
-  modules.
+  modules. A stablecoin's `ticker` defaults to its enriched on-chain symbol, then applies an exact-contract override;
+  codegen rejects tickers outside the ASCII bare-ticker shape (`^[A-Za-z0-9][A-Za-z0-9_.-]*$`).
 - `src/chains/chains.ts` keeps the supported evm-atlas chain set local, maps those slugs to `viem/chains`, and layers
   local Atlas/accounting metadata on top. Do not widen support to every viem chain.
 
@@ -84,8 +85,8 @@ typechecked.
 
 `data/tokens.json` and `data/chains.json` are canonical JSON artifacts for non-TypeScript consumers (Go, jq, Python).
 TypeScript consumers should use the typed `@prb/crypto-registry` entry; Node ESM JSON imports need
-`with { type: "json" }`. Regenerate them with `just json-gen` after hand edits to `chains.ts` or the stablecoin
-classification.
+`with { type: "json" }`. Regenerate them with `just json-gen` after hand edits to `chains.ts`, the stablecoin
+classification, or ticker overrides.
 
 ## Hand-authored ticker vocabulary
 
@@ -105,7 +106,10 @@ truth, so edit the literals here and keep `src/tokens/tickers.test.ts` green.
   modules and `enriched.json`.
 - Wrapped natives and native mirrors are derived from the chain registry. Stablecoins are classified by exact on-chain
   symbol against the families in `classification.ts` (so bridged/legacy variants like `USDC.e`/`USDbC` are caught while
-  decorated `aUSDC`/`cDAI`/LP tokens are not); `bridged` is best-effort (symbol/name heuristic plus `FORCE_BRIDGED`).
+  decorated `aUSDC`/`cDAI`/LP tokens are not). Each contract's `ticker` is its current ecosystem ticker, defaulting to
+  the enriched symbol and corrected through `TICKER_OVERRIDES` when that symbol is stale or ambiguous; consumers apply
+  the newest ticker retroactively rather than preserving historical names. Tickers must satisfy the ASCII bare-ticker
+  invariant. `bridged` remains best-effort (symbol/name heuristic plus `FORCE_BRIDGED`).
 
 ## Conventions
 

@@ -27,12 +27,14 @@ export const CANONICAL_TICKER_ALIASES: Readonly<Record<string, string>> = {
  * curated *superset* of the on-chain stablecoin symbols in the {@link STABLECOINS}
  * data (accessible via {@link getStablecoins}): it also folds in the plain fiat
  * quote `USD`, fiat-collateralized native tokens on Gnosis (`xDAI` /
- * `WxDAI`), and exchange- or issuer-specific pegged tickers (`BSC-USD`,
- * `LinkUSD`, `mUSD`) that never appear as canonical on-chain ERC-20 symbols.
+ * `WxDAI`), exchange- or issuer-specific pegged tickers (`BSC-USD`,
+ * `LinkUSD`, `mUSD`) that never appear as canonical on-chain ERC-20 symbols,
+ * and non-EVM bridged variants (`axlUSDC` on Cosmos chains, `lzUSDC` on
+ * Aptos).
  *
- * Conversely it intentionally omits several on-chain stablecoin symbols
- * (`TUSD`, `USDB`, `USDbC`, …) that are not part of the fiat-equivalent quote
- * vocabulary.
+ * Conversely it intentionally omits the on-chain stablecoin tickers `TUSD`,
+ * `USDB`, `EURT`, `USDT-matic`, and `BUSD-bsc`, which remain quote-only
+ * downstream.
  *
  * Membership tests against these tickers are **case-sensitive**, so preserve
  * the exact casing.
@@ -40,18 +42,24 @@ export const CANONICAL_TICKER_ALIASES: Readonly<Record<string, string>> = {
 export const STABLECOIN_TICKERS_BY_PEG: Readonly<Record<StablecoinPeg, readonly string[]>> = {
   EUR: ["EURe"],
   USD: [
+    "axlUSDC",
     "BSC-USD",
     "BUSD",
     "DAI",
+    "DAI.e",
     "frxUSD",
     "GUSD",
     "LinkUSD",
+    "lzUSDC",
     "mUSD",
     "sUSD",
     "USD",
     "USDC",
     "USDC.e",
+    "USDbC",
     "USDT",
+    "USDT0",
+    "USDt",
     "WxDAI",
     "xDAI",
     "pUSD",

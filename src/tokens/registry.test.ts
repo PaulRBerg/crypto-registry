@@ -13,6 +13,7 @@ import { TOKENS } from "./registry.js";
 import { isMirror, isStablecoin, isStandard, isWrapped } from "./types.js";
 
 const LOWERCASE_ADDRESS = /^0x[0-9a-f]{40}$/;
+const BARE_TICKER_RE = /^[A-Za-z0-9][A-Za-z0-9_.-]*$/;
 
 describe("registry integrity", () => {
   it("has unique (chainId, address) keys", () => {
@@ -110,6 +111,30 @@ describe("stablecoins", () => {
     }
   });
 
+  it("carries the current ecosystem ticker for each exact contract", () => {
+    const expected = [
+      [137, "0x2791bca1f2de4661ed88a30c99a7a9449aa84174", "USDC.e"],
+      [42_161, "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9", "USDT0"],
+      [42_220, "0x48065fbbe25f71c9282ddf5e1cd6d6a887483d5e", "USDT"],
+      [43_114, "0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7", "USDt"],
+      [8453, "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca", "USDbC"],
+      [43_114, "0xd586e7f844cea2f87f50152665bcbc2c279d8d70", "DAI.e"],
+      [137, "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063", "DAI"],
+    ] as const;
+    for (const [chainId, address, ticker] of expected) {
+      expect(getToken(chainId, address), `${chainId}:${address}`).toMatchObject({
+        kind: "stablecoin",
+        ticker,
+      });
+    }
+
+    expect(getToken(42_161, "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8")).toMatchObject({
+      bridged: true,
+      kind: "stablecoin",
+      ticker: "USDC.e",
+    });
+  });
+
   it("classify non-USDC/USDT/DAI/EURe stablecoin families", () => {
     const gusd = getToken(1, "0x056Fd409E1d7A124BD7017459DFEa2F387b6d5Cd"); // Gemini dollar
     expect(gusd && isStablecoin(gusd)).toBe(true);
@@ -140,7 +165,7 @@ describe("stablecoins", () => {
     for (const token of getStablecoins()) {
       expect(["USD", "EUR"]).toContain(token.peg);
       expect(["fiat", "crypto"]).toContain(token.backing);
-      expect(token.family.length).toBeGreaterThan(0);
+      expect(token.ticker).toMatch(BARE_TICKER_RE);
     }
   });
 });

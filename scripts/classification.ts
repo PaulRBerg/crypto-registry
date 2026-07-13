@@ -238,7 +238,21 @@ export const STABLECOIN_FAMILIES: readonly StablecoinFamily[] = [
 export const FORCE_BRIDGED: readonly string[] = [
   "10:0x7f5c764cbc14f9669b88837ca1490cca17c31607", // Optimism USDC.e (symbol "USDC")
   "100:0xddafbb505ad214d7b80b1f830fccc89b60fb7a83", // Gnosis bridged USDC (symbol "USDC")
+  "42161:0xff970a61a04b1ca14834a43f5de4533ebddb5cc8", // Arbitrum bridged USDC (name "USD Coin (Arb1)")
 ];
+
+/**
+ * Current ecosystem tickers for contracts whose on-chain symbol is stale or
+ * ambiguous. Keyed `chainId:address` with lowercase addresses.
+ */
+export const TICKER_OVERRIDES: Readonly<Record<string, string>> = {
+  "10:0x7f5c764cbc14f9669b88837ca1490cca17c31607": "USDC.e", // Optimism bridged USDC; symbol reads "USDC"
+  "100:0xddafbb505ad214d7b80b1f830fccc89b60fb7a83": "USDC.e", // Gnosis bridged USDC; symbol reads "USDC"
+  "137:0x2791bca1f2de4661ed88a30c99a7a9449aa84174": "USDC.e", // Polygon PoS bridged USDC; symbol reads "USDC"
+  "42161:0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": "USDT0", // Arbitrum; on-chain symbol "USD₮0" needs ASCII normalization
+  "42161:0xff970a61a04b1ca14834a43f5de4533ebddb5cc8": "USDC.e", // Arbitrum bridged USDC; name is "USD Coin (Arb1)"
+  "42220:0x48065fbbe25f71c9282ddf5e1cd6d6a887483d5e": "USDT", // Celo; on-chain symbol "USD₮" needs ASCII normalization
+};
 
 /**
  * Addresses present in the source holdings that are intentionally excluded.
