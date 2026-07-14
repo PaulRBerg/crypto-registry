@@ -1,6 +1,15 @@
 import { isAddress } from "../address.js";
+import { TOKEN_ADDRESS_ALIASES } from "./aliases.js";
 import { TOKENS, TOKENS_BY_CHAIN, TOKENS_BY_KEY, TOKENS_BY_SYMBOL, tokenKey } from "./registry.js";
-import type { MirrorToken, Stablecoin, StandardToken, Token, WrappedToken } from "./types.js";
+import type {
+  MirrorToken,
+  Stablecoin,
+  StandardToken,
+  Token,
+  TokenAddressAlias,
+  TokenAddressResolution,
+  WrappedToken,
+} from "./types.js";
 import { isMirror, isStablecoin, isStandard, isWrapped } from "./types.js";
 
 const EMPTY: readonly Token[] = [];
@@ -9,6 +18,32 @@ const EMPTY: readonly Token[] = [];
 export function getToken(chainId: number, address: string): Token | undefined {
   if (!isAddress(address)) return undefined;
   return TOKENS_BY_KEY.get(tokenKey(chainId, address));
+}
+
+const TOKEN_ADDRESS_ALIASES_BY_KEY: ReadonlyMap<string, TokenAddressAlias> = new Map(
+  TOKEN_ADDRESS_ALIASES.map((alias) => [tokenKey(alias.chainId, alias.historicalAddress), alias])
+);
+
+/**
+ * Resolve an exact canonical token or a verified historical event emitter.
+ * The returned token is canonical in both cases; {@link getToken} remains
+ * exact-only and never resolves aliases.
+ */
+export function resolveTokenAddress(
+  chainId: number,
+  address: string
+): TokenAddressResolution | undefined {
+  if (!isAddress(address)) return undefined;
+  const key = tokenKey(chainId, address);
+  const token = TOKENS_BY_KEY.get(key);
+  if (token) return { relationship: "canonical", token };
+
+  const alias = TOKEN_ADDRESS_ALIASES_BY_KEY.get(key);
+  if (!alias) return undefined;
+  const canonicalToken = TOKENS_BY_KEY.get(tokenKey(alias.chainId, alias.canonicalAddress));
+  return canonicalToken
+    ? { alias, relationship: alias.relationship, token: canonicalToken }
+    : undefined;
 }
 
 /** All tokens on a given chain. */

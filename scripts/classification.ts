@@ -295,16 +295,4 @@ export const DROPPED: readonly DroppedToken[] = [
     chain: "mainnet",
     reason: "Axie AxieCore — ERC-721 NFT (no decimals), not an ERC-20",
   },
-  {
-    address: "0x57ab1e02fee23774580c119740129eac7081e9d3",
-    chain: "mainnet",
-    reason:
-      "Synthetix sUSD legacy target (reverts 'Only the proxy can call'); canonical proxy 0x57ab1ec2… is registered from holdings",
-  },
-  {
-    address: "0xc011a72400e58ecd99ee497cf89e3775d4bd732f",
-    chain: "mainnet",
-    reason:
-      "Synthetix SNX deprecated target (reverts 'Only the proxy can call'); canonical proxy 0xc011a73e… is registered from holdings",
-  },
 ];

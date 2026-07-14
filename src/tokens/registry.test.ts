@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { getChain } from "../chains/lookup.js";
+import { TOKEN_ADDRESS_ALIASES } from "./aliases.js";
 import {
   getMirrorTokens,
   getStablecoins,
@@ -8,6 +9,7 @@ import {
   getTokensByChain,
   getTokensBySymbol,
   getWrappedTokens,
+  resolveTokenAddress,
 } from "./lookup.js";
 import { TOKENS } from "./registry.js";
 import { isMirror, isStablecoin, isStandard, isWrapped } from "./types.js";
@@ -53,6 +55,49 @@ describe("registry integrity", () => {
       getMirrorTokens().length +
       getStandardTokens().length;
     expect(sum).toBe(TOKENS.length);
+  });
+});
+
+describe("token address aliases", () => {
+  it("have unique lowercase keys on registered chains", () => {
+    const seen = new Set<string>();
+    for (const alias of TOKEN_ADDRESS_ALIASES) {
+      expect(alias.historicalAddress).toMatch(LOWERCASE_ADDRESS);
+      expect(alias.canonicalAddress).toMatch(LOWERCASE_ADDRESS);
+      expect(getChain(alias.chainId), `chain ${alias.chainId}`).toBeDefined();
+      const key = `${alias.chainId}:${alias.historicalAddress}`;
+      expect(seen.has(key), `duplicate alias key ${key}`).toBe(false);
+      seen.add(key);
+    }
+  });
+
+  it("target same-chain canonical tokens without colliding with them", () => {
+    for (const alias of TOKEN_ADDRESS_ALIASES) {
+      expect(getToken(alias.chainId, alias.historicalAddress)).toBeUndefined();
+      expect(
+        getToken(alias.chainId, alias.canonicalAddress),
+        `missing canonical target ${alias.chainId}:${alias.canonicalAddress}`
+      ).toBeDefined();
+    }
+  });
+
+  it("resolve to canonical tokens while preserving the relationship", () => {
+    for (const alias of TOKEN_ADDRESS_ALIASES) {
+      const mixedCaseAddress = `0x${alias.historicalAddress.slice(2).toUpperCase()}`;
+      const resolved = resolveTokenAddress(alias.chainId, mixedCaseAddress);
+      expect(resolved).toMatchObject({
+        alias,
+        relationship: "historical_event_emitter",
+        token: { address: alias.canonicalAddress, chainId: alias.chainId },
+      });
+    }
+
+    const canonical = getToken(1, "0x57ab1ec28d129707052df4df418d58a2d46d5f51");
+    expect(resolveTokenAddress(1, "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51")).toEqual({
+      relationship: "canonical",
+      token: canonical,
+    });
+    expect(resolveTokenAddress(1, "not-an-address")).toBeUndefined();
   });
 });
 

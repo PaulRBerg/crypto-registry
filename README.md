@@ -44,6 +44,7 @@ import {
   getTokensBySymbol,
   getStablecoins,
   isStablecoin,
+  resolveTokenAddress,
 } from "@prb/crypto-registry";
 
 getChain(1)?.slug; // "mainnet"
@@ -58,6 +59,10 @@ if (usdc && isStablecoin(usdc)) {
 
 getTokensBySymbol("USDC").length; // every USDC across all chains
 getStablecoins().length; // 96
+
+const historical = resolveTokenAddress(1, "0x57ab1e02fee23774580c119740129eac7081e9d3");
+// { relationship: "historical_event_emitter", token: <canonical sUSD>, alias: ... }
+getToken(1, "0x57ab1e02fee23774580c119740129eac7081e9d3"); // undefined (exact-only)
 ```
 
 ```ts
@@ -76,6 +81,12 @@ recognizePath("m/84'/0'/0'", "bitcoin")?.standard; // "bip84-native-segwit"
 **Tokens** — `TOKENS`, `getToken(chainId, address)`, `getTokensByChain(chainId)`, `getTokensBySymbol(symbol)`,
 `getStablecoins()`, `getWrappedTokens()`, `getMirrorTokens()`, `getStandardTokens()`.
 
+**Token address aliases** — `TOKEN_ADDRESS_ALIASES` contains verified non-callable historical event emitters as
+`{ chainId, historicalAddress, canonicalAddress, relationship: "historical_event_emitter" }`.
+`resolveTokenAddress(chainId, address)` returns either `{ relationship: "canonical", token }` or
+`{ relationship: "historical_event_emitter", alias, token }`, where `token` is always canonical. `getToken()` remains
+exact-only.
+
 **Tickers** — `STABLECOIN_TICKERS_BY_PEG` (fiat-equivalent quote tickers grouped by `USD` / `EUR` peg),
 `PRICE_ASSET_ALIASES` (wrapped/decorated ticker → the underlying asset whose price values it), and `NATIVE_ASSET_CHAINS`
 (native gas ticker → canonical source-ref chain). Chain-agnostic curated vocabularies for accounting/pricing;
@@ -84,7 +95,8 @@ case-sensitive.
 **Addresses** — `isAddress(value)`, `normalizeAddress(value)` (validates and lowercases), `isAddressEqual(a, b)`.
 
 **Types & guards** — `Chain`, `NativeCurrency`, `Token`, `Stablecoin`, `WrappedToken`, `MirrorToken`, `StandardToken`,
-`Address`, and the guards `isStandard` / `isStablecoin` / `isWrapped` / `isMirror`.
+`TokenAddressAlias`, `TokenAddressResolution`, `Address`, and the guards `isStandard` / `isStablecoin` / `isWrapped` /
+`isMirror`.
 
 **Derivations** — `@prb/crypto-registry/derivations` exposes path parsing/building, profile recognition/rendering,
 SLIP-44 coin types, purposes, schemes, SLIP-132 version bytes, UTXO descriptor helpers, and Substrate SURI utilities.
@@ -97,6 +109,9 @@ Non-TypeScript consumers (Go, jq, Python) can use the `@prb/crypto-registry/toke
 `@prb/crypto-registry/chains.json` subpaths. Node ESM imports require `with { type: "json" }`; TypeScript consumers
 should keep using the typed `@prb/crypto-registry` entry. Run `just json-gen` after hand edits to `chains.ts` or the
 stablecoin classification.
+
+`tokens.json` schema version 2 has the shape
+`{ "aliases": TokenAddressAlias[], "schemaVersion": 2, "tokens": Token[] }`. `chains.json` remains schema version 1.
 
 ## Contributing
 

@@ -11,6 +11,7 @@ export type {
   FormerNativeCurrency,
   NativeCurrency,
 } from "./chains/types.js";
+export { TOKEN_ADDRESS_ALIASES } from "./tokens/aliases.js";
 
 // Tokens
 export {
@@ -21,6 +22,7 @@ export {
   getTokensByChain,
   getTokensBySymbol,
   getWrappedTokens,
+  resolveTokenAddress,
 } from "./tokens/lookup.js";
 export { TOKENS } from "./tokens/registry.js";
 export {
@@ -37,6 +39,8 @@ export type {
   StablecoinPeg,
   StandardToken,
   Token,
+  TokenAddressAlias,
+  TokenAddressResolution,
   TokenKind,
   WrappedToken,
 } from "./tokens/types.js";

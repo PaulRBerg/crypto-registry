@@ -81,6 +81,36 @@ export type MirrorToken = TokenBase & {
 /** Any token in the registry. Discriminated by {@link TokenKind | kind}. */
 export type Token = StandardToken | Stablecoin | WrappedToken | MirrorToken;
 
+/**
+ * A verified non-callable historical address that emitted events for a
+ * canonical token on the same chain.
+ */
+export type TokenAddressAlias = {
+  /** EIP-155 chain id shared by the historical and canonical addresses. */
+  chainId: number;
+  /** Lowercased historical event-emitting address. */
+  historicalAddress: Address;
+  /** Lowercased address of the canonical registered token. */
+  canonicalAddress: Address;
+  /** How the historical address relates to the canonical token. */
+  relationship: "historical_event_emitter";
+};
+
+/** Result of resolving either an exact canonical address or a known alias. */
+export type TokenAddressResolution =
+  | {
+      relationship: "canonical";
+      /** The exact canonical token. */
+      token: Token;
+    }
+  | {
+      relationship: "historical_event_emitter";
+      /** The matched historical-address mapping. */
+      alias: TokenAddressAlias;
+      /** The canonical token identified by the historical emitter. */
+      token: Token;
+    };
+
 /** Narrow a {@link Token} to a {@link StandardToken}. */
 export const isStandard = (token: Token): token is StandardToken => token.kind === "standard";
 

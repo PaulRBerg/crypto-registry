@@ -9,6 +9,7 @@ import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { CHAINS } from "../src/chains/chains.js";
+import { TOKEN_ADDRESS_ALIASES } from "../src/tokens/aliases.js";
 import type { StablecoinFamily } from "./classification.js";
 import { DROPPED, FORCE_BRIDGED, STABLECOIN_FAMILIES, TICKER_OVERRIDES } from "./classification.js";
 import type { EnrichedToken } from "./enrich.js";
@@ -99,6 +100,9 @@ for (const chain of CHAINS) {
 const droppedKeys = new Set<string>();
 for (const d of DROPPED) {
   droppedKeys.add(key(chainIdForSlug(d.chain, "DROPPED"), d.address));
+}
+for (const alias of TOKEN_ADDRESS_ALIASES) {
+  droppedKeys.add(key(alias.chainId, alias.historicalAddress));
 }
 
 const forceBridged = new Set(FORCE_BRIDGED.map((s) => s.toLowerCase()));
@@ -242,7 +246,7 @@ export function generate(tokens: EnrichedToken[]): void {
         continue;
       }
       throw new Error(
-        `unresolved & undocumented token ${t.slug} ${t.address}: read it on-chain and add to a stablecoin family, MANUAL_TOKENS, or DROPPED in classification.ts`
+        `unresolved & undocumented token ${t.slug} ${t.address}: read it on-chain and add to a stablecoin family, MANUAL_TOKENS, TOKEN_ADDRESS_ALIASES, or DROPPED in classification.ts`
       );
     }
     assertValid(t, meta);

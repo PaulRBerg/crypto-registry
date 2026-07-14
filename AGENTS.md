@@ -72,6 +72,8 @@ then run `just enrich`:
 
 - `scripts/classification.ts` — hand-authored spec: stablecoin families (addresses + peg/backing/issuer), exact-contract
   `TICKER_OVERRIDES`, and the documented `DROPPED` list.
+- `src/tokens/aliases.ts` — verified non-callable historical event emitters; codegen treats their historical addresses
+  as documented exclusions and resolves them to same-chain canonical tokens at runtime.
 - `scripts/enrich.ts` — reads the token universe, fetches `decimals`/`symbol`/ `name` on-chain via viem Multicall3,
   writes `enriched.json`, then runs codegen. Re-run codegen only (no network) with `bun scripts/enrich.ts --cached`.
 - `scripts/codegen.ts` — classifies (precedence: stablecoin > wrapped > mirror > standard) and emits the four data

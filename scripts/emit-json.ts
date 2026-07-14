@@ -2,6 +2,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { CHAINS } from "../src/chains/chains.js";
+import { TOKEN_ADDRESS_ALIASES } from "../src/tokens/aliases.js";
 import { TOKENS } from "../src/tokens/registry.js";
 
 const ROOT_DIR = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -31,10 +32,13 @@ const stringify = (value: unknown): string => `${JSON.stringify(sortKeys(value),
 
 /** Render the canonical JSON artifact for non-TypeScript token consumers. */
 export function renderTokensJson(): string {
+  const aliases = [...TOKEN_ADDRESS_ALIASES].sort(
+    (a, b) => a.chainId - b.chainId || compareStrings(a.historicalAddress, b.historicalAddress)
+  );
   const tokens = [...TOKENS].sort(
     (a, b) => a.chainId - b.chainId || compareStrings(a.address, b.address)
   );
-  return stringify({ schemaVersion: 1, tokens });
+  return stringify({ aliases, schemaVersion: 2, tokens });
 }
 
 /** Render the canonical JSON artifact for non-TypeScript chain consumers. */
