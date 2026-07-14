@@ -31,9 +31,9 @@ export function versionBytesNumber(family: XpubFamily, key: keyof VersionBytes):
 }
 
 /**
- * The xpub family for a UTXO coin's address kind. Litecoin uses its own `Ltub`/`Mtub` prefixes for legacy and nested
- * segwit (and reuses `xpub` for native segwit); all other transparent UTXO chains use Bitcoin's
- * `xpub`/`ypub`/`zpub`. Returns `undefined` for non-UTXO address kinds.
+ * The xpub family for a Bitcoin-family coin's address kind. Litecoin uses its own `Ltub`/`Mtub` prefixes for legacy
+ * and nested segwit (and reuses `xpub` for native segwit); all other transparent chains in the Bitcoin family use
+ * Bitcoin's `xpub`/`ypub`/`zpub`. Returns `undefined` for non-Bitcoin-family address kinds.
  */
 export function xpubFamilyFor(coinType: number, addressKind: AddressKind): XpubFamily | undefined {
   if (coinType === COIN_TYPES.LITECOIN) {

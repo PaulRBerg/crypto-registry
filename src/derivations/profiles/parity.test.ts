@@ -100,10 +100,10 @@ const MATCHER_FIXTURES: ReadonlyArray<readonly [id: string, source: string]> = [
 ];
 
 /**
- * UTXO `*_DERIVATION_NAME_RULES` patterns recognize without capturing (`\d+'`). Dropping our capture parens must yield
- * the exact hand-written source, tying the engine to those rules too.
+ * Bitcoin-family `*_DERIVATION_NAME_RULES` patterns recognize without capturing (`\d+'`). Dropping our capture parens
+ * must yield the exact hand-written source, tying the engine to those rules too.
  */
-const UTXO_MATCHER_FIXTURES: ReadonlyArray<readonly [id: string, source: string]> = [
+const BITCOIN_MATCHER_FIXTURES: ReadonlyArray<readonly [id: string, source: string]> = [
   ["bitcoin-bip44-legacy-account", "^m\\/44'\\/0'\\/\\d+'$"],
   ["dash-bip44-legacy-account", "^m\\/44'\\/5'\\/\\d+'$"],
   ["bitcoin-bip84-native-segwit-account", "^m\\/84'\\/0'\\/\\d+'$"],
@@ -126,7 +126,9 @@ describe("parity with original regex rules", () => {
     expect(toMatcher(segments(id)).regex.source).toBe(source);
   });
 
-  it.each(UTXO_MATCHER_FIXTURES)("utxo matcher source (capture-stripped) %s", (id, source) => {
+  it.each(
+    BITCOIN_MATCHER_FIXTURES
+  )("bitcoin matcher source (capture-stripped) %s", (id, source) => {
     expect(toMatcher(segments(id)).regex.source.replaceAll("(\\d+)", "\\d+")).toBe(source);
   });
 });

@@ -99,7 +99,7 @@ case-sensitive.
 `isMirror`.
 
 **Derivations** — `@prb/crypto-registry/derivations` exposes path parsing/building, profile recognition/rendering,
-SLIP-44 coin types, purposes, schemes, SLIP-132 version bytes, UTXO descriptor helpers, and Substrate SURI utilities.
+SLIP-44 coin types, purposes, schemes, SLIP-132 version bytes, Bitcoin descriptor helpers, and Substrate SURI utilities.
 
 Addresses are stored lowercased; lookups are case-insensitive. No keccak/EIP-55 checksumming is performed.
 

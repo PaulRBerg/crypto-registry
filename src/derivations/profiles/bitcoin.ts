@@ -8,7 +8,7 @@ import type { DerivationProfile } from "./types.js";
 // Ledger's historical Vertcoin app uses coin type 128 in BIP49 paths, not Vertcoin's registered 28.
 const LEDGER_VERTCOIN_COIN_TYPE = COIN_TYPES.MONERO;
 
-const utxo = (
+const bitcoin = (
   id: string,
   chain: string,
   purpose: number,
@@ -31,9 +31,9 @@ const utxo = (
   xpubFamily,
 });
 
-/** Transparent UTXO chains: legacy (BIP44), nested segwit (BIP49), and native segwit (BIP84). */
-export const UTXO_PROFILES: readonly DerivationProfile[] = [
-  utxo(
+/** Transparent Bitcoin-family chains: legacy (BIP44), nested segwit (BIP49), and native segwit (BIP84). */
+export const BITCOIN_PROFILES: readonly DerivationProfile[] = [
+  bitcoin(
     "bitcoin-bip44-legacy-account",
     "bitcoin",
     44,
@@ -43,7 +43,7 @@ export const UTXO_PROFILES: readonly DerivationProfile[] = [
     "BIP44 Legacy",
     "bip44-legacy"
   ),
-  utxo(
+  bitcoin(
     "bitcoin-bip49-nested-segwit-account",
     "bitcoin",
     49,
@@ -53,7 +53,7 @@ export const UTXO_PROFILES: readonly DerivationProfile[] = [
     "BIP49 Nested Segwit",
     "bip49-nested-segwit"
   ),
-  utxo(
+  bitcoin(
     "bitcoin-bip84-native-segwit-account",
     "bitcoin",
     84,
@@ -63,7 +63,7 @@ export const UTXO_PROFILES: readonly DerivationProfile[] = [
     "BIP84 Native Segwit",
     "bip84-native-segwit"
   ),
-  utxo(
+  bitcoin(
     "bitcoin-cash-bip44-legacy-account",
     "bitcoin-cash",
     44,
@@ -73,7 +73,7 @@ export const UTXO_PROFILES: readonly DerivationProfile[] = [
     "BIP44 Legacy",
     "bip44-legacy"
   ),
-  utxo(
+  bitcoin(
     "bitcoin-gold-bip44-legacy-account",
     "bitcoin-gold",
     44,
@@ -83,7 +83,7 @@ export const UTXO_PROFILES: readonly DerivationProfile[] = [
     "BIP44 Legacy",
     "bip44-legacy"
   ),
-  utxo(
+  bitcoin(
     "dash-bip44-legacy-account",
     "dash",
     44,
@@ -93,7 +93,7 @@ export const UTXO_PROFILES: readonly DerivationProfile[] = [
     "BIP44 Legacy",
     "bip44-legacy"
   ),
-  utxo(
+  bitcoin(
     "litecoin-bip44-legacy-account",
     "litecoin",
     44,
@@ -103,7 +103,7 @@ export const UTXO_PROFILES: readonly DerivationProfile[] = [
     "BIP44 Legacy",
     "bip44-legacy"
   ),
-  utxo(
+  bitcoin(
     "litecoin-bip49-nested-segwit-account",
     "litecoin",
     49,
@@ -113,7 +113,7 @@ export const UTXO_PROFILES: readonly DerivationProfile[] = [
     "BIP49 Nested Segwit",
     "bip49-nested-segwit"
   ),
-  utxo(
+  bitcoin(
     "litecoin-bip84-native-segwit-account",
     "litecoin",
     84,
@@ -123,7 +123,7 @@ export const UTXO_PROFILES: readonly DerivationProfile[] = [
     "BIP84 Native Segwit",
     "bip84-native-segwit"
   ),
-  utxo(
+  bitcoin(
     "vertcoin-ledger-bip49-nested-segwit-account",
     "vertcoin",
     49,
@@ -133,7 +133,7 @@ export const UTXO_PROFILES: readonly DerivationProfile[] = [
     "Vertcoin Ledger BIP49",
     "vertcoin-ledger-bip49"
   ),
-  utxo(
+  bitcoin(
     "zcash-bip44-transparent-account",
     "zcash",
     44,
@@ -145,8 +145,8 @@ export const UTXO_PROFILES: readonly DerivationProfile[] = [
   ),
 ];
 
-/** Every UTXO chain modeled by {@link UTXO_PROFILES}. */
-export const UTXO_CHAINS = [
+/** Every Bitcoin-family chain modeled by {@link BITCOIN_PROFILES}. */
+export const BITCOIN_CHAINS = [
   "bitcoin",
   "bitcoin-cash",
   "bitcoin-gold",
@@ -156,9 +156,9 @@ export const UTXO_CHAINS = [
   "zcash",
 ] as const;
 
-export type UtxoChain = (typeof UTXO_CHAINS)[number];
+export type BitcoinChain = (typeof BITCOIN_CHAINS)[number];
 
-/** Narrow an arbitrary chain slug to a known {@link UtxoChain}. */
-export function isUtxoChain(value: string): value is UtxoChain {
-  return (UTXO_CHAINS as readonly string[]).includes(value);
+/** Narrow an arbitrary chain slug to a known {@link BitcoinChain}. */
+export function isBitcoinChain(value: string): value is BitcoinChain {
+  return (BITCOIN_CHAINS as readonly string[]).includes(value);
 }

@@ -21,9 +21,9 @@ import type { SignatureScheme } from "./schemes.js";
 import { COIN_TYPES } from "./slip44.js";
 
 /**
- * The pubkey→address encoding a raw-key descriptor applies. UTXO chains fan out to every realistic historical script
- * type because a raw key has no xpub to disambiguate which one was funded: uncompressed and compressed P2PKH always,
- * plus nested and native segwit where the chain supports them.
+ * The pubkey→address encoding a raw-key descriptor applies. Bitcoin-family chains fan out to every realistic
+ * historical script type because a raw key has no xpub to disambiguate which one was funded: uncompressed and
+ * compressed P2PKH always, plus nested and native segwit where the chain supports them.
  */
 export type RawKeyEncoding =
   | "evm"
@@ -60,7 +60,7 @@ export type RawKeyDescriptor = {
   readonly params?: RawKeyEncodingParams;
 };
 
-type UtxoChainSpec = {
+type BitcoinChainSpec = {
   readonly ecosystem: string;
   readonly coinType: number;
   /** base58check P2PKH version byte(s). */
@@ -71,9 +71,9 @@ type UtxoChainSpec = {
   readonly bech32Hrp?: string;
 };
 
-// secp256k1 transparent UTXO chains. Segwit fields are present only where the chain actually deployed segwit: Bitcoin
-// Cash, Dash, and transparent Zcash never did, so they enumerate P2PKH forms only.
-const UTXO_CHAIN_SPECS: readonly UtxoChainSpec[] = [
+// secp256k1 transparent Bitcoin-family chains. Segwit fields are present only where the chain actually deployed
+// segwit: Bitcoin Cash, Dash, and transparent Zcash never did, so they enumerate P2PKH forms only.
+const BITCOIN_CHAIN_SPECS: readonly BitcoinChainSpec[] = [
   {
     bech32Hrp: "bc",
     coinType: COIN_TYPES.BITCOIN,
@@ -101,7 +101,7 @@ const UTXO_CHAIN_SPECS: readonly UtxoChainSpec[] = [
   { coinType: COIN_TYPES.VERGE, ecosystem: "verge", p2pkhVersion: 0x1e },
 ];
 
-function utxoDescriptors(spec: UtxoChainSpec): RawKeyDescriptor[] {
+function bitcoinDescriptors(spec: BitcoinChainSpec): RawKeyDescriptor[] {
   const base = { coinType: spec.coinType, ecosystem: spec.ecosystem, scheme: "secp256k1" } as const;
   const descriptors: RawKeyDescriptor[] = [
     { ...base, encoding: "utxo-p2pkh-uncompressed", params: { p2pkhVersion: spec.p2pkhVersion } },
@@ -150,13 +150,13 @@ const SECP256R1_DESCRIPTORS: readonly RawKeyDescriptor[] = [
 ];
 
 /**
- * Every raw-key address form, grouped by curve family. secp256k1 fans out to EVM, the transparent UTXO chains (each with
- * its script-type variants), Tron, Ripple, and EOS; ed25519 covers the RFC-8032 chains that share one public key; and
- * secp256r1 covers Neo Legacy.
+ * Every raw-key address form, grouped by curve family. secp256k1 fans out to EVM, the transparent Bitcoin-family
+ * chains (each with its script-type variants), Tron, Ripple, and EOS; ed25519 covers the RFC-8032 chains that share
+ * one public key; and secp256r1 covers Neo Legacy.
  */
 export const RAW_KEY_DESCRIPTORS: readonly RawKeyDescriptor[] = [
   ...SECP256K1_ACCOUNT_DESCRIPTORS,
-  ...UTXO_CHAIN_SPECS.flatMap(utxoDescriptors),
+  ...BITCOIN_CHAIN_SPECS.flatMap(bitcoinDescriptors),
   ...ED25519_DESCRIPTORS,
   ...SECP256R1_DESCRIPTORS,
 ];

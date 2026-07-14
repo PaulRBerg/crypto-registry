@@ -25,8 +25,8 @@ export const SIGNATURE_SCHEMES = [
 export type SignatureScheme = (typeof SIGNATURE_SCHEMES)[number];
 
 /**
- * The distinct on-chain address format a profile produces. UTXO script types (`p2pkh`, `p2sh-p2wpkh`, `p2wpkh`) map to
- * SLIP-132 xpub families; the rest are per-ecosystem account formats.
+ * The distinct on-chain address format a profile produces. Bitcoin-family script types (`p2pkh`, `p2sh-p2wpkh`,
+ * `p2wpkh`) map to SLIP-132 xpub families; the rest are per-ecosystem account formats.
  */
 export const ADDRESS_KINDS = [
   "algorand",

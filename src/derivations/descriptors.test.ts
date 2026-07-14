@@ -2,13 +2,13 @@ import { describe, expect, it } from "vitest";
 import { descriptorKindForAddressKind, outputDescriptorTemplate } from "./descriptors.js";
 
 describe("descriptorKindForAddressKind", () => {
-  it("maps each UTXO script address kind to its descriptor kind", () => {
+  it("maps each Bitcoin script address kind to its descriptor kind", () => {
     expect(descriptorKindForAddressKind("p2pkh")).toBe("pkh");
     expect(descriptorKindForAddressKind("p2sh-p2wpkh")).toBe("sh-wpkh");
     expect(descriptorKindForAddressKind("p2wpkh")).toBe("wpkh");
   });
 
-  it("returns undefined for a non-UTXO address kind", () => {
+  it("returns undefined for a non-Bitcoin address kind", () => {
     expect(descriptorKindForAddressKind("evm")).toBeUndefined();
   });
 });

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { isKnownCoinType } from "../slip44.js";
+import { BITCOIN_CHAINS, isBitcoinChain } from "./bitcoin.js";
 import {
   accountPathRenderer,
   DERIVATION_PROFILES,
@@ -11,7 +12,6 @@ import {
   recognizePath,
   renderProfilePath,
 } from "./registry.js";
-import { isUtxoChain, UTXO_CHAINS } from "./utxo.js";
 
 describe("registry integrity", () => {
   it("has a unique id per profile", () => {
@@ -91,7 +91,7 @@ describe("registry integrity", () => {
 });
 
 describe("recognizePath", () => {
-  it("recognizes a UTXO path with a chain hint", () => {
+  it("recognizes a Bitcoin path with a chain hint", () => {
     expect(recognizePath("m/84'/0'/0'", "bitcoin")).toMatchObject({
       chain: "bitcoin",
       profileId: "bitcoin-bip84-native-segwit-account",
@@ -509,7 +509,7 @@ describe("legacy profiles", () => {
   });
 
   it("keeps Obyte disjoint from Bitcoin via the chain hint", () => {
-    // Obyte reuses coin type 0, so the matcher is identical to Bitcoin's. UTXO profiles are ordered
+    // Obyte reuses coin type 0, so the matcher is identical to Bitcoin's. Bitcoin profiles are ordered
     // first, so a hint-less path still resolves to Bitcoin — no regression.
     expect(recognizePath("m/44'/0'/0'")?.profileId).toBe("bitcoin-bip44-legacy-account");
     expect(recognizePath("m/44'/0'/0'", "obyte")).toMatchObject({
@@ -603,14 +603,14 @@ describe("minValueForRole", () => {
   });
 });
 
-describe("isUtxoChain", () => {
-  it("recognizes every UTXO chain", () => {
-    for (const chain of UTXO_CHAINS) {
-      expect(isUtxoChain(chain)).toBe(true);
+describe("isBitcoinChain", () => {
+  it("recognizes every Bitcoin chain", () => {
+    for (const chain of BITCOIN_CHAINS) {
+      expect(isBitcoinChain(chain)).toBe(true);
     }
   });
 
-  it("rejects a non-UTXO chain", () => {
-    expect(isUtxoChain("evm")).toBe(false);
+  it("rejects a non-Bitcoin chain", () => {
+    expect(isBitcoinChain("evm")).toBe(false);
   });
 });

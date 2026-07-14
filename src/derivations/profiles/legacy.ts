@@ -9,7 +9,7 @@ import type { DerivationProfile } from "./types.js";
  * - Obyte/Byteball reuses Bitcoin's coin type (0) under BIP44; its `obyte` address kind (base32 chash160) is the only
  *   genuinely new format here.
  * - Vertcoin has a modern BIP44 account and the old Electrum `m/0/0` first-receive path. The Ledger BIP49 quirk
- *   lives in `UTXO_PROFILES`.
+ *   lives in `BITCOIN_PROFILES`.
  * - Hush's MyHushWallet web-wallet derives flat `m/{index}` keys with no coin-type level, so its `coinType` is nominal
  *   SLIP-44 metadata (197) only.
  *

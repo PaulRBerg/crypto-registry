@@ -3,7 +3,7 @@ import { RAW_KEY_DESCRIPTORS, rawKeyDescriptorsForScheme, schemeForEcosystem } f
 import { isKnownCoinType } from "./slip44.js";
 
 describe("rawKeyDescriptorsForScheme", () => {
-  it("enumerates the secp256k1 account and UTXO family", () => {
+  it("enumerates the secp256k1 account and Bitcoin family", () => {
     const encodingsByEcosystem = new Map<string, string[]>();
     for (const descriptor of rawKeyDescriptorsForScheme("secp256k1")) {
       const encodings = encodingsByEcosystem.get(descriptor.ecosystem) ?? [];

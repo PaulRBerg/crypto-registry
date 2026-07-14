@@ -1,3 +1,4 @@
+export { BITCOIN_CHAINS, BITCOIN_PROFILES, type BitcoinChain, isBitcoinChain } from "./bitcoin.js";
 export { CARDANO_PROFILES } from "./cardano.js";
 export { COSMOS_PROFILES } from "./cosmos.js";
 export { EVM_PROFILES } from "./evm.js";
@@ -23,5 +24,4 @@ export { SOLANA_PROFILES } from "./solana.js";
 export { STARKNET_PROFILES } from "./starknet.js";
 export { SUBSTRATE_PROFILES } from "./substrate.js";
 export type { DerivationProfile, Recognition, ResolvedProfile } from "./types.js";
-export { isUtxoChain, UTXO_CHAINS, UTXO_PROFILES, type UtxoChain } from "./utxo.js";
 export { ZCASH_SHIELDED_PROFILES } from "./zcash.js";

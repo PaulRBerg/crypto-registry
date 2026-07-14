@@ -1,8 +1,8 @@
-// UTXO output-descriptor kind + template.
+// Bitcoin output-descriptor kind + template.
 export {
+  type BitcoinDescriptorKind,
   descriptorKindForAddressKind,
   outputDescriptorTemplate,
-  type UtxoDescriptorKind,
 } from "./descriptors.js";
 // Path engine: the single-source-of-truth template, plus parse/build helpers.
 export {
@@ -39,6 +39,9 @@ export {
 // Profiles registry + recognition.
 export {
   accountPathRenderer,
+  BITCOIN_CHAINS,
+  BITCOIN_PROFILES,
+  type BitcoinChain,
   CARDANO_PROFILES,
   COSMOS_PROFILES,
   DERIVATION_PROFILES,
@@ -46,7 +49,7 @@ export {
   EVM_PROFILES,
   IOTA_PROFILES,
   indexPathRenderer,
-  isUtxoChain,
+  isBitcoinChain,
   LEGACY_PROFILES,
   MISC_PROFILES,
   minValueForRole,
@@ -64,9 +67,6 @@ export {
   SOLANA_PROFILES,
   STARKNET_PROFILES,
   SUBSTRATE_PROFILES,
-  UTXO_CHAINS,
-  UTXO_PROFILES,
-  type UtxoChain,
   ZCASH_SHIELDED_PROFILES,
 } from "./profiles/index.js";
 // Purposes + standards.

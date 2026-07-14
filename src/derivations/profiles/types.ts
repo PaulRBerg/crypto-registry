@@ -8,9 +8,9 @@ import type { XpubFamily } from "../slip132.js";
  * source of truth from which the path string and the recognizer are both derived.
  *
  * Explorer/RPC/wallet-UX glue (endpoints, ss58 prefixes, hrp, class hashes, ...) is deliberately excluded: if a field
- * changes when you swap explorer, RPC, or wallet, it does not belong here. UTXO output-descriptor kind/template (see
- * `../descriptors.js`) is the one exception: it is a pure function of `addressKind`, not a wallet or explorer choice,
- * so it is modeled separately rather than excluded.
+ * changes when you swap explorer, RPC, or wallet, it does not belong here. Bitcoin output-descriptor kind/template
+ * (see `../descriptors.js`) is the one exception: it is a pure function of `addressKind`, not a wallet or explorer
+ * choice, so it is modeled separately rather than excluded.
  */
 export type DerivationProfile = {
   /** Stable id, e.g. `bitcoin-bip84-native-segwit-account`. */
@@ -31,7 +31,7 @@ export type DerivationProfile = {
   readonly addressKind: AddressKind;
   /** The single source of truth: an ordered list of segments. */
   readonly template: Template;
-  /** SLIP-132 xpub family (UTXO only). */
+  /** SLIP-132 xpub family (Bitcoin-family only). */
   readonly xpubFamily?: XpubFamily;
 };
 

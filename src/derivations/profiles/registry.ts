@@ -1,5 +1,6 @@
 import type { DerivationPath, Role, RoleValues, Template } from "../path/index.js";
 import { match, render, renderTemplate, toMatcher } from "../path/index.js";
+import { BITCOIN_PROFILES } from "./bitcoin.js";
 import { CARDANO_PROFILES } from "./cardano.js";
 import { COSMOS_PROFILES } from "./cosmos.js";
 import { EVM_PROFILES } from "./evm.js";
@@ -12,12 +13,11 @@ import { SOLANA_PROFILES } from "./solana.js";
 import { STARKNET_PROFILES } from "./starknet.js";
 import { SUBSTRATE_PROFILES } from "./substrate.js";
 import type { DerivationProfile, Recognition, ResolvedProfile } from "./types.js";
-import { UTXO_PROFILES } from "./utxo.js";
 import { ZCASH_SHIELDED_PROFILES } from "./zcash.js";
 
 /** Every derivation profile, one row per chain + standard. */
 export const DERIVATION_PROFILES: readonly DerivationProfile[] = [
-  ...UTXO_PROFILES,
+  ...BITCOIN_PROFILES,
   ...EVM_PROFILES,
   ...IOTA_PROFILES,
   ...CARDANO_PROFILES,
