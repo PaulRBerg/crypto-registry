@@ -63,6 +63,28 @@ const RPC_OVERRIDE: Partial<Record<string, string>> = {
   zksync: "https://mainnet.era.zksync.io",
 };
 
+// Independent wall-clock ceiling per RPC attempt. viem's own transport timeout
+// (10s, AbortController-based) doesn't reliably tear down a request stuck in
+// DNS/connect under Bun, and enrichChain runs up to 5 sequential multicalls
+// per attempt — so one stuck call can otherwise block the run indefinitely.
+const CHAIN_TIMEOUT_MS = 45_000;
+
+function withHardTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error: unknown) => {
+        clearTimeout(timer);
+        reject(error);
+      }
+    );
+  });
+}
+
 const DECIMALS_ABI = [
   {
     inputs: [],
@@ -308,14 +330,18 @@ async function enrichChain(
   };
 
   try {
-    const first = await attempt(false);
+    const first = await withHardTimeout(attempt(false), CHAIN_TIMEOUT_MS, `[${slug}] override RPC`);
     // Backfill ANY tokens the override RPC left unresolved from viem's default
     // RPC (a partial failure must not silently drop tokens).
     const hasMissingMetadata = first.some(
       (t) => t.decimals === null || t.name === null || t.symbol === null
     );
     if (hasMissingMetadata && RPC_OVERRIDE[slug]) {
-      const second = await attempt(true);
+      const second = await withHardTimeout(
+        attempt(true),
+        CHAIN_TIMEOUT_MS,
+        `[${slug}] default RPC`
+      );
       return first.map((t, i) => ({
         ...t,
         decimals: t.decimals ?? second[i]?.decimals ?? null,
@@ -329,7 +355,7 @@ async function enrichChain(
       `  [${slug}] override RPC failed (${(error as Error).message}); retrying default`
     );
     try {
-      return await attempt(true);
+      return await withHardTimeout(attempt(true), CHAIN_TIMEOUT_MS, `[${slug}] default RPC`);
     } catch (error2) {
       console.error(`  [${slug}] default RPC failed too (${(error2 as Error).message})`);
       return addresses.map((address) => ({
@@ -389,6 +415,9 @@ async function main() {
   }
   generate(tokens);
   emitJson();
+  // A watchdog-abandoned fetch (see withHardTimeout) can leave a dangling
+  // handle that keeps the event loop alive; force termination once done.
+  process.exit(0);
 }
 
 main().catch((error) => {
