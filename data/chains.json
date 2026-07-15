@@ -441,7 +441,8 @@
         "name": "IoTeX",
         "symbol": "IOTX"
       },
-      "slug": "iotex"
+      "slug": "iotex",
+      "wrappedNativeAddress": "0xa00744882684c3e4747faefd68d283ea44099d03"
     },
     {
       "aliases": [],

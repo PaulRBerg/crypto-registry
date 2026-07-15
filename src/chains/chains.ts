@@ -263,6 +263,7 @@ const LOCAL_CHAIN_METADATA = {
     coinGeckoPlatformId: "iotex",
     name: "IoTeX",
     nativeCoinGeckoId: "iotex",
+    wrappedNativeAddress: "0xa00744882684c3e4747faefd68d283ea44099d03",
   },
   lightlink: {
     aliases: ["lightlink phoenix", "LightLink Phoenix Mainnet"],

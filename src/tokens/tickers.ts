@@ -89,6 +89,7 @@ export const PRICE_ASSET_ALIASES: Readonly<Record<string, string>> = {
   WFRAX: "FRAX",
   WFTM: "FTM",
   WHYPE: "HYPE",
+  WIOTX: "IOTX",
   WMATIC: "POL",
   WMON: "MON",
   WPOL: "POL",

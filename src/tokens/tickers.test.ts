@@ -92,6 +92,7 @@ describe("price-asset aliases", () => {
       WFRAX: "FRAX",
       WFTM: "FTM",
       WHYPE: "HYPE",
+      WIOTX: "IOTX",
       WMATIC: "POL",
       WMON: "MON",
       WPOL: "POL",
