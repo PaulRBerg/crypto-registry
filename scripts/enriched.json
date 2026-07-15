@@ -3808,6 +3808,14 @@
     "decimals": 6
   },
   {
+    "chainId": 4663,
+    "slug": "robinhood",
+    "address": "0x0bd7d308f8e1639fab988df18a8011f41eacad73",
+    "symbol": "WETH",
+    "name": "WETH",
+    "decimals": 18
+  },
+  {
     "chainId": 4689,
     "slug": "iotex",
     "address": "0x3cdb7c48e70b854ed2fa392e21687501d84b3afc",

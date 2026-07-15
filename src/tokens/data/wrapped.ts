@@ -18,6 +18,7 @@ export const WRAPPED_TOKENS: readonly WrappedToken[] = [
   { address: "0x5555555555555555555555555555555555555555", chainId: 999, decimals: 18, name: "Wrapped HYPE", symbol: "WHYPE", kind: "wrapped", underlyingSymbol: "HYPE" },
   { address: "0xe30fedd158a2e3b13e9badaeabafc5516e95e8c7", chainId: 1329, decimals: 18, name: "Wrapped SEI", symbol: "WSEI", kind: "wrapped", underlyingSymbol: "SEI" },
   { address: "0x5300000000000000000000000000000000000011", chainId: 2818, decimals: 18, name: "Wrapped Ether", symbol: "WETH", kind: "wrapped", underlyingSymbol: "ETH" },
+  { address: "0x0bd7d308f8e1639fab988df18a8011f41eacad73", chainId: 4663, decimals: 18, name: "WETH", symbol: "WETH", kind: "wrapped", underlyingSymbol: "ETH" },
   { address: "0x4200000000000000000000000000000000000006", chainId: 5330, decimals: 18, name: "Wrapped Ether", symbol: "WETH", kind: "wrapped", underlyingSymbol: "ETH" },
   { address: "0x4200000000000000000000000000000000000006", chainId: 8453, decimals: 18, name: "Wrapped Ether", symbol: "WETH", kind: "wrapped", underlyingSymbol: "ETH" },
   { address: "0x4200000000000000000000000000000000000006", chainId: 34443, decimals: 18, name: "Wrapped Ether", symbol: "WETH", kind: "wrapped", underlyingSymbol: "ETH" },

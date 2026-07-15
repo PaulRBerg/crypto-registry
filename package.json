@@ -33,7 +33,7 @@
     "url": "https://github.com/PaulRBerg/crypto-registry/issues"
   },
   "dependencies": {
-    "viem": "^2.54.6"
+    "viem": "^2.55.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.1",
@@ -46,7 +46,7 @@
     "vitest": "^4.0.16"
   },
   "peerDependencies": {
-    "viem": "^2.54.6"
+    "viem": "^2.55.0"
   },
   "exports": {
     ".": {

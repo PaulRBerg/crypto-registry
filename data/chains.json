@@ -410,6 +410,24 @@
     },
     {
       "aliases": [],
+      "chainId": 4663,
+      "coinGeckoPlatformId": "robinhood",
+      "explorer": {
+        "addressUrl": "https://robinhoodchain.blockscout.com/address/{address}",
+        "txUrl": "https://robinhoodchain.blockscout.com/tx/{tx_hash}"
+      },
+      "name": "Robinhood Chain",
+      "nativeCurrency": {
+        "coinGeckoId": "ethereum",
+        "decimals": 18,
+        "name": "Ether",
+        "symbol": "ETH"
+      },
+      "slug": "robinhood",
+      "wrappedNativeAddress": "0x0bd7d308f8e1639fab988df18a8011f41eacad73"
+    },
+    {
+      "aliases": [],
       "chainId": 4689,
       "coinGeckoPlatformId": "iotex",
       "explorer": {

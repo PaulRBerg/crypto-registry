@@ -11,7 +11,7 @@ const viemChainsBySlug = VIEM_CHAINS_BY_SLUG as Record<
 describe("chain registry", () => {
   it("exposes every chain", () => {
     expect(allChains()).toBe(CHAINS);
-    expect(CHAINS.length).toBe(36);
+    expect(CHAINS.length).toBe(37);
   });
 
   it("has unique chain ids and slugs", () => {
