@@ -5,25 +5,25 @@
 //
 // Source token list = the prb-finance `included.tsv` ERC-20 rows (external,
 // not committed) UNION the stablecoin/wrapped/mirror addresses this registry
-// classifies. Run with: `just enrich` (bun scripts/enrich.ts).
+// classifies. Run with: `just enrich`.
 //
 // Usage:
-//   bun scripts/enrich.ts            # fetch on-chain, write enriched.json, then codegen
-//   bun scripts/enrich.ts --cached   # skip fetch, regenerate data files from cache
+//   just enrich            # fetch through RouteMesh, write enriched.json, then codegen
+//   just enrich --cached   # skip fetch, regenerate data files from cache
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { PublicClient } from "viem";
 import { createPublicClient, fromHex, http } from "viem";
 import { CHAINS, VIEM_CHAINS_BY_SLUG } from "../src/chains/chains.js";
 import { STABLECOIN_FAMILIES } from "./classification.js";
 import { generate } from "./codegen.js";
-import { emitJson } from "./emit-json.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const TOKEN_SOURCE_DIR =
   process.env.TOKEN_SOURCE_DIR ?? "/Users/prb/projects/prb-finance/onchain/evm/tokens";
 const CACHE_PATH = join(HERE, "enriched.json");
+const ROUTEMESH_BASE_URL = "https://lb.routeme.sh/rpc";
 const CHAIN_ID_BY_SLUG = new Map(CHAINS.map((chain) => [chain.slug, chain.chainId]));
 const TOKEN_SOURCE_SLUG: Partial<Record<string, string>> = { mainnet: "ethereum" };
 const TOKEN_METADATA_OVERRIDES = new Map<string, Partial<Pick<EnrichedToken, "name" | "symbol">>>([
@@ -34,8 +34,8 @@ const TOKEN_METADATA_OVERRIDES = new Map<string, Partial<Pick<EnrichedToken, "na
   ["100:0xe91d153e0b41518a2ce8dd3d7944fa863463a97d", { name: "Wrapped xDAI", symbol: "WxDAI" }],
 ]);
 
-/** Preferred RPC overrides (from cryptfolio RpcUrl), keyed by slug. */
-const RPC_OVERRIDE: Partial<Record<string, string>> = {
+/** Public RPC fallbacks (from cryptfolio RpcUrl), keyed by slug. */
+const PUBLIC_RPC_BY_SLUG: Partial<Record<string, string>> = {
   abstract: "https://api.mainnet.abs.xyz",
   arbitrum: "https://arbitrum-one.publicnode.com",
   avalanche: "https://api.avax.network/ext/bc/C/rpc",
@@ -140,6 +140,19 @@ export type EnrichedToken = {
   decimals: number | null;
 };
 
+type ChainAttempt = () => Promise<EnrichedToken[]>;
+type ChainEnrichmentOptions = {
+  addresses: `0x${string}`[];
+  cachedTokens: ReadonlyMap<string, EnrichedToken>;
+  chainId: number;
+  publicAttempt: ChainAttempt;
+  routeMeshAttempt: ChainAttempt;
+  routeMeshApiKey: string;
+  slug: string;
+  timeoutMs?: number;
+  warn?: (message: string) => void;
+};
+
 const lc = (a: string): `0x${string}` => a.toLowerCase() as `0x${string}`;
 const ADDRESS_RE = /^0x[0-9a-f]{40}$/;
 const ADDRESS_IN_URL = /0x[0-9a-fA-F]{40}/;
@@ -191,7 +204,36 @@ function applyMetadataOverrides(token: EnrichedToken): EnrichedToken {
 }
 
 function canonicalizeTokens(tokens: EnrichedToken[]): EnrichedToken[] {
-  return tokens.map(applyMetadataOverrides);
+  return tokens.map((token) => {
+    const canonical = applyMetadataOverrides(token);
+    // biome-ignore assist/source/useSortedKeys: Preserve the committed cache's field order.
+    return {
+      chainId: canonical.chainId,
+      slug: canonical.slug,
+      address: canonical.address,
+      symbol: canonical.symbol,
+      name: canonical.name,
+      decimals: canonical.decimals,
+    };
+  });
+}
+
+export function requireRouteMeshApiKey(value = process.env.ROUTEMESH_API_KEY): string {
+  const apiKey = value?.trim();
+  if (!apiKey || apiKey.startsWith("encrypted:")) {
+    throw new Error(
+      "ROUTEMESH_API_KEY is required for live enrichment; configure dotenvx or run `just enrich --cached`"
+    );
+  }
+  return apiKey;
+}
+
+export function summarizeRpcError(error: unknown, routeMeshApiKey: string): string {
+  const message = error instanceof Error ? error.message : String(error);
+  const firstLine = message.split("\n", 1)[0] || "unknown error";
+  return firstLine
+    .replaceAll(routeMeshApiKey, "[redacted]")
+    .replace(/https:\/\/lb\.routeme\.sh\/rpc\/\d+\/[^\s)]+/g, "RouteMesh RPC");
 }
 
 /** Parse `included.tsv` ERC-20 rows for a chain; returns lowercased addresses. */
@@ -240,12 +282,11 @@ function buildUniverse(): Map<string, Set<`0x${string}`>> {
   return universe;
 }
 
-function clientFor(slug: string, useDefault = false): PublicClient {
+function clientFor(slug: string, rpcUrl?: string): PublicClient {
   const chain = viemChainForSlug(slug);
   if (!chain) throw new Error(`no viem chain mapping for ${slug}`);
 
-  const override = RPC_OVERRIDE[slug];
-  const transport = !useDefault && override ? http(override) : http();
+  const transport = http(rpcUrl);
   return createPublicClient({ chain, transport, batch: { multicall: true } }) as PublicClient;
 }
 
@@ -299,84 +340,108 @@ async function readField(
   return result;
 }
 
-async function enrichChain(
+async function attemptChain(
+  client: PublicClient,
   slug: string,
   chainId: number,
   addresses: `0x${string}`[]
 ): Promise<EnrichedToken[]> {
-  const attempt = async (useDefault: boolean) => {
-    const client = clientFor(slug, useDefault);
-    const decimalsResults = await client.multicall({
-      allowFailure: true,
-      contracts: addresses.map((address) => ({
-        abi: DECIMALS_ABI,
-        address,
-        functionName: "decimals",
-      })),
-    });
-    const symbols = await readField(client, addresses, "symbol");
-    const names = await readField(client, addresses, "name");
-    return addresses.map((address, i): EnrichedToken => {
-      const d = decimalsResults[i];
-      return {
-        chainId,
-        slug,
-        address,
-        decimals: d?.status === "success" ? Number(d.result) : null,
-        name: names.get(address) ?? null,
-        symbol: symbols.get(address) ?? null,
-      };
-    });
-  };
+  const decimalsResults = await client.multicall({
+    allowFailure: true,
+    contracts: addresses.map((address) => ({
+      abi: DECIMALS_ABI,
+      address,
+      functionName: "decimals",
+    })),
+  });
+  const symbols = await readField(client, addresses, "symbol");
+  const names = await readField(client, addresses, "name");
+  return addresses.map((address, i): EnrichedToken => {
+    const d = decimalsResults[i];
+    return {
+      address,
+      chainId,
+      decimals: d?.status === "success" ? Number(d.result) : null,
+      name: names.get(address) ?? null,
+      slug,
+      symbol: symbols.get(address) ?? null,
+    };
+  });
+}
+
+function unresolvedToken(slug: string, chainId: number, address: `0x${string}`): EnrichedToken {
+  return { address, chainId, decimals: null, name: null, slug, symbol: null };
+}
+
+export async function runChainEnrichment({
+  addresses,
+  cachedTokens,
+  chainId,
+  publicAttempt,
+  routeMeshApiKey,
+  routeMeshAttempt,
+  slug,
+  timeoutMs = CHAIN_TIMEOUT_MS,
+  warn = console.error,
+}: ChainEnrichmentOptions): Promise<EnrichedToken[]> {
+  try {
+    return await withHardTimeout(routeMeshAttempt(), timeoutMs, `[${slug}] RouteMesh`);
+  } catch (error) {
+    warn(
+      `  [${slug}] RouteMesh failed (${summarizeRpcError(error, routeMeshApiKey)}); retrying public RPC`
+    );
+  }
 
   try {
-    const first = await withHardTimeout(attempt(false), CHAIN_TIMEOUT_MS, `[${slug}] override RPC`);
-    // Backfill ANY tokens the override RPC left unresolved from viem's default
-    // RPC (a partial failure must not silently drop tokens).
-    const hasMissingMetadata = first.some(
-      (t) => t.decimals === null || t.name === null || t.symbol === null
-    );
-    if (hasMissingMetadata && RPC_OVERRIDE[slug]) {
-      const second = await withHardTimeout(
-        attempt(true),
-        CHAIN_TIMEOUT_MS,
-        `[${slug}] default RPC`
-      );
-      return first.map((t, i) => ({
-        ...t,
-        decimals: t.decimals ?? second[i]?.decimals ?? null,
-        name: t.name ?? second[i]?.name ?? null,
-        symbol: t.symbol ?? second[i]?.symbol ?? null,
-      }));
-    }
-    return first;
+    return await withHardTimeout(publicAttempt(), timeoutMs, `[${slug}] public RPC`);
   } catch (error) {
-    console.error(
-      `  [${slug}] override RPC failed (${(error as Error).message}); retrying default`
+    const tokens = addresses.map(
+      (address) =>
+        cachedTokens.get(tokenKey(chainId, address)) ?? unresolvedToken(slug, chainId, address)
     );
-    try {
-      return await withHardTimeout(attempt(true), CHAIN_TIMEOUT_MS, `[${slug}] default RPC`);
-    } catch (error2) {
-      console.error(`  [${slug}] default RPC failed too (${(error2 as Error).message})`);
-      return addresses.map((address) => ({
-        chainId,
-        slug,
-        address,
-        decimals: null,
-        name: null,
-        symbol: null,
-      }));
-    }
+    const recovered = tokens.filter((token) =>
+      cachedTokens.has(tokenKey(chainId, token.address))
+    ).length;
+    warn(
+      `  [${slug}] public RPC failed too (${summarizeRpcError(error, routeMeshApiKey)}); recovered ${recovered}/${addresses.length} tokens from cache`
+    );
+    return tokens;
   }
 }
 
-async function fetchAll(): Promise<EnrichedToken[]> {
+function enrichChain(
+  slug: string,
+  chainId: number,
+  addresses: `0x${string}`[],
+  cachedTokens: ReadonlyMap<string, EnrichedToken>,
+  routeMeshApiKey: string
+): Promise<EnrichedToken[]> {
+  const routeMeshClient = clientFor(slug, `${ROUTEMESH_BASE_URL}/${chainId}/${routeMeshApiKey}`);
+  const publicClient = clientFor(slug, PUBLIC_RPC_BY_SLUG[slug]);
+  return runChainEnrichment({
+    addresses,
+    cachedTokens,
+    chainId,
+    publicAttempt: () => attemptChain(publicClient, slug, chainId, addresses),
+    routeMeshApiKey,
+    routeMeshAttempt: () => attemptChain(routeMeshClient, slug, chainId, addresses),
+    slug,
+  });
+}
+
+async function fetchAll(
+  cachedTokens: readonly EnrichedToken[],
+  routeMeshApiKey: string
+): Promise<EnrichedToken[]> {
   if (!existsSync(TOKEN_SOURCE_DIR)) {
     throw new Error(
       `TOKEN_SOURCE_DIR not found: ${TOKEN_SOURCE_DIR}\nSet TOKEN_SOURCE_DIR to the prb-finance evm tokens dir, or run \`just enrich --cached\` to regenerate from scripts/enriched.json.`
     );
   }
   const universe = buildUniverse();
+  const cachedByKey = new Map(
+    cachedTokens.map((token) => [tokenKey(token.chainId, token.address), token] as const)
+  );
   const all: EnrichedToken[] = [];
   for (const [slug, set] of universe) {
     const addresses = [...set];
@@ -385,42 +450,52 @@ async function fetchAll(): Promise<EnrichedToken[]> {
     if (chainId === undefined) throw new Error(`unknown chain slug in token universe: ${slug}`);
 
     process.stdout.write(`[${slug}] ${addresses.length} tokens... `);
-    const enriched = await enrichChain(slug, chainId, addresses);
-    const ok = enriched.filter((t) => t.decimals !== null).length;
-    console.log(`${ok}/${addresses.length} resolved`);
+    const enriched = await enrichChain(slug, chainId, addresses, cachedByKey, routeMeshApiKey);
+    const resolvedCount = enriched.filter((token) => token.decimals !== null).length;
+    console.log(`${resolvedCount}/${addresses.length} resolved`);
     all.push(...enriched);
   }
   return all;
 }
 
 async function main() {
-  const cached = process.argv.includes("--cached");
+  const useCachedTokens = process.argv.includes("--cached");
+  const cachedRaw = readFileSync(CACHE_PATH, "utf8");
+  const cachedTokens = parseCachedTokens(cachedRaw);
   let tokens: EnrichedToken[];
-  if (cached) {
-    const raw = readFileSync(CACHE_PATH, "utf8");
-    tokens = canonicalizeTokens(parseCachedTokens(raw));
-    const normalized = `${JSON.stringify(tokens, null, 2)}\n`;
-    if (normalized !== raw) writeFileSync(CACHE_PATH, normalized);
+  if (useCachedTokens) {
+    tokens = canonicalizeTokens(cachedTokens);
     console.log(`Loaded ${tokens.length} tokens from cache.`);
   } else {
-    tokens = canonicalizeTokens(await fetchAll());
+    const routeMeshApiKey = requireRouteMeshApiKey();
+    tokens = canonicalizeTokens(await fetchAll(cachedTokens, routeMeshApiKey));
     tokens.sort((a, b) => a.chainId - b.chainId || a.address.localeCompare(b.address));
-    writeFileSync(CACHE_PATH, `${JSON.stringify(tokens, null, 2)}\n`);
-    const failed = tokens.filter((t) => t.decimals === null);
-    console.log(`\nWrote ${tokens.length} tokens to enriched.json (${failed.length} unresolved).`);
-    if (failed.length > 0) {
+    const unresolved = tokens.filter((token) => token.decimals === null);
+    console.log(`\nFetched ${tokens.length} tokens (${unresolved.length} unresolved).`);
+    if (unresolved.length > 0) {
       console.log("Unresolved (no decimals):");
-      for (const t of failed) console.log(`  ${t.slug}\t${t.address}`);
+      for (const token of unresolved) console.log(`  ${token.slug}\t${token.address}`);
     }
   }
+
+  const serializedTokens = `${JSON.stringify(tokens, null, 2)}\n`;
   generate(tokens);
+  if (serializedTokens !== cachedRaw) writeFileSync(CACHE_PATH, serializedTokens);
+  const { emitJson } = await import("./emit-json.js");
   emitJson();
-  // A watchdog-abandoned fetch (see withHardTimeout) can leave a dangling
-  // handle that keeps the event loop alive; force termination once done.
-  process.exit(0);
+  console.log(`Wrote ${tokens.length} tokens to enriched.json.`);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().then(
+    () => {
+      // A watchdog-abandoned fetch (see withHardTimeout) can leave a dangling
+      // handle that keeps the event loop alive; force termination once done.
+      process.exit(0);
+    },
+    (error: unknown) => {
+      console.error(error);
+      process.exit(1);
+    }
+  );
+}

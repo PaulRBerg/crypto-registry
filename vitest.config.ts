@@ -12,7 +12,7 @@ export default defineConfig({
     environment: "node",
     globals: true,
     hideSkippedTests: true,
-    include: ["src/**/*.test.ts"],
+    include: ["src/**/*.test.ts", "scripts/**/*.test.ts"],
     outputFile: CI ? "./test-results.json" : undefined,
     reporters: CI ? ["github-actions", "json"] : ["default"],
   },

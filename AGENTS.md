@@ -13,10 +13,10 @@ Agent guidance for `@prb/crypto-registry`. Keep changes surgical and the package
 
 - `just typecheck` — `tsgo` over `src/` and `scripts/`.
 - `just lint` / `just format` — Biome (format also runs Prettier on Markdown).
-- `just test` — Vitest (`src/**/*.test.ts`).
+- `just test` — Vitest (`src/**/*.test.ts`, `scripts/**/*.test.ts`).
 - `just build` — clean `dist/`, compile with `tsconfig.build.json`, `npm pack`.
-- `just enrich` — regenerate token data (see below). Network + reads an external source dir; not part of the normal
-  build.
+- `just enrich` — regenerate token data through RouteMesh (see below). Requires `ROUTEMESH_API_KEY`, uses the network,
+  and reads an external source dir; not part of the normal build.
 - `just json-gen` — regenerate committed JSON artifacts for non-TypeScript consumers after hand edits to
   `src/chains/chains.ts` or `scripts/classification.ts`.
 
@@ -75,7 +75,7 @@ then run `just enrich`:
 - `src/tokens/aliases.ts` — verified non-callable historical event emitters; codegen treats their historical addresses
   as documented exclusions and resolves them to same-chain canonical tokens at runtime.
 - `scripts/enrich.ts` — reads the token universe, fetches `decimals`/`symbol`/ `name` on-chain via viem Multicall3,
-  writes `enriched.json`, then runs codegen. Re-run codegen only (no network) with `bun scripts/enrich.ts --cached`.
+  writes `enriched.json`, then runs codegen. Re-run codegen only (no network) with `just enrich --cached`.
 - `scripts/codegen.ts` — classifies (precedence: stablecoin > wrapped > mirror > standard) and emits the four data
   modules. A stablecoin's `ticker` defaults to its enriched on-chain symbol, then applies an exact-contract override;
   codegen rejects tickers outside the ASCII bare-ticker shape (`^[A-Za-z0-9][A-Za-z0-9_.-]*$`).
@@ -89,6 +89,15 @@ typechecked.
 TypeScript consumers should use the typed `@prb/crypto-registry` entry; Node ESM JSON imports need
 `with { type: "json" }`. Regenerate them with `just json-gen` after hand edits to `chains.ts`, the stablecoin
 classification, or ticker overrides.
+
+## Enrichment credentials (dotenvx)
+
+- `.env` contains the encrypted `ROUTEMESH_API_KEY` plus its public key and is safe to commit.
+- `.env.keys` contains `DOTENV_PRIVATE_KEY`, is gitignored, and must never be committed or printed.
+- Set or rotate the key with `env -u ROUTEMESH_API_KEY na dotenvx set ROUTEMESH_API_KEY <value>`; never write a
+  plaintext value to `.env`.
+- `just enrich` decrypts `.env` through `dotenvx run`. An existing shell or CI variable takes precedence.
+- `just enrich --cached` does not require a decrypted RouteMesh key.
 
 ## Hand-authored ticker vocabulary
 

@@ -52,9 +52,10 @@ alias t := test
     na vitest --ui {{ args }}
 alias tui := test-ui
 
-# Regenerate src/tokens/data/*.ts from on-chain enrichment (pass --cached to skip the network)
+# Regenerate token data through RouteMesh (pass --cached to skip the network)
+[positional-arguments]
 @enrich *args:
-    bun scripts/enrich.ts {{ args }}
+    na dotenvx run --quiet -- bun scripts/enrich.ts "$@"
 
 # Regenerate committed JSON data artifacts without network access
 @json-gen:

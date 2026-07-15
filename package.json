@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.1",
+    "@dotenvx/dotenvx": "^2.10.0",
     "@prb/devkit": "^1.0.0",
     "@types/node": "^25.0.3",
     "@typescript/native-preview": "^7.0.0-dev.20260624.1",
