@@ -35,6 +35,26 @@ export type ChainExplorer = {
   txUrl: string;
 };
 
+/**
+ * Account semantics relevant to activity discovery for a mnemonic-derived EVM
+ * address.
+ *
+ * `ethereum-eoa` means that the derived address is an Ethereum-style EOA for
+ * this purpose. It does not mean the chain lacks smart-contract accounts,
+ * ERC-4337, or EIP-7702. The other values identify protocol-native account
+ * abstraction, activity shared with another execution environment, or a model
+ * that has not been verified.
+ *
+ * Consumers may enable EOA-specific activity shortcuts only for the exact
+ * `ethereum-eoa` value. Treat every other (and any future) value as unsafe by
+ * default.
+ */
+export type AccountActivityModel =
+  | "ethereum-eoa"
+  | "native-account-abstraction"
+  | "cross-vm"
+  | "unknown";
+
 /** A supported EVM chain and the metadata this registry needs to describe it. */
 export type Chain = {
   /** EIP-155 chain id. */
@@ -43,6 +63,8 @@ export type Chain = {
   slug: string;
   /** Display name, e.g. `"Ethereum"`. */
   name: string;
+  /** Account semantics governing safe activity-discovery shortcuts. */
+  accountActivityModel: AccountActivityModel;
   /** Extra lookup names (tickers, legacy names) resolved by `getChainByName`. */
   aliases: readonly string[];
   /** The chain's native gas asset. */

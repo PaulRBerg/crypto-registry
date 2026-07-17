@@ -33,6 +33,6 @@ describe("JSON data artifacts", () => {
     const rendered = renderChainsJson();
     const committed = readFileSync(join(DATA_DIR, "chains.json"), "utf8");
     expect(committed).toBe(rendered);
-    expect(JSON.parse(committed)).toEqual({ chains: sortedChains, schemaVersion: 1 });
+    expect(JSON.parse(committed)).toEqual({ chains: sortedChains, schemaVersion: 2 });
   });
 });

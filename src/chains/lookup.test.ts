@@ -7,6 +7,13 @@ const viemChainsBySlug = VIEM_CHAINS_BY_SLUG as Record<
   string,
   (typeof VIEM_CHAINS_BY_SLUG)[keyof typeof VIEM_CHAINS_BY_SLUG]
 >;
+const NON_ETHEREUM_EOA_ACTIVITY_MODELS = {
+  abstract: "native-account-abstraction",
+  hyperevm: "cross-vm",
+  sei: "cross-vm",
+  sophon: "native-account-abstraction",
+  zksync: "native-account-abstraction",
+};
 
 describe("chain registry", () => {
   it("exposes every chain", () => {
@@ -21,6 +28,17 @@ describe("chain registry", () => {
 
   it("every native currency uses 18 decimals", () => {
     for (const chain of CHAINS) expect(chain.nativeCurrency.decimals).toBe(18);
+  });
+
+  it("classifies every chain's mnemonic-derived account activity model", () => {
+    expect(
+      Object.fromEntries(
+        CHAINS.filter((chain) => chain.accountActivityModel !== "ethereum-eoa").map((chain) => [
+          chain.slug,
+          chain.accountActivityModel,
+        ])
+      )
+    ).toEqual(NON_ETHEREUM_EOA_ACTIVITY_MODELS);
   });
 
   it("sources chain ids and native currencies from the supported viem mapping", () => {

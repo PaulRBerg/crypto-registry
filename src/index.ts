@@ -6,6 +6,7 @@ export { isAddress, isAddressEqual, normalizeAddress } from "./address.js";
 export { CHAINS } from "./chains/chains.js";
 export { allChains, getChain, getChainByName, getChainBySlug } from "./chains/lookup.js";
 export type {
+  AccountActivityModel,
   Chain,
   ChainExplorer,
   FormerNativeCurrency,

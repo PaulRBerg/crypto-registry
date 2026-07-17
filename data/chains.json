@@ -1,6 +1,7 @@
 {
   "chains": [
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "eth",
         "ethereum",
@@ -23,6 +24,7 @@
       "wrappedNativeAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "op",
         "OP Mainnet"
@@ -47,6 +49,7 @@
       "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "XDC Network"
       ],
@@ -67,6 +70,7 @@
       "wrappedNativeAddress": "0x951857744785e80e2de051c32ee7b25f9c458c42"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "binance smart chain",
         "bnb",
@@ -89,6 +93,7 @@
       "wrappedNativeAddress": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "gnosis chain"
       ],
@@ -109,6 +114,7 @@
       "wrappedNativeAddress": "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 130,
       "coinGeckoPlatformId": "unichain",
@@ -127,6 +133,7 @@
       "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "matic",
         "pol"
@@ -151,6 +158,7 @@
       "wrappedNativeAddress": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 143,
       "coinGeckoPlatformId": "monad",
@@ -169,6 +177,7 @@
       "wrappedNativeAddress": "0x3bd359c1119da7da1d913d1c4d2b7c461115433a"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 146,
       "coinGeckoPlatformId": "sonic",
@@ -187,6 +196,7 @@
       "wrappedNativeAddress": "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "fantom opera",
         "ftm"
@@ -208,6 +218,7 @@
       "wrappedNativeAddress": "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "frax"
       ],
@@ -236,6 +247,7 @@
       "wrappedNativeAddress": "0xfc00000000000000000000000000000000000002"
     },
     {
+      "accountActivityModel": "native-account-abstraction",
       "aliases": [],
       "chainId": 324,
       "coinGeckoPlatformId": "zksync",
@@ -257,6 +269,7 @@
       "wrappedNativeAddress": "0x5aea5775959fbc2557cc8789bc1bf90a239d9a91"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "worldchain"
       ],
@@ -277,6 +290,7 @@
       "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
     },
     {
+      "accountActivityModel": "cross-vm",
       "aliases": [
         "hyper evm",
         "hyperliquid"
@@ -298,6 +312,7 @@
       "wrappedNativeAddress": "0x5555555555555555555555555555555555555555"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "coreDao"
       ],
@@ -317,6 +332,7 @@
       "slug": "core-dao"
     },
     {
+      "accountActivityModel": "cross-vm",
       "aliases": [
         "Sei Network"
       ],
@@ -337,6 +353,7 @@
       "wrappedNativeAddress": "0xe30fedd158a2e3b13e9badaeabafc5516e95e8c7"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "lightlink phoenix",
         "LightLink Phoenix Mainnet"
@@ -357,6 +374,7 @@
       "slug": "lightlink"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 2020,
       "coinGeckoPlatformId": "ronin",
@@ -374,6 +392,7 @@
       "slug": "ronin"
     },
     {
+      "accountActivityModel": "native-account-abstraction",
       "aliases": [],
       "chainId": 2741,
       "coinGeckoPlatformId": "abstract",
@@ -391,6 +410,7 @@
       "slug": "abstract"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 2818,
       "coinGeckoPlatformId": "morph-l2",
@@ -409,6 +429,7 @@
       "wrappedNativeAddress": "0x5300000000000000000000000000000000000011"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 4663,
       "coinGeckoPlatformId": "robinhood",
@@ -427,6 +448,7 @@
       "wrappedNativeAddress": "0x0bd7d308f8e1639fab988df18a8011f41eacad73"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 4689,
       "coinGeckoPlatformId": "iotex",
@@ -445,6 +467,7 @@
       "wrappedNativeAddress": "0xa00744882684c3e4747faefd68d283ea44099d03"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 5330,
       "coinGeckoPlatformId": "superseed",
@@ -463,6 +486,7 @@
       "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 8453,
       "coinGeckoPlatformId": "base",
@@ -484,6 +508,7 @@
       "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "Mode Mainnet"
       ],
@@ -504,6 +529,7 @@
       "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "Arbitrum One"
       ],
@@ -524,6 +550,7 @@
       "wrappedNativeAddress": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 42170,
       "coinGeckoPlatformId": "arbitrum-nova",
@@ -541,6 +568,7 @@
       "slug": "arbitrum-nova"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 42220,
       "coinGeckoPlatformId": "celo",
@@ -561,6 +589,7 @@
       "slug": "celo"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "avalanche c-chain",
         "avax"
@@ -582,6 +611,7 @@
       "wrappedNativeAddress": "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"
     },
     {
+      "accountActivityModel": "native-account-abstraction",
       "aliases": [],
       "chainId": 50104,
       "coinGeckoPlatformId": "sophon",
@@ -599,6 +629,7 @@
       "slug": "sophon"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "Linea Mainnet"
       ],
@@ -619,6 +650,7 @@
       "wrappedNativeAddress": "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 80094,
       "coinGeckoPlatformId": "berachain",
@@ -637,6 +669,7 @@
       "wrappedNativeAddress": "0x6969696969696969696969696969696969696969"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 81457,
       "coinGeckoPlatformId": "blast",
@@ -655,6 +688,7 @@
       "wrappedNativeAddress": "0x4300000000000000000000000000000000000004"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "Chiliz Chain"
       ],
@@ -674,6 +708,7 @@
       "slug": "chiliz"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "Taiko Alethia",
         "Taiko Mainnet"
@@ -695,6 +730,7 @@
       "wrappedNativeAddress": "0xa51894664a773981c6c112c43ce576f315d5b1b6"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [],
       "chainId": 534352,
       "coinGeckoPlatformId": "scroll",
@@ -713,6 +749,7 @@
       "wrappedNativeAddress": "0x5300000000000000000000000000000000000004"
     },
     {
+      "accountActivityModel": "ethereum-eoa",
       "aliases": [
         "zora network"
       ],
@@ -733,5 +770,5 @@
       "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
     }
   ],
-  "schemaVersion": 1
+  "schemaVersion": 2
 }

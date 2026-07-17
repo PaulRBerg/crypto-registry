@@ -76,7 +76,8 @@ recognizePath("m/84'/0'/0'", "bitcoin")?.standard; // "bip84-native-segwit"
 ## API
 
 **Chains** — `CHAINS`, `allChains()`, `getChain(chainId)`, `getChainBySlug(slug)`, `getChainByName(name)`
-(case-insensitive over name, slug, and aliases).
+(case-insensitive over name, slug, and aliases). Every chain has an `accountActivityModel`; consumers may use
+Ethereum-EOA activity shortcuts only for the exact `"ethereum-eoa"` value and must default-deny every other value.
 
 **Tokens** — `TOKENS`, `getToken(chainId, address)`, `getTokensByChain(chainId)`, `getTokensBySymbol(symbol)`,
 `getStablecoins()`, `getWrappedTokens()`, `getMirrorTokens()`, `getStandardTokens()`.
@@ -94,9 +95,9 @@ case-sensitive.
 
 **Addresses** — `isAddress(value)`, `normalizeAddress(value)` (validates and lowercases), `isAddressEqual(a, b)`.
 
-**Types & guards** — `Chain`, `NativeCurrency`, `Token`, `Stablecoin`, `WrappedToken`, `MirrorToken`, `StandardToken`,
-`TokenAddressAlias`, `TokenAddressResolution`, `Address`, and the guards `isStandard` / `isStablecoin` / `isWrapped` /
-`isMirror`.
+**Types & guards** — `AccountActivityModel`, `Chain`, `NativeCurrency`, `Token`, `Stablecoin`, `WrappedToken`,
+`MirrorToken`, `StandardToken`, `TokenAddressAlias`, `TokenAddressResolution`, `Address`, and the guards `isStandard` /
+`isStablecoin` / `isWrapped` / `isMirror`.
 
 **Derivations** — `@prb/crypto-registry/derivations` exposes path parsing/building, profile recognition/rendering,
 SLIP-44 coin types, purposes, schemes, SLIP-132 version bytes, Bitcoin descriptor helpers, and Substrate SURI utilities.
@@ -111,7 +112,8 @@ should keep using the typed `@prb/crypto-registry` entry. Run `just json-gen` af
 stablecoin classification.
 
 `tokens.json` schema version 2 has the shape
-`{ "aliases": TokenAddressAlias[], "schemaVersion": 2, "tokens": Token[] }`. `chains.json` remains schema version 1.
+`{ "aliases": TokenAddressAlias[], "schemaVersion": 2, "tokens": Token[] }`. `chains.json` schema version 2 has the
+shape `{ "chains": Chain[], "schemaVersion": 2 }`; every chain row includes the required `accountActivityModel` field.
 
 ## Contributing
 
