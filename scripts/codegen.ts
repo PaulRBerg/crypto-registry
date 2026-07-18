@@ -258,7 +258,7 @@ export function generate(tokens: EnrichedToken[]): void {
   const files: [string, string, string, string[]][] = [
     [
       "stablecoins.ts",
-      "Stablecoins (USDC/USDT/DAI/EURe/BUSD/TUSD/GUSD/EURT/USDB/sUSD) and bridged variants.",
+      "Stablecoins (USDC/USDT/DAI/EURe/BUSD/TUSD/GUSD/EURT/USDB) and bridged variants.",
       "Stablecoin",
       buckets.stablecoin,
     ],

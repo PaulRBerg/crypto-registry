@@ -52,7 +52,6 @@ export const STABLECOIN_TICKERS_BY_PEG: Readonly<Record<StablecoinPeg, readonly 
     "LinkUSD",
     "lzUSDC",
     "mUSD",
-    "sUSD",
     "USD",
     "USDC",
     "USDC.e",

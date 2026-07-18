@@ -211,15 +211,6 @@ export const STABLECOIN_FAMILIES: readonly StablecoinFamily[] = [
     symbols: ["USDB"],
   },
   {
-    backing: "crypto",
-    contracts: { mainnet: ["0x57ab1ec28d129707052df4df418d58a2d46d5f51"] },
-    display: "sUSD",
-    issuer: "Synthetix",
-    nativeSymbols: ["sUSD"],
-    peg: "USD",
-    symbols: ["sUSD"],
-  },
-  {
     backing: "fiat",
     contracts: { fraxtal: ["0xfc00000000000000000000000000000000000001"] },
     display: "frxUSD",

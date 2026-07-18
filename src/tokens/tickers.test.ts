@@ -53,7 +53,6 @@ describe("stablecoin tickers", () => {
       "lzUSDC",
       "mUSD",
       "pUSD",
-      "sUSD",
       "xDAI",
     ]);
   });

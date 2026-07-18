@@ -218,7 +218,7 @@ describe("stablecoins", () => {
 describe("remapped Synthetix proxies", () => {
   it("register the canonical sUSD/SNX proxies", () => {
     const susd = getToken(1, "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51");
-    expect(susd && isStablecoin(susd)).toBe(true);
+    expect(susd && isStandard(susd)).toBe(true);
     expect(getToken(1, "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F")?.symbol).toBe("SNX");
   });
 
