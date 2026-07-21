@@ -50,6 +50,7 @@ describe("stablecoin tickers", () => {
       "WxDAI",
       "axlUSDC",
       "frxUSD",
+      "ioUSDC",
       "lzUSDC",
       "mUSD",
       "pUSD",
@@ -81,6 +82,7 @@ describe("price-asset aliases", () => {
   it("matches the exact wrapped/decorated ticker map", () => {
     expect(PRICE_ASSET_ALIASES).toEqual({
       clBTC: "BTC",
+      ioETH: "ETH",
       WAVAX: "AVAX",
       WBERA: "BERA",
       WBNB: "BNB",

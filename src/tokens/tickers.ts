@@ -49,6 +49,7 @@ export const STABLECOIN_TICKERS_BY_PEG: Readonly<Record<StablecoinPeg, readonly 
     "DAI.e",
     "frxUSD",
     "GUSD",
+    "ioUSDC",
     "LinkUSD",
     "lzUSDC",
     "mUSD",
@@ -78,6 +79,7 @@ export const STABLECOIN_TICKERS_BY_PEG: Readonly<Record<StablecoinPeg, readonly 
  */
 export const PRICE_ASSET_ALIASES: Readonly<Record<string, string>> = {
   clBTC: "BTC",
+  ioETH: "ETH",
   WAVAX: "AVAX",
   WBERA: "BERA",
   WBNB: "BNB",
