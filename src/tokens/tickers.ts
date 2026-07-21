@@ -78,6 +78,7 @@ export const STABLECOIN_TICKERS_BY_PEG: Readonly<Record<StablecoinPeg, readonly 
  * **case-sensitively** by design.
  */
 export const PRICE_ASSET_ALIASES: Readonly<Record<string, string>> = {
+  COREBTC: "BTC",
   clBTC: "BTC",
   ioETH: "ETH",
   WAVAX: "AVAX",
@@ -86,6 +87,7 @@ export const PRICE_ASSET_ALIASES: Readonly<Record<string, string>> = {
   "WBNB.b": "BNB",
   WBTC: "BTC",
   WCELO: "CELO",
+  WEGLD: "EGLD",
   WETH: "ETH",
   WFRAX: "FRAX",
   WFTM: "FTM",
@@ -99,6 +101,7 @@ export const PRICE_ASSET_ALIASES: Readonly<Record<string, string>> = {
   WxDAI: "xDAI",
   wfrxETH: "frxETH",
   wNXM: "NXM",
+  wSOL: "SOL",
 };
 
 /**

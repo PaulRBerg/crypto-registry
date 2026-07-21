@@ -81,6 +81,7 @@ describe("stablecoin tickers", () => {
 describe("price-asset aliases", () => {
   it("matches the exact wrapped/decorated ticker map", () => {
     expect(PRICE_ASSET_ALIASES).toEqual({
+      COREBTC: "BTC",
       clBTC: "BTC",
       ioETH: "ETH",
       WAVAX: "AVAX",
@@ -89,6 +90,7 @@ describe("price-asset aliases", () => {
       "WBNB.b": "BNB",
       WBTC: "BTC",
       WCELO: "CELO",
+      WEGLD: "EGLD",
       WETH: "ETH",
       WFRAX: "FRAX",
       WFTM: "FTM",
@@ -102,6 +104,7 @@ describe("price-asset aliases", () => {
       WxDAI: "xDAI",
       wfrxETH: "frxETH",
       wNXM: "NXM",
+      wSOL: "SOL",
     });
   });
 
