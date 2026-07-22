@@ -122,6 +122,37 @@ truth, so edit the literals here and keep `src/tokens/tickers.test.ts` green.
   the newest ticker retroactively rather than preserving historical names. Tickers must satisfy the ASCII bare-ticker
   invariant. `bridged` remains best-effort (symbol/name heuristic plus `FORCE_BRIDGED`).
 
+## User-facing communication
+
+Treat visual structure as information architecture, not decoration.
+
+- Use one semantic status vocabulary consistently: `🔎 Preview` or read-only, `⏳ Running`, `✅ Verified`, `⚠️ Review`
+  for a caveat, approval, risk, or partial result, `⛔ Blocked`, `❓ Unknown`, `↩ Reverted` or rolled back, and
+  `♻️ Rewritten` or regenerated. Pair every status icon with words; never rely on color or emoji alone. Add
+  `— not written` only when no requested artifact was written; otherwise name the partial, preserved, or rollback state.
+- When skills compose, the outermost user-invoked workflow owns the single top-level preview and final outcome. Nested
+  skills return phase updates or compact subreceipts into that wrapper instead of emitting competing top-level previews
+  and conclusions. A directly invoked skill uses its full wrapper.
+- Lead with one outcome line. Before credentialed, network, artifact-writing, or external-write commands, show a compact
+  preview of the target chain scope, evidence sources, cache mode, credential readiness, local write surfaces, affected
+  repositories, and planned external effects. Report only whether a secret is available; never print or persist its
+  value.
+- Before a push, publication, destructive action, or global installation change, show the exact repository, branch,
+  remote/ref, commits or staged paths in scope, command/effect, and any stable target identifier or confirmation token
+  needed to make approval target-specific. Require confirmation under the active authority rules, and re-confirm if the
+  target set changes materially.
+- During long work, report evidence-backed phase changes or measured `completed/total` progress only. Finish with a
+  receipt covering changed artifacts, generated-versus-hand-authored surfaces, source coverage, validation, external
+  state, gaps, and the smallest next action. Distinguish unchanged, no-op, partial, not-written, blocked, and
+  prior-artifacts-preserved outcomes accurately; use `✅ Verified` only after the required evidence and checks exist.
+- Use tables for repeated fields, trees for real propagation or artifact hierarchy, and progress bars only when a
+  measured numerator and denominator exist. Never infer progress from elapsed time, activity, retries, or silence.
+- Keep JSON, YAML, exact commands, RPC payloads, URLs, chain IDs, addresses, hashes, commit IDs, confirmation tokens,
+  diagnostics, logs, and other machine-consumed or verbatim content undecorated. Public registry identifiers should
+  remain exact when they are evidence; apply masking to private source paths or identifiers before presentation.
+- Decoration belongs to the agent's chat wrapper, not CLI stdout/stderr, source code, generated registry artifacts, Git
+  commits, GitHub text, external queries, or user-authored content unless the task explicitly calls for it.
+
 ## Conventions
 
 - Token types are a discriminated union on `kind`; add new kinds via `src/tokens/types.ts` and a guard, then thread
