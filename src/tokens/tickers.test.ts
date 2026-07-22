@@ -60,7 +60,7 @@ describe("stablecoin tickers", () => {
   });
 
   it("lists the exact EUR-equivalent quote vocabulary", () => {
-    expect([...STABLECOIN_TICKERS_BY_PEG.EUR]).toEqual(["EURe"]);
+    expect([...STABLECOIN_TICKERS_BY_PEG.EUR]).toEqual(["EURe", "EURT"]);
   });
 
   it("has no duplicates within or across pegs", () => {
@@ -69,7 +69,7 @@ describe("stablecoin tickers", () => {
   });
 
   it("covers every registry ticker or names it as an explicit exception", () => {
-    const exceptions: readonly string[] = ["TUSD", "USDB", "EURT", "USDT-matic", "BUSD-bsc"];
+    const exceptions: readonly string[] = ["TUSD", "USDB", "USDT-matic", "BUSD-bsc"];
     for (const row of getStablecoins()) {
       expect(
         STABLECOIN_TICKERS_BY_PEG[row.peg].includes(row.ticker) || exceptions.includes(row.ticker),

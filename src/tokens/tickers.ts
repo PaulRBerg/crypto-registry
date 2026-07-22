@@ -34,14 +34,14 @@ export const CANONICAL_TICKER_ALIASES: Readonly<Record<string, string>> = {
  * Aptos).
  *
  * Conversely it intentionally omits the on-chain stablecoin tickers `TUSD`,
- * `USDB`, `EURT`, `USDT-matic`, and `BUSD-bsc`, which remain quote-only
+ * `USDB`, `USDT-matic`, and `BUSD-bsc`, which remain quote-only
  * downstream.
  *
  * Membership tests against these tickers are **case-sensitive**, so preserve
  * the exact casing.
  */
 export const STABLECOIN_TICKERS_BY_PEG: Readonly<Record<StablecoinPeg, readonly string[]>> = {
-  EUR: ["EURe"],
+  EUR: ["EURe", "EURT"],
   USD: [
     "axlUSDC",
     "BSC-USD",
