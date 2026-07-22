@@ -94,6 +94,7 @@ export const STABLECOINS: readonly Stablecoin[] = [
   { address: "0x7d43aabc515c356145049227cee54b608342c0ad", chainId: 59144, decimals: 18, name: "Binance USD", symbol: "BUSD", backing: "fiat", bridged: false, issuer: "Paxos", kind: "stablecoin", peg: "USD", ticker: "BUSD" },
   { address: "0xa219439258ca9da29e9cc4ce5596924745e12b93", chainId: 59144, decimals: 6, name: "Tether USD", symbol: "USDT", backing: "fiat", bridged: false, issuer: "Tether", kind: "stablecoin", peg: "USD", ticker: "USDT" },
   { address: "0x4300000000000000000000000000000000000003", chainId: 81457, decimals: 18, name: "USDB", symbol: "USDB", backing: "crypto", bridged: false, issuer: "Blast", kind: "stablecoin", peg: "USD", ticker: "USDB" },
+  { address: "0x07d83526730c7438048d55a4fc0b850e2aab6f0b", chainId: 167000, decimals: 6, name: "USD Coin", symbol: "USDC", backing: "fiat", bridged: true, issuer: "Circle", kind: "stablecoin", peg: "USD", ticker: "USDC" },
   { address: "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4", chainId: 534352, decimals: 6, name: "USD Coin", symbol: "USDC", backing: "fiat", bridged: false, issuer: "Circle", kind: "stablecoin", peg: "USD", ticker: "USDC" },
   { address: "0xf55bec9cafdbe8730f096aa55dad6d22d44099df", chainId: 534352, decimals: 6, name: "Tether USD", symbol: "USDT", backing: "fiat", bridged: false, issuer: "Tether", kind: "stablecoin", peg: "USD", ticker: "USDT" },
 ];

@@ -3898,6 +3898,22 @@
   {
     "chainId": 4689,
     "slug": "iotex",
+    "address": "0x0258866edaf84d6081df17660357ab20a07d0c80",
+    "symbol": "ioETH",
+    "name": "Wrapped Ether",
+    "decimals": 18
+  },
+  {
+    "chainId": 4689,
+    "slug": "iotex",
+    "address": "0x3b2bf2b523f54c4e454f08aa286d03115aff326c",
+    "symbol": "ioUSDC",
+    "name": "USD Coin",
+    "decimals": 6
+  },
+  {
+    "chainId": 4689,
+    "slug": "iotex",
     "address": "0x3cdb7c48e70b854ed2fa392e21687501d84b3afc",
     "symbol": "USDT-matic",
     "name": "Matic Tether USD",
@@ -3909,6 +3925,14 @@
     "address": "0x84abcb2832be606341a50128aeb1db43aa017449",
     "symbol": "BUSD-bsc",
     "name": "Binance USD",
+    "decimals": 18
+  },
+  {
+    "chainId": 4689,
+    "slug": "iotex",
+    "address": "0x8e66c0d6b70c0b23d39f4b21a1eac52bba8ed89a",
+    "symbol": "WMATIC",
+    "name": "Wrapped Matic",
     "decimals": 18
   },
   {
@@ -3950,6 +3974,14 @@
     "symbol": "WBTC",
     "name": "Wrapped BTC",
     "decimals": 8
+  },
+  {
+    "chainId": 8453,
+    "slug": "base",
+    "address": "0x0bd4887f7d41b35cd75dff9ffee2856106f86670",
+    "symbol": "FRIEND",
+    "name": "FRIEND",
+    "decimals": 18
   },
   {
     "chainId": 8453,
@@ -5026,9 +5058,25 @@
   {
     "chainId": 167000,
     "slug": "taiko",
+    "address": "0x07d83526730c7438048d55a4fc0b850e2aab6f0b",
+    "symbol": "USDC",
+    "name": "USD Coin",
+    "decimals": 6
+  },
+  {
+    "chainId": 167000,
+    "slug": "taiko",
     "address": "0xa51894664a773981c6c112c43ce576f315d5b1b6",
     "symbol": "WETH",
     "name": "Wrapped Ether",
+    "decimals": 18
+  },
+  {
+    "chainId": 167000,
+    "slug": "taiko",
+    "address": "0xa9d23408b9ba935c230493c40c73824df71a0975",
+    "symbol": "TAIKO",
+    "name": "Taiko Token",
     "decimals": 18
   },
   {

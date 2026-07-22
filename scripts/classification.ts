@@ -55,6 +55,7 @@ export const STABLECOIN_FAMILIES: readonly StablecoinFamily[] = [
       sonic: ["0x29219dd400f2bf60e5a23d13be72b486d4038894"],
       sophon: ["0x9aa0f72392b5784ad86c6f3e899bcc053d00db4f"],
       superseed: ["0xc316c8252b5f2176d0135ebb0999e99296998f2e"],
+      taiko: ["0x07d83526730c7438048d55a4fc0b850e2aab6f0b"],
       unichain: ["0x078d782b760474a361dda0af3839290b0ef57ad6"],
       "world-chain": ["0x79a02482a880bce3f13e09da970dc34db4cd24d1"],
       xdc: ["0xfa2958cb79b0491cc627c1557f441ef849ca8eb1"],
@@ -230,6 +231,7 @@ export const FORCE_BRIDGED: readonly string[] = [
   "10:0x7f5c764cbc14f9669b88837ca1490cca17c31607", // Optimism USDC.e (symbol "USDC")
   "100:0xddafbb505ad214d7b80b1f830fccc89b60fb7a83", // Gnosis bridged USDC (symbol "USDC")
   "42161:0xff970a61a04b1ca14834a43f5de4533ebddb5cc8", // Arbitrum bridged USDC (name "USD Coin (Arb1)")
+  "167000:0x07d83526730c7438048d55a4fc0b850e2aab6f0b", // Taiko bridged USDC (symbol "USDC")
 ];
 
 /**
