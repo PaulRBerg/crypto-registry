@@ -15,6 +15,7 @@ describe("canonical ticker aliases", () => {
       HAV: "SNX",
       INST: "FLUID",
       MATIC: "POL",
+      WMATIC: "WPOL",
       XNO: "NANO",
       XRB: "NANO",
     });

@@ -15,6 +15,7 @@ export const CANONICAL_TICKER_ALIASES: Readonly<Record<string, string>> = {
   HAV: "SNX",
   INST: "FLUID",
   MATIC: "POL",
+  WMATIC: "WPOL",
   XNO: "NANO",
   XRB: "NANO",
 };
