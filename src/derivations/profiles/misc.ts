@@ -28,6 +28,24 @@ type Row = {
 
 const ROWS: readonly Row[] = [
   {
+    // The official Ledger Filecoin app accepts both variable account and address-index levels, e.g.
+    // m/44'/461'/5'/0/3. This profile describes native secp256k1 `f1` addresses, not FEVM `0x` accounts.
+    addressKind: "filecoin",
+    chain: "filecoin",
+    coinType: COIN_TYPES.FILECOIN,
+    id: "filecoin-bip44-address-index",
+    scheme: "secp256k1",
+    standard: "bip44",
+    standardName: "BIP44",
+    template: [
+      lit(44, true),
+      lit(COIN_TYPES.FILECOIN, true),
+      vr("account", true),
+      lit(0),
+      vr("index"),
+    ],
+  },
+  {
     addressKind: "stellar",
     chain: "stellar",
     coinType: COIN_TYPES.STELLAR,
@@ -311,7 +329,8 @@ const ROWS: readonly Row[] = [
 
 /**
  * Single-chain account profiles: Stellar/Waves/Algorand/Aptos/Nano (ed25519), Neo Legacy (secp256r1), and the
- * Hedera ED25519 accounts, and secp256k1 BIP44 chains (Aptos, Handshake, NavCoin, Ripple, Verge, EOS-Vaulta, Fuel).
+ * Hedera ED25519 accounts, and secp256k1 BIP44 chains (Aptos, Filecoin, Handshake, NavCoin, Ripple, Verge,
+ * EOS-Vaulta, Fuel).
  * Aptos carries both an ed25519
  * fully-hardened Ledger path and a secp256k1 BIP44 path (last two levels unhardened), matching the Aptos SDK.
  * Algorand likewise carries two ed25519 shapes: the fully-hardened Ledger path and the ARC-52 BIP32-Ed25519 path whose

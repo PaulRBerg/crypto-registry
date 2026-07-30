@@ -33,6 +33,7 @@ describe("registry integrity", () => {
 
   it("precomputes example paths from the template", () => {
     expect(profileById("evm-bip44-address-index")?.examplePath).toBe("m/44'/60'/0'/0/0");
+    expect(profileById("filecoin-bip44-address-index")?.examplePath).toBe("m/44'/461'/0'/0/0");
     expect(profileById("evm-ledger-live-account-index")?.examplePath).toBe("m/44'/60'/1'/0/0");
     expect(profileById("ripple-bip44-address-index")?.examplePath).toBe("m/44'/144'/0'/0/0");
     expect(profileById("ripple-bip44-account")?.examplePath).toBe("m/44'/144'/1'/0/0");
@@ -117,6 +118,16 @@ describe("recognizePath", () => {
     expect(recognizePath("m/44'/60'/0'/0/3")).toMatchObject({
       profileId: "evm-bip44-address-index",
       values: { index: 3 },
+    });
+  });
+
+  it("recognizes native Filecoin account and address indices", () => {
+    expect(recognizePath("m/44'/461'/5'/0/3", "filecoin")).toMatchObject({
+      chain: "filecoin",
+      coinType: 461,
+      profileId: "filecoin-bip44-address-index",
+      scheme: "secp256k1",
+      values: { account: 5, index: 3 },
     });
   });
 

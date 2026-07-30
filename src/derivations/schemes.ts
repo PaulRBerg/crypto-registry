@@ -36,6 +36,7 @@ export const ADDRESS_KINDS = [
   "cosmos",
   "eos",
   "evm",
+  "filecoin",
   "fuel",
   "handshake",
   "hedera-account",
