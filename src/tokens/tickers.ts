@@ -120,6 +120,7 @@ export const NATIVE_ASSET_CHAINS: Readonly<Record<string, string>> = {
   BTC: "Bitcoin",
   EOS: "EOS",
   ETH: "Ethereum",
+  FIL: "Filecoin",
   FRAX: "Fraxtal",
   frxETH: "Fraxtal",
   HBAR: "Hedera",

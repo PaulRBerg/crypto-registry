@@ -12,6 +12,7 @@ import {
   chiliz,
   coreDao,
   fantom,
+  filecoin,
   fraxtal,
   gnosis,
   hyperEvm,
@@ -55,6 +56,7 @@ const CHAIN_SLUGS = [
   "core-dao",
   "mainnet",
   "fantom",
+  "filecoin",
   "fraxtal",
   "gnosis",
   "hyperevm",
@@ -100,6 +102,7 @@ export const VIEM_CHAINS_BY_SLUG = {
   "core-dao": coreDao,
   mainnet,
   fantom,
+  filecoin,
   fraxtal,
   gnosis,
   hyperevm: hyperEvm,
@@ -241,6 +244,17 @@ const LOCAL_CHAIN_METADATA = {
     explorer: {
       addressUrl: "https://explorer.fantom.network/address/{address}",
       txUrl: "https://explorer.fantom.network/tx/{tx_hash}",
+    },
+  },
+  filecoin: {
+    accountActivityModel: "cross-vm",
+    aliases: ["fevm", "filecoin evm", "fvm"],
+    coinGeckoPlatformId: "filecoin",
+    name: "Filecoin",
+    nativeCoinGeckoId: "filecoin",
+    explorer: {
+      addressUrl: "https://filecoin.blockscout.com/address/{address}",
+      txUrl: "https://filecoin.blockscout.com/tx/{tx_hash}",
     },
   },
   fraxtal: {

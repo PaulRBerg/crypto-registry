@@ -133,6 +133,7 @@ describe("native asset chains", () => {
       BTC: "Bitcoin",
       EOS: "EOS",
       ETH: "Ethereum",
+      FIL: "Filecoin",
       FRAX: "Fraxtal",
       frxETH: "Fraxtal",
       HBAR: "Hedera",

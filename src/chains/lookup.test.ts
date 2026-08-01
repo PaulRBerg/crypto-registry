@@ -9,6 +9,7 @@ const viemChainsBySlug = VIEM_CHAINS_BY_SLUG as Record<
 >;
 const NON_ETHEREUM_EOA_ACTIVITY_MODELS = {
   abstract: "native-account-abstraction",
+  filecoin: "cross-vm",
   hyperevm: "cross-vm",
   sei: "cross-vm",
   sophon: "native-account-abstraction",
@@ -18,7 +19,7 @@ const NON_ETHEREUM_EOA_ACTIVITY_MODELS = {
 describe("chain registry", () => {
   it("exposes every chain", () => {
     expect(allChains()).toBe(CHAINS);
-    expect(CHAINS.length).toBe(37);
+    expect(CHAINS.length).toBe(38);
   });
 
   it("has unique chain ids and slugs", () => {
@@ -92,6 +93,7 @@ describe("getChainByName", () => {
     expect(getChainByName("ethereum")?.slug).toBe("mainnet");
     expect(getChainByName("matic")?.slug).toBe("polygon");
     expect(getChainByName("avax")?.slug).toBe("avalanche");
+    expect(getChainByName("fevm")?.slug).toBe("filecoin");
   });
 
   it("resolves differing viem display names as aliases", () => {

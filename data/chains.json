@@ -247,6 +247,29 @@
       "wrappedNativeAddress": "0xfc00000000000000000000000000000000000002"
     },
     {
+      "accountActivityModel": "cross-vm",
+      "aliases": [
+        "fevm",
+        "filecoin evm",
+        "fvm",
+        "Filecoin Mainnet"
+      ],
+      "chainId": 314,
+      "coinGeckoPlatformId": "filecoin",
+      "explorer": {
+        "addressUrl": "https://filecoin.blockscout.com/address/{address}",
+        "txUrl": "https://filecoin.blockscout.com/tx/{tx_hash}"
+      },
+      "name": "Filecoin",
+      "nativeCurrency": {
+        "coinGeckoId": "filecoin",
+        "decimals": 18,
+        "name": "filecoin",
+        "symbol": "FIL"
+      },
+      "slug": "filecoin"
+    },
+    {
       "accountActivityModel": "native-account-abstraction",
       "aliases": [],
       "chainId": 324,
