@@ -44,6 +44,7 @@ describe("stablecoin tickers", () => {
       "USD",
       "USDC",
       "USDC.e",
+      "USDF",
       "USDT",
       "USDT0",
       "USDbC",

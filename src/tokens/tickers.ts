@@ -57,6 +57,7 @@ export const STABLECOIN_TICKERS_BY_PEG: Readonly<Record<StablecoinPeg, readonly 
     "USD",
     "USDC",
     "USDC.e",
+    "USDF",
     "USDbC",
     "USDT",
     "USDT0",
