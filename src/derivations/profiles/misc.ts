@@ -348,7 +348,7 @@ export const MISC_PROFILES: readonly DerivationProfile[] = ROWS.map((row) => ({
   coinType: row.coinType,
   ecosystems: row.ecosystems ?? [row.chain],
   id: row.id,
-  purpose: row.purpose ?? 44,
+  purpose: row.purpose === undefined ? 44 : row.purpose,
   scheme: row.scheme,
   standard: row.standard,
   standardName: row.standardName,

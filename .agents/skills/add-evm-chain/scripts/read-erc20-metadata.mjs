@@ -10,6 +10,10 @@ const SELECTORS = {
 };
 
 const ADDRESS_RE = /^0x[0-9a-fA-F]{40}$/;
+const CHAIN_ID_RE = /^\d+$/;
+const HEX_RE = /^[0-9a-fA-F]*$/;
+const RPC_TIMEOUT_MS = 30_000;
+const UINT_HEX_RE = /^0x[0-9a-fA-F]+$/;
 
 let nextId = 1;
 
@@ -36,7 +40,8 @@ function parseArgs(argv) {
   }
 
   const rpc = args.rpc;
-  const chainId = Number.parseInt(args["chain-id"], 10);
+  const chainIdText = args["chain-id"];
+  const chainId = chainIdText && CHAIN_ID_RE.test(chainIdText) ? Number(chainIdText) : Number.NaN;
   const slug = args.slug;
   const address = args.address?.toLowerCase();
 
@@ -50,25 +55,30 @@ function parseArgs(argv) {
 }
 
 async function rpcCall(rpc, method, params = []) {
+  const id = nextId;
+  nextId += 1;
   const response = await fetch(rpc, {
     body: JSON.stringify({
-      id: nextId,
+      id,
       jsonrpc: "2.0",
       method,
       params,
     }),
     method: "POST",
+    signal: AbortSignal.timeout(RPC_TIMEOUT_MS),
     headers: {
       "content-type": "application/json",
     },
   });
-  nextId += 1;
 
   if (!response.ok) {
     throw new Error(`${method} failed with HTTP ${response.status}`);
   }
 
   const body = await response.json();
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    throw new Error(`${method} returned an invalid JSON-RPC response`);
+  }
   if (body.error) {
     throw new Error(`${method} failed: ${body.error.message ?? JSON.stringify(body.error)}`);
   }
@@ -84,8 +94,10 @@ function ethCall(rpc, address, data) {
 }
 
 function hexToBytes(hex) {
-  const raw = hex.startsWith("0x") ? hex.slice(2) : hex;
-  if (raw.length % 2 !== 0) throw new Error(`Odd-length hex: ${hex}`);
+  if (!hex.startsWith("0x")) throw new Error("Hex result must start with 0x");
+  const raw = hex.slice(2);
+  if (raw.length % 2 !== 0) throw new Error(`Odd-length hex result (${raw.length} digits)`);
+  if (!HEX_RE.test(raw)) throw new Error("Invalid hex result");
   const bytes = new Uint8Array(raw.length / 2);
   for (let i = 0; i < bytes.length; i += 1) {
     bytes[i] = Number.parseInt(raw.slice(i * 2, i * 2 + 2), 16);
@@ -129,18 +141,23 @@ function decodeStringLike(result) {
   return decodeBytes(bytes.slice(start, end));
 }
 
-function decodeUint(result) {
+function decodeUint8(result) {
   if (!result || result === "0x") return null;
+  if (!UINT_HEX_RE.test(result)) throw new Error("Invalid uint8 hex result");
   const value = BigInt(result);
-  if (value > BigInt(Number.MAX_SAFE_INTEGER)) return null;
+  if (value > 255n) throw new Error(`uint8 out of range: ${value.toString()}`);
   return Number(value);
+}
+
+function errorMessage(error) {
+  return error instanceof Error ? error.message : String(error);
 }
 
 async function readNullable(label, read) {
   try {
     return await read();
   } catch (error) {
-    console.error(`Warning: failed to read ${label}: ${error.message}`);
+    console.error(`Warning: failed to read ${label}: ${errorMessage(error)}`);
     return null;
   }
 }
@@ -153,7 +170,7 @@ async function main() {
   }
 
   const decimals = await readNullable("decimals", async () =>
-    decodeUint(await ethCall(rpc, address, SELECTORS.decimals))
+    decodeUint8(await ethCall(rpc, address, SELECTORS.decimals))
   );
   const symbol = await readNullable("symbol", async () =>
     decodeStringLike(await ethCall(rpc, address, SELECTORS.symbol))
@@ -179,6 +196,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error(error.message);
+  console.error(errorMessage(error));
   process.exit(1);
 });

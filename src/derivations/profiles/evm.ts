@@ -1,4 +1,4 @@
-import { evmAddressIndexShape } from "../internal/shapes.js";
+import { bip44AddressIndexShape } from "../internal/shapes.js";
 import { lit, vr } from "../path/template.js";
 import { COIN_TYPES } from "../slip44.js";
 import type { DerivationProfile } from "./types.js";
@@ -24,7 +24,7 @@ export const EVM_PROFILES: readonly DerivationProfile[] = [
     id: "evm-bip44-address-index",
     standard: "bip44",
     standardName: "BIP44",
-    template: evmAddressIndexShape(COIN_TYPES.ETHEREUM),
+    template: bip44AddressIndexShape(COIN_TYPES.ETHEREUM),
   },
   {
     ...base,

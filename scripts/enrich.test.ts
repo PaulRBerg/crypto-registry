@@ -1,6 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 import type { EnrichedToken } from "./enrich.js";
-import { requireRouteMeshApiKey, runChainEnrichment, summarizeRpcError } from "./enrich.js";
+import {
+  parseIncludedAddresses,
+  requireRouteMeshApiKey,
+  runChainEnrichment,
+  summarizeRpcError,
+} from "./enrich.js";
 
 const CHAIN_ID = 1;
 const SLUG = "mainnet";
@@ -104,5 +109,28 @@ describe("RouteMesh configuration", () => {
 
     expect(summary).toBe("request RouteMesh RPC failed");
     expect(summary).not.toContain(API_KEY);
+  });
+});
+
+describe("included token source", () => {
+  const header = "token_symbol\ttoken_type\twallets_used\texchanges_used\twhy\ttoken_address";
+
+  it("extracts and lowercases ERC-20 addresses while ignoring other token kinds", () => {
+    const raw = [
+      header,
+      `USDC\terc20\twallet\texchange\theld\thttps://example.test/token/0x${ADDRESS_A.slice(2).toUpperCase()}`,
+      "NFT\terc721\twallet\t\theld\thttps://example.test/nft/1",
+    ].join("\n");
+
+    expect(parseIncludedAddresses(raw)).toEqual([ADDRESS_A]);
+  });
+
+  it("rejects schema drift and malformed ERC-20 rows", () => {
+    expect(() => parseIncludedAddresses("token_type\ttoken_address\n")).toThrow(
+      "unexpected header"
+    );
+    expect(() =>
+      parseIncludedAddresses(`${header}\nUSDC\terc20\twallet\texchange\theld\tnot-an-address`)
+    ).toThrow("ERC-20 without a valid address");
   });
 });

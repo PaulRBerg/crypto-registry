@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { DERIVATION_PROFILES } from "../profiles/registry.js";
 import type { RoleValues, Template } from "./template.js";
-import { match, render } from "./template.js";
+import { lit, match, render, vr } from "./template.js";
 
 const paramRoles = (template: Template) =>
   template.flatMap((segment) =>
@@ -46,5 +46,36 @@ describe("template round-trip laws", () => {
     expect(paramRoles(root?.template ?? [])).toHaveLength(0);
     expect(render(root?.template ?? [])).toBe("m/44'/501'");
     expect(match(root?.template ?? [], "m/44'/501'")).toEqual({});
+  });
+});
+
+describe("template validation", () => {
+  const indexTemplate = [vr("index", false, 1)];
+
+  it.each([
+    -1,
+    0,
+    1.5,
+    2 ** 31,
+    Number.NaN,
+    Number.POSITIVE_INFINITY,
+  ])("rejects an invalid rendered index: %s", (index) => {
+    expect(() => render(indexTemplate, { index })).toThrow(RangeError);
+  });
+
+  it("accepts the inclusive minimum and maximum derivation index", () => {
+    expect(render(indexTemplate, { index: 1 })).toBe("m/1");
+    expect(render(indexTemplate, { index: 2 ** 31 - 1 })).toBe(`m/${2 ** 31 - 1}`);
+  });
+
+  it("rejects invalid fixed levels and minimums", () => {
+    expect(() => render([lit(-1)])).toThrow(RangeError);
+    expect(() => render([vr("index", false, -1)], { index: 0 })).toThrow(RangeError);
+  });
+
+  it("requires repeated roles to match the same value", () => {
+    const repeatedRole = [vr("index"), vr("index")];
+    expect(match(repeatedRole, "m/3/3")).toEqual({ index: 3 });
+    expect(match(repeatedRole, "m/3/4")).toBeUndefined();
   });
 });

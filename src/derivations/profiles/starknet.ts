@@ -1,4 +1,4 @@
-import { evmAddressIndexShape } from "../internal/shapes.js";
+import { bip44AddressIndexShape } from "../internal/shapes.js";
 import { COIN_TYPES } from "../slip44.js";
 import type { DerivationProfile } from "./types.js";
 
@@ -17,6 +17,6 @@ export const STARKNET_PROFILES: readonly DerivationProfile[] = [
     scheme: "stark",
     standard: "ready-argent",
     standardName: "Ready X",
-    template: evmAddressIndexShape(COIN_TYPES.STARKNET),
+    template: bip44AddressIndexShape(COIN_TYPES.STARKNET),
   },
 ];

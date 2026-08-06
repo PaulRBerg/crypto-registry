@@ -156,6 +156,9 @@ type ChainEnrichmentOptions = {
 const lc = (a: string): `0x${string}` => a.toLowerCase() as `0x${string}`;
 const ADDRESS_RE = /^0x[0-9a-f]{40}$/;
 const ADDRESS_IN_URL = /0x[0-9a-fA-F]{40}/;
+const INCLUDED_TSV_HEADER =
+  "token_symbol\ttoken_type\twallets_used\texchanges_used\twhy\ttoken_address";
+const LINE_BREAK_RE = /\r?\n/u;
 const tokenKey = (chainId: number, address: string) => `${chainId}:${address.toLowerCase()}`;
 
 function viemChainForSlug(slug: string) {
@@ -236,24 +239,43 @@ export function summarizeRpcError(error: unknown, routeMeshApiKey: string): stri
     .replace(/https:\/\/lb\.routeme\.sh\/rpc\/\d+\/[^\s)]+/g, "RouteMesh RPC");
 }
 
-/** Parse `included.tsv` ERC-20 rows for a chain; returns lowercased addresses. */
+/** Parse `included.tsv` ERC-20 rows; returns lowercased addresses. */
+export function parseIncludedAddresses(raw: string, source = "included.tsv"): `0x${string}`[] {
+  const [header, ...rows] = raw.split(LINE_BREAK_RE);
+  if (header !== INCLUDED_TSV_HEADER) {
+    throw new Error(`${source} has an unexpected header`);
+  }
+
+  const out: `0x${string}`[] = [];
+  for (const [index, row] of rows.entries()) {
+    if (row.length === 0) continue;
+    const cols = row.split("\t");
+    if (cols.length !== 6) {
+      throw new Error(`${source} row ${index + 2} has ${cols.length} columns; expected 6`);
+    }
+    if (cols[1] !== "erc20") continue;
+    const match = cols[5].match(ADDRESS_IN_URL);
+    if (!match) {
+      throw new Error(`${source} row ${index + 2} is an ERC-20 without a valid address`);
+    }
+    out.push(lc(match[0]));
+  }
+  return out;
+}
+
+/** Read one chain's source file; an absent file means the chain has no source rows. */
 function readIncludedAddresses(slug: string): `0x${string}`[] {
   const path = join(TOKEN_SOURCE_DIR, TOKEN_SOURCE_SLUG[slug] ?? slug, "included.tsv");
   let raw: string;
   try {
     raw = readFileSync(path, "utf8");
-  } catch {
-    return [];
+  } catch (error) {
+    if (typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT") {
+      return [];
+    }
+    throw error;
   }
-  const out: `0x${string}`[] = [];
-  const rows = raw.split("\n").slice(1); // drop header
-  for (const row of rows) {
-    const cols = row.split("\t");
-    if (cols[1] !== "erc20") continue;
-    const match = cols.at(-1)?.match(ADDRESS_IN_URL);
-    if (match) out.push(lc(match[0]));
-  }
-  return out;
+  return parseIncludedAddresses(raw, path);
 }
 
 /** Build the full set of (slug -> addresses) to enrich. */
@@ -319,7 +341,7 @@ async function readField(
   addresses.forEach((address, i) => {
     const r = stringResults[i];
     if (r?.status === "success" && typeof r.result === "string") {
-      result.set(address, (r.result as string).trim() || null);
+      result.set(address, r.result.trim() || null);
     } else {
       bytesRetry.push(address);
     }

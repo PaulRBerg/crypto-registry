@@ -52,7 +52,26 @@ const tick = (hardened: boolean): string => (hardened ? "'" : "");
 
 const join = (parts: readonly string[]): string => (parts.length > 0 ? `/${parts.join("/")}` : "");
 
+const assertDerivationIndex = (value: number, label: string, minValue = 0): void => {
+  if (!Number.isInteger(value) || value < minValue || value >= HARDENED_OFFSET) {
+    throw new RangeError(
+      `${label} must be an integer in [${minValue}, 2^31); received ${String(value)}`
+    );
+  }
+};
+
+const validateTemplate = (template: Template): void => {
+  for (const segment of template) {
+    if (segment.kind === "fixed") {
+      assertDerivationIndex(segment.value, "fixed segment value");
+    } else if (segment.minValue !== undefined) {
+      assertDerivationIndex(segment.minValue, `minValue for role "${segment.role}"`);
+    }
+  }
+};
+
 const templateKind = (template: Template): "bip" | "native" => {
+  validateTemplate(template);
   const hasNative = template.some((segment) => segment.kind === "native-param");
   if (hasNative && template.some((segment) => segment.kind !== "native-param")) {
     throw new Error("mixed BIP and native template segments are not supported");
@@ -71,7 +90,8 @@ const variableSegments = (
 const escapeRegex = (value: string): string => value.replace(/[\\^$.*+?()[\]{}|]/gu, "\\$&");
 
 /**
- * Direction A — render a template to a concrete path. Every param role must be supplied in `values`.
+ * Direction A — render a template to a concrete path. Every param role must be supplied in `values`; each value must
+ * be an integer from its authored `minValue` (default `0`) through `2^31 - 1`.
  *
  * @example render(evmAddressIndexShape(60), { index: 5 }) // "m/44'/60'/0'/0/5"
  */
@@ -85,6 +105,7 @@ export function render(template: Template, values: RoleValues = {}): DerivationP
     if (value === undefined) {
       throw new Error(`render: missing value for role "${segment.role}"`);
     }
+    assertDerivationIndex(value, `value for role "${segment.role}"`, segment.minValue ?? 0);
     if (segment.kind === "native-param") {
       return `${segment.prefix}${value}`;
     }
@@ -165,6 +186,10 @@ export function match(template: Template, path: string): RoleValues | undefined 
   for (const [position, segment] of variables.entries()) {
     const value = Number.parseInt(found[position + 1], 10);
     if (value < (segment.minValue ?? 0) || value >= HARDENED_OFFSET) {
+      return undefined;
+    }
+    const previousValue = values[segment.role];
+    if (previousValue !== undefined && previousValue !== value) {
       return undefined;
     }
     values[segment.role] = value;

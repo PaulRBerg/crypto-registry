@@ -55,14 +55,5 @@ export const bip44RootShape = (purpose: number, coinType: number): Template => [
   vr("account", true),
 ];
 
-/** `m/44'/{coin}'/0'/0/{index}` — fixed account, varying address index (EVM, Starknet). */
-export const evmAddressIndexShape = (coinType: number): Template => [
-  lit(44, true),
-  lit(coinType, true),
-  lit(0, true),
-  lit(0),
-  vr("index"),
-];
-
 /** `index={index}` — native Nano/RaiBlocks seed account index evidence. */
 export const nativeIndexShape = (): Template => [nvr("index", "index=")];

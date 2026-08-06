@@ -76,6 +76,7 @@ describe("registry integrity", () => {
     );
     expect(profileById("nano-legacy-seed-account")?.examplePath).toBe("index=0");
     expect(profileById("nano-legacy-seed-account")?.template).toBe("index={index}");
+    expect(profileById("nano-legacy-seed-account")?.purpose).toBeNull();
     expect(profileById("hedera-ed25519-account")?.examplePath).toBe("m/44'/3030'/0'/0'/0'");
     expect(profileById("hedera-ed25519-legacy")?.examplePath).toBe("m/44'/3030'/0'/0'");
   });

@@ -238,7 +238,10 @@ export function generate(tokens: EnrichedToken[]): void {
 
   for (const t of all) {
     const k = key(t.chainId, t.address);
-    if (seen.has(k)) continue;
+    if (seen.has(k)) {
+      throw new Error(`duplicate token ${t.slug} ${t.address}`);
+    }
+    seen.add(k);
     const meta = resolveMetadata(t);
     if (!meta) {
       if (droppedKeys.has(k)) {
@@ -246,11 +249,10 @@ export function generate(tokens: EnrichedToken[]): void {
         continue;
       }
       throw new Error(
-        `unresolved & undocumented token ${t.slug} ${t.address}: read it on-chain and add to a stablecoin family, MANUAL_TOKENS, TOKEN_ADDRESS_ALIASES, or DROPPED in classification.ts`
+        `unresolved & undocumented token ${t.slug} ${t.address}: read it on-chain, map its historical address in TOKEN_ADDRESS_ALIASES, or add it to DROPPED in classification.ts`
       );
     }
     assertValid(t, meta);
-    seen.add(k);
     const { bucket, line } = classify(t, meta);
     buckets[bucket].push(line);
   }
