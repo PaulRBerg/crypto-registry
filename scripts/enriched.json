@@ -2578,6 +2578,14 @@
   {
     "chainId": 100,
     "slug": "gnosis",
+    "address": "0x2a22f9c3b484c3629090feed35f17ff8f88f76f0",
+    "symbol": "USDC.e",
+    "name": "Bridged USDC (Gnosis)",
+    "decimals": 6
+  },
+  {
+    "chainId": 100,
+    "slug": "gnosis",
     "address": "0x420ca0f9b9b604ce0fd9c18ef134c705e5fa3430",
     "symbol": "EURe",
     "name": "Monerium EURe",
@@ -4589,6 +4597,22 @@
     "address": "0xe4dddfe67e7164b0fe14e218d80dc4c08edc01cb",
     "symbol": "KNC",
     "name": "Kyber Network Crystal v2",
+    "decimals": 18
+  },
+  {
+    "chainId": 42161,
+    "slug": "arbitrum",
+    "address": "0xf28831db80a616dc33a5869f6f689f54add5b74c",
+    "symbol": "CONTRIB",
+    "name": "Ethtrader Contribution on Arbitrum One",
+    "decimals": 18
+  },
+  {
+    "chainId": 42161,
+    "slug": "arbitrum",
+    "address": "0xf42e2b8bc2af8b110b65be98db1321b1ab8d44f5",
+    "symbol": "DONUT",
+    "name": "Donut",
     "decimals": 18
   },
   {

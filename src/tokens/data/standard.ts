@@ -469,6 +469,8 @@ export const STANDARD_TOKENS: readonly StandardToken[] = [
   { address: "0xd4d42f0b6def4ce0383636770ef773390d85c61a", chainId: 42161, decimals: 18, name: "SushiToken", symbol: "SUSHI", kind: "standard" },
   { address: "0xdbcd16e622c95acb2650b38ec799f76bfc557a0b", chainId: 42161, decimals: 18, name: "Curve.fi ETH/wstETH", symbol: "wstETHCRV", kind: "standard" },
   { address: "0xe4dddfe67e7164b0fe14e218d80dc4c08edc01cb", chainId: 42161, decimals: 18, name: "Kyber Network Crystal v2", symbol: "KNC", kind: "standard" },
+  { address: "0xf28831db80a616dc33a5869f6f689f54add5b74c", chainId: 42161, decimals: 18, name: "Ethtrader Contribution on Arbitrum One", symbol: "CONTRIB", kind: "standard" },
+  { address: "0xf42e2b8bc2af8b110b65be98db1321b1ab8d44f5", chainId: 42161, decimals: 18, name: "Donut", symbol: "DONUT", kind: "standard" },
   { address: "0xf929de51d91c77e42f5090069e0ad7a09e513c73", chainId: 42161, decimals: 18, name: "FOX", symbol: "FOX", kind: "standard" },
   { address: "0xf97f4df75117a78c1a5a0dbb814af92458539fb4", chainId: 42161, decimals: 18, name: "ChainLink Token", symbol: "LINK", kind: "standard" },
   { address: "0xfa7f8980b0f1e64a2062791cc3b0871572f1f7f0", chainId: 42161, decimals: 18, name: "Uniswap", symbol: "UNI", kind: "standard" },
