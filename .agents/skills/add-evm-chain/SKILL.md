@@ -123,12 +123,12 @@ publication approval.
      Its expected surfaces are `scripts/enriched.json` and the generated token modules under `src/tokens/data/`.
      Afterward, compare the actual changed paths with that set and flag unexpected output.
    - Prefer `just enrich`. If it stalls or fails on unrelated chains, run
-     `node scripts/read-erc20-metadata.mjs --rpc <url> --chain-id <id> --slug <slug> --address <wrapped-native>` from
-     this skill to diagnose the missing row. Treat the result as complete evidence only when the chain ID matches,
-     `symbol` and `name` are non-empty strings, and `decimals` is a valid integer; a `null` field is an unresolved read,
-     even though the helper exits successfully. Do not merge the diagnostic row into generated `scripts/enriched.json`
-     by hand. If the normal enrichment flow cannot produce the row, stop with the truthful partial or blocked outcome
-     and report the precise enrichment gap.
+     `bun scripts/read-erc20-metadata.ts --rpc <url> --chain-id <id> --slug <slug> --address <wrapped-native>` from this
+     skill to diagnose the missing row. Treat the result as complete evidence only when the chain ID matches, `symbol`
+     and `name` are non-empty strings, and `decimals` is a valid integer; a `null` field is an unresolved read, even
+     though the helper exits successfully. Do not merge the diagnostic row into generated `scripts/enriched.json` by
+     hand. If the normal enrichment flow cannot produce the row, stop with the truthful partial or blocked outcome and
+     report the precise enrichment gap.
    - After the hand-authored chain and token inputs are final, preview `data/chains.json` and `data/tokens.json` as the
      expected `just json-gen` surfaces, run that recipe, and compare the actual changed paths with the preview. Inspect
      both JSON artifacts for the requested chain and wrapped-native metadata before treating generation as complete.
@@ -173,7 +173,7 @@ Run the bundled ERC-20 metadata reader from this skill directory to diagnose a w
 enrichment flow could not read:
 
 ```bash
-node scripts/read-erc20-metadata.mjs --rpc <url> --chain-id <id> --slug <slug> --address <erc20>
+bun scripts/read-erc20-metadata.ts --rpc <url> --chain-id <id> --slug <slug> --address <erc20>
 ```
 
 The script verifies `eth_chainId`, reads `decimals`, `symbol`, and `name`, lowercases the address, and prints a

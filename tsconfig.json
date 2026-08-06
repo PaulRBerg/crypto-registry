@@ -9,6 +9,6 @@
     "rootDir": ".",
     "types": ["node", "vitest/globals"]
   },
-  "include": ["src/**/*.ts", "scripts/**/*.ts"],
+  "include": [".agents/skills/add-evm-chain/scripts/**/*.ts", "src/**/*.ts", "scripts/**/*.ts"],
   "exclude": ["dist", "node_modules"]
 }

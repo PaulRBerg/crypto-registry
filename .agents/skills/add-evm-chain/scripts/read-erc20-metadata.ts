@@ -1,7 +1,7 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
 const USAGE =
-  "Usage: node scripts/read-erc20-metadata.mjs --rpc <url> --chain-id <id> --slug <slug> --address <erc20>";
+  "Usage: bun scripts/read-erc20-metadata.ts --rpc <url> --chain-id <id> --slug <slug> --address <erc20>";
 
 const SELECTORS = {
   decimals: "0x313ce567",
@@ -17,11 +17,23 @@ const UINT_HEX_RE = /^0x[0-9a-fA-F]+$/;
 
 let nextId = 1;
 
-function parseArgs(argv) {
-  const args = {};
+type ParsedArgs = {
+  address: string;
+  chainId: number;
+  rpc: string;
+  slug: string;
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function parseArgs(argv: string[]): ParsedArgs {
+  const args: Record<string, string> = {};
 
   for (let i = 0; i < argv.length; i += 1) {
     const token = argv[i];
+    if (token === undefined) continue;
     if (token === "--help" || token === "-h") {
       console.log(USAGE);
       process.exit(0);
@@ -54,7 +66,11 @@ function parseArgs(argv) {
   return { address, chainId, rpc, slug };
 }
 
-async function rpcCall(rpc, method, params = []) {
+async function rpcCall(
+  rpc: string,
+  method: string,
+  params: readonly unknown[] = []
+): Promise<string> {
   const id = nextId;
   nextId += 1;
   const response = await fetch(rpc, {
@@ -75,12 +91,16 @@ async function rpcCall(rpc, method, params = []) {
     throw new Error(`${method} failed with HTTP ${response.status}`);
   }
 
-  const body = await response.json();
-  if (!body || typeof body !== "object" || Array.isArray(body)) {
+  const body: unknown = await response.json();
+  if (!isRecord(body)) {
     throw new Error(`${method} returned an invalid JSON-RPC response`);
   }
   if (body.error) {
-    throw new Error(`${method} failed: ${body.error.message ?? JSON.stringify(body.error)}`);
+    const detail =
+      isRecord(body.error) && typeof body.error.message === "string"
+        ? body.error.message
+        : JSON.stringify(body.error);
+    throw new Error(`${method} failed: ${detail}`);
   }
   if (typeof body.result !== "string") {
     throw new Error(`${method} returned a non-string result`);
@@ -89,11 +109,11 @@ async function rpcCall(rpc, method, params = []) {
   return body.result;
 }
 
-function ethCall(rpc, address, data) {
+function ethCall(rpc: string, address: string, data: string): Promise<string> {
   return rpcCall(rpc, "eth_call", [{ data, to: address }, "latest"]);
 }
 
-function hexToBytes(hex) {
+function hexToBytes(hex: string): Uint8Array {
   if (!hex.startsWith("0x")) throw new Error("Hex result must start with 0x");
   const raw = hex.slice(2);
   if (raw.length % 2 !== 0) throw new Error(`Odd-length hex result (${raw.length} digits)`);
@@ -105,21 +125,21 @@ function hexToBytes(hex) {
   return bytes;
 }
 
-function wordToNumber(bytes, offset) {
+function wordToNumber(bytes: Uint8Array, offset: number): number | null {
   if (offset + 32 > bytes.length) return null;
   let value = 0n;
   for (let i = offset; i < offset + 32; i += 1) {
-    value = value * 256n + BigInt(bytes[i]);
+    value = value * 256n + BigInt(bytes[i] as number);
   }
   if (value > BigInt(Number.MAX_SAFE_INTEGER)) return null;
   return Number(value);
 }
 
-function decodeBytes(bytes) {
+function decodeBytes(bytes: Uint8Array): string {
   return new TextDecoder("utf-8", { fatal: false }).decode(bytes).replace(/\0+$/g, "");
 }
 
-function decodeStringLike(result) {
+function decodeStringLike(result: string): string | null {
   if (!result || result === "0x") return null;
 
   const bytes = hexToBytes(result);
@@ -141,7 +161,7 @@ function decodeStringLike(result) {
   return decodeBytes(bytes.slice(start, end));
 }
 
-function decodeUint8(result) {
+function decodeUint8(result: string): number | null {
   if (!result || result === "0x") return null;
   if (!UINT_HEX_RE.test(result)) throw new Error("Invalid uint8 hex result");
   const value = BigInt(result);
@@ -149,11 +169,11 @@ function decodeUint8(result) {
   return Number(value);
 }
 
-function errorMessage(error) {
+function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-async function readNullable(label, read) {
+async function readNullable<T>(label: string, read: () => Promise<T>): Promise<T | null> {
   try {
     return await read();
   } catch (error) {
