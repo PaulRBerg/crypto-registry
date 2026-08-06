@@ -88,6 +88,86 @@ alias tui := test-ui
 @json-gen:
     bun scripts/emit-json.ts
 
+# Validate, tag, and push a stable release from a clean, current main branch
+[group("publish"), script("bash")]
+release:
+    set -euo pipefail
+
+    if [[ -n "$(git status --porcelain)" ]]; then
+      echo "Error: the working tree must be clean" >&2
+      exit 1
+    fi
+
+    branch="$(git branch --show-current)"
+    if [[ "$branch" != "main" ]]; then
+      echo "Error: releases must be created from main (current branch: $branch)" >&2
+      exit 1
+    fi
+
+    git fetch --quiet origin main
+    if [[ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]]; then
+      echo "Error: local main must exactly match origin/main" >&2
+      exit 1
+    fi
+
+    version="$(jq -r '.version' package.json)"
+    if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+      echo "Error: package.json version must be a stable X.Y.Z version: $version" >&2
+      exit 1
+    fi
+    tag="v$version"
+
+    if git show-ref --verify --quiet "refs/tags/$tag"; then
+      echo "Error: local tag $tag already exists" >&2
+      exit 1
+    fi
+
+    if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; then
+      echo "Error: remote tag $tag already exists" >&2
+      exit 1
+    else
+      rc=$?
+      if [[ "$rc" -ne 2 ]]; then
+        echo "Error: could not check remote tag $tag" >&2
+        exit "$rc"
+      fi
+    fi
+
+    just full-check
+    just test
+    just build
+
+    if [[ -n "$(git status --porcelain)" ]]; then
+      echo "Error: release checks left the working tree dirty" >&2
+      exit 1
+    fi
+
+    git fetch --quiet origin main
+    if [[ "$(git branch --show-current)" != "main" ]] || \
+       [[ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]]; then
+      echo "Error: main changed while release checks were running" >&2
+      exit 1
+    fi
+
+    if git show-ref --verify --quiet "refs/tags/$tag"; then
+      echo "Error: tag $tag was created while release checks were running" >&2
+      exit 1
+    fi
+
+    if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; then
+      echo "Error: tag $tag was created while release checks were running" >&2
+      exit 1
+    else
+      rc=$?
+      if [[ "$rc" -ne 2 ]]; then
+        echo "Error: could not recheck remote tag $tag" >&2
+        exit "$rc"
+      fi
+    fi
+
+    git tag --annotate "$tag" --message "$tag"
+    git push origin "refs/tags/$tag"
+
 # ---------------------------------------------------------------------------- #
 #                                    CHECKS                                    #
 # ---------------------------------------------------------------------------- #

@@ -119,6 +119,32 @@ shape `{ "chains": Chain[], "schemaVersion": 2 }`; every chain row includes the 
 
 See [`AGENTS.md`](./AGENTS.md) for the development workflow and the generated-data ownership rules.
 
+## Maintainer release
+
+npm requires a package to exist before its trusted publisher can be configured. Bootstrap the first release locally,
+then configure and verify the GitHub Actions publisher:
+
+```sh
+just full-check
+just test
+just build
+npm publish
+npm trust github @prb/crypto-registry --repository PaulRBerg/crypto-registry --file release.yml --allow-publish
+npm trust list
+```
+
+Only after trusted publishing is verified, force-retarget `v1.0.0` to the current release commit. Pushing this tag lets
+CI observe the already-published package, create the GitHub release, and sync the `v1` branch:
+
+```sh
+git tag --force --annotate v1.0.0 --message v1.0.0
+git push origin refs/tags/v1.0.0 --force
+```
+
+For every later stable release, update and commit the package version on `main`, then run `just release`. The recipe
+checks the release, creates and pushes only the version tag, and never publishes to npm itself. CI publishes through npm
+trusted publishing with tokenless OIDC; no npm credential belongs in the workflow or repository.
+
 ## License
 
 MIT © [Paul Razvan Berg](https://github.com/PaulRBerg)
