@@ -43,8 +43,8 @@ describe("chain registry", () => {
   });
 
   it("sources chain ids and native currencies from the supported viem mapping", () => {
-    expect(Object.keys(VIEM_CHAINS_BY_SLUG).sort()).toEqual(
-      CHAINS.map((chain) => chain.slug).sort()
+    expect(Object.keys(VIEM_CHAINS_BY_SLUG).toSorted()).toEqual(
+      CHAINS.map((chain) => chain.slug).toSorted()
     );
 
     for (const chain of CHAINS) {

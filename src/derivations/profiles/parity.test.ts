@@ -126,9 +126,10 @@ describe("parity with original regex rules", () => {
     expect(toMatcher(segments(id)).regex.source).toBe(source);
   });
 
-  it.each(
-    BITCOIN_MATCHER_FIXTURES
-  )("bitcoin matcher source (capture-stripped) %s", (id, source) => {
-    expect(toMatcher(segments(id)).regex.source.replaceAll("(\\d+)", "\\d+")).toBe(source);
-  });
+  it.each(BITCOIN_MATCHER_FIXTURES)(
+    "bitcoin matcher source (capture-stripped) %s",
+    (id, source) => {
+      expect(toMatcher(segments(id)).regex.source.replaceAll("(\\d+)", "\\d+")).toBe(source);
+    }
+  );
 });

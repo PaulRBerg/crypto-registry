@@ -34,7 +34,7 @@ describe("canonical ticker aliases", () => {
 
 describe("stablecoin tickers", () => {
   it("lists the exact USD-equivalent quote vocabulary", () => {
-    expect([...STABLECOIN_TICKERS_BY_PEG.USD].sort()).toEqual([
+    expect([...STABLECOIN_TICKERS_BY_PEG.USD].toSorted()).toEqual([
       "BSC-USD",
       "BUSD",
       "DAI",

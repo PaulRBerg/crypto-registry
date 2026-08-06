@@ -12,7 +12,7 @@ Agent guidance for `@prb/crypto-registry`. Keep changes surgical and the package
 ## Commands
 
 - `just typecheck` — `tsgo` over `src/` and `scripts/`.
-- `just lint` / `just format` — Biome (format also runs Prettier on Markdown).
+- `just ox-check` / `just ox-write` — Oxlint/Oxfmt for JS/TS/JSON; Prettier owns Markdown/YAML.
 - `just test` — Vitest (`src/**/*.test.ts`, `scripts/**/*.test.ts`).
 - `just build` — clean `dist/`, compile with `tsconfig.build.json`, `npm pack`.
 - `just enrich` — regenerate token data through RouteMesh (see below). Requires `ROUTEMESH_API_KEY`, uses the network,
@@ -22,8 +22,8 @@ Agent guidance for `@prb/crypto-registry`. Keep changes surgical and the package
 
 ## Lint Rules
 
-After generating or editing code, run these checks **in order**. The `just` recipes wrap Biome, Prettier, and `tsgo`
-with the repo's config.
+After generating or editing code, run these checks **in order**. The `just` recipes wrap Oxlint/Oxfmt, Prettier, and
+`tsgo` with the repo's config.
 
 **File argument rules:**
 
@@ -33,22 +33,22 @@ with the repo's config.
 **Command sequence:**
 
 1. **Identify which file types changed.**
-2. **`just biome-check <files>`** — format + lint JS/TS/JSON (skip if none changed). The generated data modules
-   (`src/tokens/data/`, `scripts/enriched.json`) are excluded in `biome.jsonc`, so Biome ignores them even if passed.
-   Auto-fix with `just format`.
-3. **`just prettier-check <globs>`** — check Markdown/YAML formatting (skip if no `.md`/`.mdx`/`.yaml` changed).
-   Auto-fix with `just format`.
+2. **`just ox-check <files>`** — format + lint JS/TS/JSON (skip if none changed). The generated data modules
+   (`src/tokens/data/`, `scripts/enriched.json`) are excluded in the Ox config, so Oxlint/Oxfmt ignore them even if
+   passed. Auto-fix with `just ox-write`.
+3. **`just prettier-check <globs>`** — check Markdown/YAML formatting (skip if no `.md`/`.mdx`/`.yaml`/`.yml` changed).
+   Auto-fix with `just prettier-write`.
 4. **`just typecheck`** — `tsgo` over `src/` + `scripts/` (always run on the entire project).
 
 **Examples:**
 
 ```bash
 # Fewer than 10 files: specific paths and/or globs
-just biome-check src/tokens/registry.ts scripts/codegen.ts
+just ox-check src/tokens/registry.ts scripts/codegen.ts
 just prettier-check AGENTS.md
 
 # 10+ files: omit arguments to process everything
-just biome-check
+just ox-check
 just prettier-check
 
 # Type check always runs on the whole project
@@ -82,8 +82,7 @@ then run `just enrich`:
 - `src/chains/chains.ts` keeps the supported evm-atlas chain set local, maps those slugs to `viem/chains`, and layers
   local Atlas/accounting metadata on top. Do not widen support to every viem chain.
 
-These generated files are excluded from Biome in `biome.jsonc` to stay compact (one row per line); they are still
-typechecked.
+These generated files are excluded in the Ox config to stay compact (one row per line); they are still typechecked.
 
 `data/tokens.json` and `data/chains.json` are canonical JSON artifacts for non-TypeScript consumers (Go, jq, Python).
 TypeScript consumers should use the typed `@prb/crypto-registry` entry; Node ESM JSON imports need

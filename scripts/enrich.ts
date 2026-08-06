@@ -70,12 +70,12 @@ const PUBLIC_RPC_BY_SLUG: Partial<Record<string, string>> = {
 const CHAIN_TIMEOUT_MS = 45_000;
 
 function withHardTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
-  return new Promise<T>((resolve, reject) => {
+  return new Promise<T>((complete, reject) => {
     const timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
     promise.then(
       (value) => {
         clearTimeout(timer);
-        resolve(value);
+        complete(value);
       },
       (error: unknown) => {
         clearTimeout(timer);
@@ -209,7 +209,6 @@ function applyMetadataOverrides(token: EnrichedToken): EnrichedToken {
 function canonicalizeTokens(tokens: EnrichedToken[]): EnrichedToken[] {
   return tokens.map((token) => {
     const canonical = applyMetadataOverrides(token);
-    // biome-ignore assist/source/useSortedKeys: Preserve the committed cache's field order.
     return {
       chainId: canonical.chainId,
       slug: canonical.slug,

@@ -223,7 +223,7 @@ function classify(t: EnrichedToken, meta: Resolved): { bucket: Bucket; line: str
 }
 
 export function generate(tokens: EnrichedToken[]): void {
-  const all = [...tokens].sort(
+  const all = [...tokens].toSorted(
     (a, b) => a.chainId - b.chainId || a.address.localeCompare(b.address)
   );
 

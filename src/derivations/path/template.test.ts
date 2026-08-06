@@ -52,16 +52,12 @@ describe("template round-trip laws", () => {
 describe("template validation", () => {
   const indexTemplate = [vr("index", false, 1)];
 
-  it.each([
-    -1,
-    0,
-    1.5,
-    2 ** 31,
-    Number.NaN,
-    Number.POSITIVE_INFINITY,
-  ])("rejects an invalid rendered index: %s", (index) => {
-    expect(() => render(indexTemplate, { index })).toThrow(RangeError);
-  });
+  it.each([-1, 0, 1.5, 2 ** 31, Number.NaN, Number.POSITIVE_INFINITY])(
+    "rejects an invalid rendered index: %s",
+    (index) => {
+      expect(() => render(indexTemplate, { index })).toThrow(RangeError);
+    }
+  );
 
   it("accepts the inclusive minimum and maximum derivation index", () => {
     expect(render(indexTemplate, { index: 1 })).toBe("m/1");

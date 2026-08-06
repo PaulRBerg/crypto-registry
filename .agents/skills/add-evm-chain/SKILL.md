@@ -136,8 +136,7 @@ publication approval.
      chain, with generated files changed only by their owning generators.
 
 5. Verify `crypto-registry`.
-   - For fewer than 10 changed JS/TS/JSON files, run `just biome-check <changed files>`; otherwise run
-     `just biome-check`.
+   - For fewer than 10 changed JS/TS/JSON files, run `just ox-check <changed files>`; otherwise run `just ox-check`.
    - Run `just typecheck`.
    - Run `just test src/chains/lookup.test.ts src/tokens/registry.test.ts`.
    - Run `just tsc-build`.

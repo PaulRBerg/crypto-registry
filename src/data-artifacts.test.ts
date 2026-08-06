@@ -9,11 +9,11 @@ import { TOKENS } from "./tokens/registry.js";
 
 const DATA_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "data");
 
-const sortedTokens = [...TOKENS].sort(
+const sortedTokens = [...TOKENS].toSorted(
   (a, b) => a.chainId - b.chainId || compareStrings(a.address, b.address)
 );
-const sortedChains = [...CHAINS].sort((a, b) => a.chainId - b.chainId);
-const sortedAliases = [...TOKEN_ADDRESS_ALIASES].sort(
+const sortedChains = [...CHAINS].toSorted((a, b) => a.chainId - b.chainId);
+const sortedAliases = [...TOKEN_ADDRESS_ALIASES].toSorted(
   (a, b) => a.chainId - b.chainId || compareStrings(a.historicalAddress, b.historicalAddress)
 );
 

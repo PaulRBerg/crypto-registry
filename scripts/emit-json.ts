@@ -21,7 +21,7 @@ function sortKeys(value: unknown): unknown {
   if (value && typeof value === "object") {
     return Object.fromEntries(
       Object.entries(value)
-        .sort(([a], [b]) => compareStrings(a, b))
+        .toSorted(([a], [b]) => compareStrings(a, b))
         .map(([key, entry]) => [key, sortKeys(entry)])
     );
   }
@@ -32,10 +32,10 @@ const stringify = (value: unknown): string => `${JSON.stringify(sortKeys(value),
 
 /** Render the canonical JSON artifact for non-TypeScript token consumers. */
 export function renderTokensJson(): string {
-  const aliases = [...TOKEN_ADDRESS_ALIASES].sort(
+  const aliases = [...TOKEN_ADDRESS_ALIASES].toSorted(
     (a, b) => a.chainId - b.chainId || compareStrings(a.historicalAddress, b.historicalAddress)
   );
-  const tokens = [...TOKENS].sort(
+  const tokens = [...TOKENS].toSorted(
     (a, b) => a.chainId - b.chainId || compareStrings(a.address, b.address)
   );
   return stringify({ aliases, schemaVersion: 2, tokens });
@@ -43,7 +43,7 @@ export function renderTokensJson(): string {
 
 /** Render the canonical JSON artifact for non-TypeScript chain consumers. */
 export function renderChainsJson(): string {
-  const chains = [...CHAINS].sort((a, b) => a.chainId - b.chainId);
+  const chains = [...CHAINS].toSorted((a, b) => a.chainId - b.chainId);
   return stringify({ chains, schemaVersion: 2 });
 }
 
