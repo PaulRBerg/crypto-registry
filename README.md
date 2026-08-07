@@ -121,29 +121,28 @@ See [`AGENTS.md`](./AGENTS.md) for the development workflow and the generated-da
 
 ## Maintainer release
 
-npm requires a package to exist before its trusted publisher can be configured. Bootstrap the first release locally,
-then configure and verify the GitHub Actions publisher:
+All npm publishing runs through the `release.yml` GitHub Actions trusted publisher with tokenless OIDC. Do not publish
+locally or add an npm credential to the workflow or repository.
+
+For an on-demand development release, commit and push a consumer-visible change to `main`, then run:
 
 ```sh
-just full-check
-just test
-just build
-npm publish
-npm trust github @prb/crypto-registry --repository PaulRBerg/crypto-registry --file release.yml --allow-publish
-npm trust list
+just release-dev
 ```
 
-Only after trusted publishing is verified, force-retarget `v1.0.0` to the current release commit. Pushing this tag lets
-CI observe the already-published package, create the GitHub release, and sync the `v1` branch:
+The recipe requires a clean local `main` equal to `origin/main`, dispatches the exact commit, waits for CI, and verifies
+the published npm metadata. CI derives the version from the stable `package.json` base, the current UTC date, and the
+highest development-release counter already published that day. It publishes versions such as `1.0.0-dev.20260807.1`
+under the `dev` dist-tag without changing `latest`, creating a Git tag, or committing the derived version. Install the
+newest development release with:
 
 ```sh
-git tag --force --annotate v1.0.0 --message v1.0.0
-git push origin refs/tags/v1.0.0 --force
+npm install @prb/crypto-registry@dev
 ```
 
-For every later stable release, update and commit the package version on `main`, then run `just release`. The recipe
-checks the release, creates and pushes only the version tag, and never publishes to npm itself. CI publishes through npm
-trusted publishing with tokenless OIDC; no npm credential belongs in the workflow or repository.
+For a stable release, update and commit the stable package version on `main`, then run `just release`. The recipe checks
+the release and pushes its version tag; CI publishes it under `latest`, creates the GitHub release, and syncs the major
+version branch.
 
 ## License
 

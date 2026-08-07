@@ -10,6 +10,8 @@ import "./node_modules/@prb/devkit/just/npm.just"
 na := require("na")
 ni := require("ni")
 nlx := require("nlx")
+gh := require("gh")
+rg := require("rg")
 
 # ---------------------------------------------------------------------------- #
 #                                   CONSTANTS                                  #
@@ -87,6 +89,106 @@ alias tui := test-ui
 # Regenerate committed JSON data artifacts without network access
 @json-gen:
     bun scripts/emit-json.ts
+
+# Dispatch and verify an on-demand development release from current main
+[group("publish"), script("bash")]
+release-dev:
+    set -euo pipefail
+
+    if [[ -n "$(git status --porcelain)" ]]; then
+      echo "Error: the working tree must be clean" >&2
+      exit 1
+    fi
+
+    branch="$(git branch --show-current)"
+    if [[ "$branch" != "main" ]]; then
+      echo "Error: releases must be created from main (current branch: $branch)" >&2
+      exit 1
+    fi
+
+    git fetch --quiet origin main
+    commit_sha="$(git rev-parse HEAD)"
+    if [[ "$commit_sha" != "$(git rev-parse FETCH_HEAD)" ]]; then
+      echo "Error: local main must exactly match origin/main" >&2
+      exit 1
+    fi
+
+    gh_bin="{{ gh }}"
+    rg_bin="{{ rg }}"
+    active_run="$("$gh_bin" run list \
+      --workflow=release.yml \
+      --limit=20 \
+      --json status,url \
+      --jq 'map(select(.status != "completed")) | first | .url // empty')"
+    if [[ -n "$active_run" ]]; then
+      echo "Error: another release workflow is active: $active_run" >&2
+      exit 1
+    fi
+
+    package_name="$(jq -r '.name' package.json)"
+    base_version="$(jq -r '.version' package.json)"
+    if [[ ! "$base_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+      echo "Error: package.json version must be a stable X.Y.Z version: $base_version" >&2
+      exit 1
+    fi
+
+    echo "Repository: PaulRBerg/crypto-registry"
+    echo "Branch: main"
+    echo "Commit: $commit_sha"
+    echo "Package: $package_name"
+    echo "Base version: $base_version"
+    echo "npm tag: dev"
+
+    dist_tags_before="$(npm view "$package_name" dist-tags \
+      --json \
+      --registry=https://registry.npmjs.org/ \
+      --color=false)"
+    latest_before="$(jq -er '.latest | select(type == "string")' <<< "$dist_tags_before")"
+
+    if ! run_output="$("$gh_bin" workflow run release.yml --ref main -f "commit_sha=$commit_sha" 2>&1)"; then
+      echo "$run_output" >&2
+      exit 1
+    fi
+    run_url="$(printf '%s\n' "$run_output" | "$rg_bin" -o 'https://github\.com/[^/]+/[^/]+/actions/runs/[0-9]+' || true)"
+    if [[ ! "$run_url" =~ ^https://github.com/[^/]+/[^/]+/actions/runs/[0-9]+$ ]]; then
+      echo "Error: GitHub CLI returned an unexpected workflow result: $run_output" >&2
+      exit 1
+    fi
+    run_id="${run_url##*/}"
+
+    echo "Workflow: $run_url"
+    "$gh_bin" run watch "$run_id" --compact --exit-status
+
+    run_head="$("$gh_bin" run view "$run_id" --json headSha --jq '.headSha')"
+    if [[ "$run_head" != "$commit_sha" ]]; then
+      echo "Error: workflow published unexpected commit $run_head" >&2
+      exit 1
+    fi
+
+    npm_metadata="$(npm view "${package_name}@dev" version gitHead \
+      --json \
+      --registry=https://registry.npmjs.org/ \
+      --color=false)"
+    published_version="$(jq -er '.version | select(type == "string")' <<< "$npm_metadata")"
+    published_git_head="$(jq -er '.gitHead | select(type == "string")' <<< "$npm_metadata")"
+    if [[ "$published_git_head" != "$commit_sha" ]]; then
+      echo "Error: npm dev tag points to commit $published_git_head, expected $commit_sha" >&2
+      exit 1
+    fi
+
+    dist_tags="$(npm view "$package_name" dist-tags \
+      --json \
+      --registry=https://registry.npmjs.org/ \
+      --color=false)"
+    latest_version="$(jq -er '.latest | select(type == "string")' <<< "$dist_tags")"
+    dev_version="$(jq -er '.dev | select(type == "string")' <<< "$dist_tags")"
+    if [[ "$latest_version" != "$latest_before" ]] || [[ "$dev_version" != "$published_version" ]]; then
+      echo "Error: unexpected npm dist-tags: $dist_tags" >&2
+      exit 1
+    fi
+
+    echo "Published: ${package_name}@${published_version}"
+    echo "Source: $published_git_head"
 
 # Validate, tag, and push a stable release from a clean, current main branch
 [group("publish"), script("bash")]

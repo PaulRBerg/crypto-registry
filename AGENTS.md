@@ -19,6 +19,21 @@ Agent guidance for `@prb/crypto-registry`. Keep changes surgical and the package
   and reads an external source dir; not part of the normal build.
 - `just json-gen` — regenerate committed JSON artifacts for non-TypeScript consumers after hand edits to
   `src/chains/chains.ts` or `scripts/classification.ts`.
+- `just release-dev` — dispatch and verify an on-demand npm development release from clean, current `main`.
+
+## Development releases
+
+- Agents are pre-authorized to run `just release-dev` without separate confirmation after a validated change to
+  consumer-visible package code, APIs, or registry data has been committed and pushed to `main`. Do not release docs,
+  tests, scripts, tooling, CI-only changes, or a commit already represented by the npm `dev` tag. The initial rollout of
+  this automation is the sole tooling-only bootstrap exception.
+- Before dispatching, preview `PaulRBerg/crypto-registry`, `main`, the exact commit, `@prb/crypto-registry`, the stable
+  base version, and the npm `dev` tag. Only one release workflow may be active at a time.
+- Use `just release-dev`; it dispatches the exact `origin/main` commit, waits for GitHub Actions, and verifies the npm
+  version, dist-tags, and `gitHead`. Report the workflow URL and published version. Never hand-edit a development
+  version, run `npm publish` locally, or create development Git tags or GitHub releases.
+- Development versions are derived in CI as `X.Y.Z-dev.YYYYMMDD.N`, using the UTC date and the next package-wide daily
+  counter. `package.json` remains at the stable base, `dev` advances, and `latest` remains stable.
 
 ## Lint Rules
 

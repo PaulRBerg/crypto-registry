@@ -1,25 +1,32 @@
-# Publishes stable version tags through npm trusted publishing, creates the
-# corresponding GitHub release, and syncs the major version branch.
+# Publishes stable version tags or on-demand development versions through npm
+# trusted publishing. Stable releases also create a GitHub release and sync the
+# major version branch.
 name: Release
 
 on:
   push:
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: Exact origin/main commit to publish
+        required: true
+        type: string
 
 permissions:
   contents: write
   id-token: write
 
 concurrency:
-  group: stable-release
+  group: npm-release
   cancel-in-progress: false
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the release tag
+      - name: Check out the release source
         uses: actions/checkout@v5
 
       - name: Set up Node.js
@@ -41,28 +48,47 @@ jobs:
       - name: Set up just
         uses: extractions/setup-just@v4
 
-      - name: Verify release tag
+      - name: Verify release source
+        env:
+          EXPECTED_COMMIT: ${{ inputs.commit_sha }}
         shell: bash
         run: |
           set -euo pipefail
 
           PACKAGE_NAME="$(node --print "require('./package.json').name")"
-          PACKAGE_VERSION="$(node --print "require('./package.json').version")"
-          EXPECTED_TAG="v${PACKAGE_VERSION}"
+          BASE_VERSION="$(node --print "require('./package.json').version")"
 
-          if [[ ! "$PACKAGE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "package.json version must be a stable X.Y.Z version: $PACKAGE_VERSION" >&2
+          if [[ ! "$BASE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "package.json version must be a stable X.Y.Z version: $BASE_VERSION" >&2
             exit 1
           fi
 
-          if [[ "$GITHUB_REF_NAME" != "$EXPECTED_TAG" ]]; then
-            echo "Tag $GITHUB_REF_NAME does not match package.json version $EXPECTED_TAG" >&2
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+            EXPECTED_TAG="v${BASE_VERSION}"
+            if [[ "$GITHUB_REF_NAME" != "$EXPECTED_TAG" ]]; then
+              echo "Tag $GITHUB_REF_NAME does not match package.json version $EXPECTED_TAG" >&2
+              exit 1
+            fi
+            RELEASE_CHANNEL="stable"
+          elif [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+              echo "Development releases must be dispatched from main: $GITHUB_REF" >&2
+              exit 1
+            fi
+            if [[ ! "$EXPECTED_COMMIT" =~ ^[0-9a-f]{40}$ ]] || [[ "$GITHUB_SHA" != "$EXPECTED_COMMIT" ]]; then
+              echo "Dispatched commit $GITHUB_SHA does not match expected commit $EXPECTED_COMMIT" >&2
+              exit 1
+            fi
+            RELEASE_CHANNEL="dev"
+          else
+            echo "Unsupported release event: $GITHUB_EVENT_NAME" >&2
             exit 1
           fi
 
           {
             echo "PACKAGE_NAME=$PACKAGE_NAME"
-            echo "PACKAGE_VERSION=$PACKAGE_VERSION"
+            echo "BASE_VERSION=$BASE_VERSION"
+            echo "RELEASE_CHANNEL=$RELEASE_CHANNEL"
           } >> "$GITHUB_ENV"
 
       - name: Install dependencies
@@ -73,6 +99,62 @@ jobs:
 
       - name: Test
         run: just test
+
+      - name: Resolve package version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PACKAGE_VERSION="$BASE_VERSION"
+          ALREADY_PUBLISHED="false"
+
+          if [[ "$RELEASE_CHANNEL" == "dev" ]]; then
+            NPM_VIEW_ERROR="$(mktemp "$RUNNER_TEMP/npm-dev-view.XXXXXX")"
+            trap 'rm -f "$NPM_VIEW_ERROR"' EXIT
+
+            if DEV_METADATA="$(
+              npm view "${PACKAGE_NAME}@dev" version gitHead \
+                --json \
+                --registry=https://registry.npmjs.org/ \
+                --color=false 2>"$NPM_VIEW_ERROR"
+            )"; then
+              DEV_VERSION="$(jq -er '.version | select(type == "string")' <<< "$DEV_METADATA")"
+              DEV_GIT_HEAD="$(jq -r '.gitHead // ""' <<< "$DEV_METADATA")"
+              if [[ "$DEV_GIT_HEAD" == "$GITHUB_SHA" ]]; then
+                PACKAGE_VERSION="$DEV_VERSION"
+                ALREADY_PUBLISHED="true"
+              fi
+            else
+              npm_view_status=$?
+              if ! grep -Eq '^npm (error|ERR!)[[:space:]]+code[[:space:]]+E404[[:space:]]*$' "$NPM_VIEW_ERROR"; then
+                echo "npm registry query for the dev tag failed; refusing to publish" >&2
+                exit "$npm_view_status"
+              fi
+            fi
+
+            if [[ "$ALREADY_PUBLISHED" == "false" ]]; then
+              RELEASE_DATE="$(date -u +%Y%m%d)"
+              PACKAGE_VERSION="$(
+                npm view "$PACKAGE_NAME" versions \
+                  --json \
+                  --registry=https://registry.npmjs.org/ \
+                  --color=false |
+                  bun scripts/release-version.ts "$BASE_VERSION" "$RELEASE_DATE"
+              )"
+            fi
+
+            npm pkg set "version=$PACKAGE_VERSION"
+            ACTUAL_VERSION="$(node --print "require('./package.json').version")"
+            if [[ "$ACTUAL_VERSION" != "$PACKAGE_VERSION" ]]; then
+              echo "Failed to set package.json version to $PACKAGE_VERSION" >&2
+              exit 1
+            fi
+          fi
+
+          {
+            echo "PACKAGE_VERSION=$PACKAGE_VERSION"
+            echo "ALREADY_PUBLISHED=$ALREADY_PUBLISHED"
+          } >> "$GITHUB_ENV"
 
       - name: Build
         run: just build
@@ -86,6 +168,12 @@ jobs:
           NPM_VIEW_ERROR="$(mktemp "$RUNNER_TEMP/npm-view.XXXXXX")"
           trap 'rm -f "$NPM_VIEW_ERROR"' EXIT
 
+          if [[ "$ALREADY_PUBLISHED" == "true" ]]; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "$PACKAGE_NAME@$PACKAGE_VERSION already represents $GITHUB_SHA; skipping npm publish"
+            exit 0
+          fi
+
           if PUBLISHED_VERSION="$(
             npm view "${PACKAGE_NAME}@${PACKAGE_VERSION}" version \
               --registry=https://registry.npmjs.org/ \
@@ -93,6 +181,11 @@ jobs:
           )"; then
             if [[ "$PUBLISHED_VERSION" != "$PACKAGE_VERSION" ]]; then
               echo "npm returned unexpected version '$PUBLISHED_VERSION' for $PACKAGE_NAME@$PACKAGE_VERSION" >&2
+              exit 1
+            fi
+
+            if [[ "$RELEASE_CHANNEL" == "dev" ]]; then
+              echo "Development version collision at $PACKAGE_NAME@$PACKAGE_VERSION" >&2
               exit 1
             fi
 
@@ -109,11 +202,27 @@ jobs:
             fi
           fi
 
-      - name: Publish to npm
-        if: steps.npm-version.outputs.publish == 'true'
+      - name: Publish stable version to npm
+        if: steps.npm-version.outputs.publish == 'true' && env.RELEASE_CHANNEL == 'stable'
         run: npm publish
 
+      - name: Publish development version to npm
+        if: steps.npm-version.outputs.publish == 'true' && env.RELEASE_CHANNEL == 'dev'
+        run: npm publish --tag dev
+
+      - name: Summarize npm release
+        shell: bash
+        run: |
+          {
+            echo "### npm release"
+            echo "- Package: \`$PACKAGE_NAME@$PACKAGE_VERSION\`"
+            echo "- Channel: \`$RELEASE_CHANNEL\`"
+            echo "- Source: \`$GITHUB_SHA\`"
+            echo "- Published: \`${{ steps.npm-version.outputs.publish }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Create GitHub release
+        if: env.RELEASE_CHANNEL == 'stable'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -127,6 +236,7 @@ jobs:
           fi
 
       - name: Sync major version branch with release tag
+        if: env.RELEASE_CHANNEL == 'stable'
         shell: bash
         run: |
           set -euo pipefail
