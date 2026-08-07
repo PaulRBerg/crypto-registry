@@ -30,6 +30,9 @@ jobs:
       - name: Set up npm
         run: npm install --global npm@11.5.1
 
+      - name: Set up Ni package manager resolver
+        run: npm install --global @antfu/ni
+
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
         with:
