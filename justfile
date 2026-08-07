@@ -168,10 +168,23 @@ release-dev:
       exit 1
     fi
 
-    npm_metadata="$(npm view "${package_name}@dev" version gitHead \
-      --json \
-      --registry=https://registry.npmjs.org/ \
-      --color=false)"
+    npm_view_error="$(mktemp "${TMPDIR:-/tmp}/crypto-registry-npm-view.XXXXXX")"
+    trap 'rm -f "$npm_view_error"' EXIT
+    npm_metadata=""
+    for attempt in 1 2 3 4 5 6; do
+      if npm_metadata="$(npm view "${package_name}@dev" version gitHead \
+        --json \
+        --registry=https://registry.npmjs.org/ \
+        --color=false 2>"$npm_view_error")"; then
+        break
+      fi
+      if [[ "$attempt" -eq 6 ]]; then
+        echo "Error: npm dev tag did not become readable after publication" >&2
+        cat "$npm_view_error" >&2
+        exit 1
+      fi
+      sleep 2
+    done
     published_version="$(jq -er '.version | select(type == "string")' <<< "$npm_metadata")"
     published_git_head="$(jq -er '.gitHead | select(type == "string")' <<< "$npm_metadata")"
     if [[ "$published_git_head" != "$commit_sha" ]]; then
