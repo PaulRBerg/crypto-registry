@@ -11,7 +11,6 @@ na := require("na")
 ni := require("ni")
 nlx := require("nlx")
 gh := require("gh")
-rg := require("rg")
 
 # ---------------------------------------------------------------------------- #
 #                                   CONSTANTS                                  #
@@ -114,7 +113,6 @@ release-dev:
     fi
 
     gh_bin="{{ gh }}"
-    rg_bin="{{ rg }}"
     active_run="$("$gh_bin" run list \
       --workflow=release.yml \
       --limit=20 \
@@ -149,7 +147,12 @@ release-dev:
       echo "$run_output" >&2
       exit 1
     fi
-    run_url="$(printf '%s\n' "$run_output" | "$rg_bin" -o 'https://github\.com/[^/]+/[^/]+/actions/runs/[0-9]+' || true)"
+    run_url=""
+    while IFS= read -r line; do
+      if [[ "$line" =~ ^https://github.com/[^/]+/[^/]+/actions/runs/[0-9]+$ ]]; then
+        run_url="$line"
+      fi
+    done <<< "$run_output"
     if [[ ! "$run_url" =~ ^https://github.com/[^/]+/[^/]+/actions/runs/[0-9]+$ ]]; then
       echo "Error: GitHub CLI returned an unexpected workflow result: $run_output" >&2
       exit 1
