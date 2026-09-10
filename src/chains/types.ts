@@ -29,7 +29,11 @@ export type FormerNativeCurrency = {
 
 /** Explorer URL templates. `{address}` / `{tx_hash}` are substituted by callers. */
 export type ChainExplorer = {
-  /** Address page template containing the `{address}` placeholder. */
+  /**
+   * Address page template containing `{address}`. Substitute a lowercase address
+   * (use `normalizeAddress`); Zerion otherwise redirects away from the
+   * selected chain's history.
+   */
   addressUrl: string;
   /** Transaction page template containing the `{tx_hash}` placeholder. */
   txUrl: string;

@@ -466,6 +466,10 @@ const LOCAL_CHAIN_METADATA = {
     accountActivityModel: "ethereum-eoa",
     aliases: ["zora network"],
     coinGeckoPlatformId: "zora-network",
+    explorer: {
+      addressUrl: "https://app.zerion.io/{address}/history?chain=zora",
+      txUrl: "https://explorer.zora.energy/tx/{tx_hash}",
+    },
     name: "Zora",
     nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x4200000000000000000000000000000000000006",

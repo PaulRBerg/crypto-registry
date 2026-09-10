@@ -779,7 +779,7 @@
       "chainId": 7777777,
       "coinGeckoPlatformId": "zora-network",
       "explorer": {
-        "addressUrl": "https://explorer.zora.energy/address/{address}",
+        "addressUrl": "https://app.zerion.io/{address}/history?chain=zora",
         "txUrl": "https://explorer.zora.energy/tx/{tx_hash}"
       },
       "name": "Zora",
