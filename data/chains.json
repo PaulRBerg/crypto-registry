@@ -438,8 +438,9 @@
       "chainId": 2818,
       "coinGeckoPlatformId": "morph-l2",
       "explorer": {
-        "addressUrl": "https://explorer.morphl2.io/address/{address}",
-        "txUrl": "https://explorer.morphl2.io/tx/{tx_hash}"
+        "addressUrl": "https://explorer.morph.network/address/{address}",
+        "apiUrl": "https://explorer-api.morph.network/api",
+        "txUrl": "https://explorer.morph.network/tx/{tx_hash}"
       },
       "name": "Morph",
       "nativeCurrency": {

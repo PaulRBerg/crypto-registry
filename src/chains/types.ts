@@ -29,6 +29,8 @@ export type FormerNativeCurrency = {
 
 /** Explorer URL templates. `{address}` / `{tx_hash}` are substituted by callers. */
 export type ChainExplorer = {
+  /** Verified API base URL, when it differs from the explorer page host. */
+  apiUrl?: string;
   /**
    * Address page template containing `{address}`. Substitute a lowercase address
    * (use `normalizeAddress`); Zerion otherwise redirects away from the

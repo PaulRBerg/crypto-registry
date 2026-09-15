@@ -348,6 +348,11 @@ const LOCAL_CHAIN_METADATA = {
     name: "Morph",
     nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x5300000000000000000000000000000000000011",
+    explorer: {
+      addressUrl: "https://explorer.morph.network/address/{address}",
+      apiUrl: "https://explorer-api.morph.network/api",
+      txUrl: "https://explorer.morph.network/tx/{tx_hash}",
+    },
   },
   optimism: {
     accountActivityModel: "ethereum-eoa",
