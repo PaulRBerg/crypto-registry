@@ -172,13 +172,21 @@ release-dev:
     trap 'rm -f "$npm_view_error"' EXIT
     npm_metadata=""
     for attempt in 1 2 3 4 5 6; do
+      observed_git_head=""
       if npm_metadata="$(npm view "${package_name}@dev" version gitHead \
         --json \
         --registry=https://registry.npmjs.org/ \
         --color=false 2>"$npm_view_error")"; then
-        break
+        observed_git_head="$(jq -er '.gitHead | select(type == "string")' <<< "$npm_metadata" 2>/dev/null || true)"
+        if [[ "$observed_git_head" == "$commit_sha" ]]; then
+          break
+        fi
       fi
       if [[ "$attempt" -eq 6 ]]; then
+        if [[ -n "$observed_git_head" ]]; then
+          echo "Error: npm dev tag points to commit $observed_git_head, expected $commit_sha" >&2
+          exit 1
+        fi
         echo "Error: npm dev tag did not become readable after publication" >&2
         cat "$npm_view_error" >&2
         exit 1
