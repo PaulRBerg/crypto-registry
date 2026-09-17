@@ -7,6 +7,7 @@
         "ethereum",
         "ethereum mainnet"
       ],
+      "category": "mainnet",
       "chainId": 1,
       "coinGeckoPlatformId": "ethereum",
       "explorer": {
@@ -29,6 +30,7 @@
         "op",
         "OP Mainnet"
       ],
+      "category": "op-stack",
       "chainId": 10,
       "coinGeckoPlatformId": "optimistic-ethereum",
       "explorer": {
@@ -53,6 +55,7 @@
       "aliases": [
         "XDC Network"
       ],
+      "category": "alt-l1",
       "chainId": 50,
       "coinGeckoPlatformId": "xdc-network",
       "explorer": {
@@ -76,6 +79,7 @@
         "bnb",
         "BNB Smart Chain"
       ],
+      "category": "alt-l1",
       "chainId": 56,
       "coinGeckoPlatformId": "binance-smart-chain",
       "explorer": {
@@ -97,6 +101,7 @@
       "aliases": [
         "gnosis chain"
       ],
+      "category": "alt-l1",
       "chainId": 100,
       "coinGeckoPlatformId": "xdai",
       "explorer": {
@@ -116,6 +121,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "op-stack",
       "chainId": 130,
       "coinGeckoPlatformId": "unichain",
       "explorer": {
@@ -138,6 +144,7 @@
         "matic",
         "pol"
       ],
+      "category": "alt-l1",
       "chainId": 137,
       "coinGeckoPlatformId": "polygon-pos",
       "explorer": {
@@ -160,6 +167,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "alt-l1",
       "chainId": 143,
       "coinGeckoPlatformId": "monad",
       "explorer": {
@@ -179,6 +187,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "alt-l1",
       "chainId": 146,
       "coinGeckoPlatformId": "sonic",
       "explorer": {
@@ -201,6 +210,7 @@
         "fantom opera",
         "ftm"
       ],
+      "category": "alt-l1",
       "chainId": 250,
       "coinGeckoPlatformId": "fantom",
       "explorer": {
@@ -222,6 +232,7 @@
       "aliases": [
         "frax"
       ],
+      "category": "op-stack",
       "chainId": 252,
       "coinGeckoPlatformId": "fraxtal",
       "explorer": {
@@ -254,6 +265,7 @@
         "fvm",
         "Filecoin Mainnet"
       ],
+      "category": "alt-l1",
       "chainId": 314,
       "coinGeckoPlatformId": "filecoin",
       "explorer": {
@@ -272,6 +284,7 @@
     {
       "accountActivityModel": "native-account-abstraction",
       "aliases": [],
+      "category": "zk",
       "chainId": 324,
       "coinGeckoPlatformId": "zksync",
       "explorer": {
@@ -296,6 +309,7 @@
       "aliases": [
         "worldchain"
       ],
+      "category": "op-stack",
       "chainId": 480,
       "coinGeckoPlatformId": "world-chain",
       "explorer": {
@@ -318,6 +332,7 @@
         "hyper evm",
         "hyperliquid"
       ],
+      "category": "alt-l1",
       "chainId": 999,
       "coinGeckoPlatformId": "hyperevm",
       "explorer": {
@@ -339,6 +354,7 @@
       "aliases": [
         "coreDao"
       ],
+      "category": "alt-l1",
       "chainId": 1116,
       "coinGeckoPlatformId": "core",
       "explorer": {
@@ -359,6 +375,7 @@
       "aliases": [
         "Sei Network"
       ],
+      "category": "alt-l1",
       "chainId": 1329,
       "coinGeckoPlatformId": "sei-v2",
       "explorer": {
@@ -381,6 +398,7 @@
         "lightlink phoenix",
         "LightLink Phoenix Mainnet"
       ],
+      "category": "alt-l2",
       "chainId": 1890,
       "coinGeckoPlatformId": "lightlink",
       "explorer": {
@@ -399,6 +417,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "op-stack",
       "chainId": 2020,
       "coinGeckoPlatformId": "ronin",
       "explorer": {
@@ -417,6 +436,7 @@
     {
       "accountActivityModel": "native-account-abstraction",
       "aliases": [],
+      "category": "zk",
       "chainId": 2741,
       "coinGeckoPlatformId": "abstract",
       "explorer": {
@@ -435,6 +455,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "zk",
       "chainId": 2818,
       "coinGeckoPlatformId": "morph-l2",
       "explorer": {
@@ -455,6 +476,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "nitro",
       "chainId": 4663,
       "coinGeckoPlatformId": "robinhood",
       "explorer": {
@@ -474,6 +496,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "alt-l1",
       "chainId": 4689,
       "coinGeckoPlatformId": "iotex",
       "explorer": {
@@ -493,6 +516,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "op-stack",
       "chainId": 5330,
       "coinGeckoPlatformId": "superseed",
       "explorer": {
@@ -512,6 +536,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "op-stack",
       "chainId": 8453,
       "coinGeckoPlatformId": "base",
       "explorer": {
@@ -536,6 +561,7 @@
       "aliases": [
         "Mode Mainnet"
       ],
+      "category": "op-stack",
       "chainId": 34443,
       "coinGeckoPlatformId": "mode",
       "explorer": {
@@ -557,6 +583,7 @@
       "aliases": [
         "Arbitrum One"
       ],
+      "category": "nitro",
       "chainId": 42161,
       "coinGeckoPlatformId": "arbitrum-one",
       "explorer": {
@@ -576,6 +603,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "nitro",
       "chainId": 42170,
       "coinGeckoPlatformId": "arbitrum-nova",
       "explorer": {
@@ -594,6 +622,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "op-stack",
       "chainId": 42220,
       "coinGeckoPlatformId": "celo",
       "explorer": {
@@ -618,6 +647,7 @@
         "avalanche c-chain",
         "avax"
       ],
+      "category": "alt-l1",
       "chainId": 43114,
       "coinGeckoPlatformId": "avalanche",
       "explorer": {
@@ -637,6 +667,7 @@
     {
       "accountActivityModel": "native-account-abstraction",
       "aliases": [],
+      "category": "zk",
       "chainId": 50104,
       "coinGeckoPlatformId": "sophon",
       "explorer": {
@@ -657,6 +688,7 @@
       "aliases": [
         "Linea Mainnet"
       ],
+      "category": "zk",
       "chainId": 59144,
       "coinGeckoPlatformId": "linea",
       "explorer": {
@@ -676,6 +708,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "alt-l1",
       "chainId": 80094,
       "coinGeckoPlatformId": "berachain",
       "explorer": {
@@ -695,6 +728,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "op-stack",
       "chainId": 81457,
       "coinGeckoPlatformId": "blast",
       "explorer": {
@@ -716,6 +750,7 @@
       "aliases": [
         "Chiliz Chain"
       ],
+      "category": "alt-l1",
       "chainId": 88888,
       "coinGeckoPlatformId": "chiliz",
       "explorer": {
@@ -737,6 +772,7 @@
         "Taiko Alethia",
         "Taiko Mainnet"
       ],
+      "category": "zk",
       "chainId": 167000,
       "coinGeckoPlatformId": "taiko",
       "explorer": {
@@ -756,6 +792,7 @@
     {
       "accountActivityModel": "ethereum-eoa",
       "aliases": [],
+      "category": "zk",
       "chainId": 534352,
       "coinGeckoPlatformId": "scroll",
       "explorer": {
@@ -777,6 +814,7 @@
       "aliases": [
         "zora network"
       ],
+      "category": "op-stack",
       "chainId": 7777777,
       "coinGeckoPlatformId": "zora-network",
       "explorer": {
@@ -794,5 +832,5 @@
       "wrappedNativeAddress": "0x4200000000000000000000000000000000000006"
     }
   ],
-  "schemaVersion": 2
+  "schemaVersion": 3
 }

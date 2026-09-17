@@ -61,6 +61,9 @@ export type AccountActivityModel =
   | "cross-vm"
   | "unknown";
 
+/** A chain's current architectural category. This does not describe historical eras. */
+export type ChainCategory = "mainnet" | "alt-l1" | "op-stack" | "nitro" | "zk" | "alt-l2";
+
 /** A supported EVM chain and the metadata this registry needs to describe it. */
 export type Chain = {
   /** EIP-155 chain id. */
@@ -69,6 +72,8 @@ export type Chain = {
   slug: string;
   /** Display name, e.g. `"Ethereum"`. */
   name: string;
+  /** Current architectural category, independent of account activity semantics. */
+  category: ChainCategory;
   /** Account semantics governing safe activity-discovery shortcuts. */
   accountActivityModel: AccountActivityModel;
   /** Extra lookup names (tickers, legacy names) resolved by `getChainByName`. */

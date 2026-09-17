@@ -9,7 +9,7 @@ natives**, and **native mirrors**. The package is data plus lookup helpers: no n
 only `viem` at runtime, so it runs unchanged in Node and the browser. The `derivations` subpath adds HD derivation path
 types, SLIP-44 data, and registered path profiles.
 
-- **34** EVM chains
+- Curated EVM chain coverage with canonical current architecture categories
 - **615** ERC-20 tokens across four kinds
 - HD derivation path profiles and SLIP registries under `@prb/crypto-registry/derivations`
 - ESM-only, ships `.d.ts`, tree-shakeable (`sideEffects: false`)
@@ -48,6 +48,7 @@ import {
 } from "@prb/crypto-registry";
 
 getChain(1)?.slug; // "mainnet"
+getChain(1)?.category; // "mainnet"
 getChainByName("matic")?.chainId; // 137 (resolves names, slugs, and aliases)
 
 const usdc = getToken(1, "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48");
@@ -76,8 +77,11 @@ recognizePath("m/84'/0'/0'", "bitcoin")?.standard; // "bip84-native-segwit"
 ## API
 
 **Chains** — `CHAINS`, `allChains()`, `getChain(chainId)`, `getChainBySlug(slug)`, `getChainByName(name)`
-(case-insensitive over name, slug, and aliases). Every chain has an `accountActivityModel`; consumers may use
-Ethereum-EOA activity shortcuts only for the exact `"ethereum-eoa"` value and must default-deny every other value.
+(case-insensitive over name, slug, and aliases). Every chain has a `category` describing its current architecture:
+`"mainnet"`, `"alt-l1"`, `"op-stack"`, `"nitro"`, `"zk"`, or `"alt-l2"`. The category is not a history of earlier eras:
+`"mainnet"` is reserved for Ethereum, Polygon PoS is an `"alt-l1"`, and `"zk"` includes validiums and hybrid designs.
+`accountActivityModel` remains independent; consumers may use Ethereum-EOA activity shortcuts only for the exact
+`"ethereum-eoa"` value and must default-deny every other value.
 
 **Tokens** — `TOKENS`, `getToken(chainId, address)`, `getTokensByChain(chainId)`, `getTokensBySymbol(symbol)`,
 `getStablecoins()`, `getWrappedTokens()`, `getMirrorTokens()`, `getStandardTokens()`.
@@ -95,9 +99,9 @@ case-sensitive.
 
 **Addresses** — `isAddress(value)`, `normalizeAddress(value)` (validates and lowercases), `isAddressEqual(a, b)`.
 
-**Types & guards** — `AccountActivityModel`, `Chain`, `NativeCurrency`, `Token`, `Stablecoin`, `WrappedToken`,
-`MirrorToken`, `StandardToken`, `TokenAddressAlias`, `TokenAddressResolution`, `Address`, and the guards `isStandard` /
-`isStablecoin` / `isWrapped` / `isMirror`.
+**Types & guards** — `AccountActivityModel`, `ChainCategory`, `Chain`, `NativeCurrency`, `Token`, `Stablecoin`,
+`WrappedToken`, `MirrorToken`, `StandardToken`, `TokenAddressAlias`, `TokenAddressResolution`, `Address`, and the guards
+`isStandard` / `isStablecoin` / `isWrapped` / `isMirror`.
 
 **Derivations** — `@prb/crypto-registry/derivations` exposes path parsing/building, profile recognition/rendering,
 SLIP-44 coin types, purposes, schemes, SLIP-132 version bytes, Bitcoin descriptor helpers, and Substrate SURI utilities.
@@ -112,8 +116,9 @@ should keep using the typed `@prb/crypto-registry` entry. Run `just json-gen` af
 stablecoin classification.
 
 `tokens.json` schema version 2 has the shape
-`{ "aliases": TokenAddressAlias[], "schemaVersion": 2, "tokens": Token[] }`. `chains.json` schema version 2 has the
-shape `{ "chains": Chain[], "schemaVersion": 2 }`; every chain row includes the required `accountActivityModel` field.
+`{ "aliases": TokenAddressAlias[], "schemaVersion": 2, "tokens": Token[] }`. `chains.json` schema version 3 has the
+shape `{ "chains": Chain[], "schemaVersion": 3 }`; every chain row includes the required `category` and
+`accountActivityModel` fields.
 
 ## Contributing
 

@@ -1,8 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { CHAINS, VIEM_CHAINS_BY_SLUG } from "./chains.js";
 import { allChains, getChain, getChainByName, getChainBySlug } from "./lookup.js";
+import type { ChainCategory } from "./types.js";
 
 const LOWERCASE_ADDRESS = /^0x[0-9a-f]{40}$/;
+const CHAIN_CATEGORIES = new Set<ChainCategory>([
+  "mainnet",
+  "alt-l1",
+  "op-stack",
+  "nitro",
+  "zk",
+  "alt-l2",
+]);
 const viemChainsBySlug = VIEM_CHAINS_BY_SLUG as Record<
   string,
   (typeof VIEM_CHAINS_BY_SLUG)[keyof typeof VIEM_CHAINS_BY_SLUG]
@@ -40,6 +49,39 @@ describe("chain registry", () => {
         ])
       )
     ).toEqual(NON_ETHEREUM_EOA_ACTIVITY_MODELS);
+  });
+
+  it("classifies every chain by its current architecture", () => {
+    for (const chain of CHAINS) expect(CHAIN_CATEGORIES.has(chain.category)).toBe(true);
+
+    expect(
+      Object.fromEntries(
+        [...CHAIN_CATEGORIES].map((category) => [
+          category,
+          CHAINS.filter((chain) => chain.category === category).length,
+        ])
+      )
+    ).toEqual({
+      mainnet: 1,
+      "alt-l1": 15,
+      "op-stack": 11,
+      nitro: 3,
+      zk: 7,
+      "alt-l2": 1,
+    });
+  });
+
+  it("reserves mainnet for Ethereum and covers key architecture assignments", () => {
+    expect(
+      CHAINS.filter((chain) => chain.category === "mainnet").map((chain) => chain.chainId)
+    ).toEqual([1]);
+    expect(getChainBySlug("polygon")?.category).toBe("alt-l1");
+    expect(getChainBySlug("lightlink")?.category).toBe("alt-l2");
+    expect(getChainBySlug("celo")?.category).toBe("op-stack");
+    expect(getChainBySlug("ronin")?.category).toBe("op-stack");
+    expect(getChainBySlug("robinhood")?.category).toBe("nitro");
+    expect(getChainBySlug("morph")?.category).toBe("zk");
+    expect(getChainBySlug("sophon")?.category).toBe("zk");
   });
 
   it("sources chain ids and native currencies from the supported viem mapping", () => {

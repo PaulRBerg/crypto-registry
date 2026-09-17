@@ -44,7 +44,7 @@ export function renderTokensJson(): string {
 /** Render the canonical JSON artifact for non-TypeScript chain consumers. */
 export function renderChainsJson(): string {
   const chains = [...CHAINS].toSorted((a, b) => a.chainId - b.chainId);
-  return stringify({ chains, schemaVersion: 2 });
+  return stringify({ chains, schemaVersion: 3 });
 }
 
 /** Write committed JSON artifacts from the current registry data. */

@@ -40,7 +40,13 @@ import {
   zora,
 } from "viem/chains";
 import type { Address } from "../address.js";
-import type { AccountActivityModel, Chain, ChainExplorer, FormerNativeCurrency } from "./types.js";
+import type {
+  AccountActivityModel,
+  Chain,
+  ChainCategory,
+  ChainExplorer,
+  FormerNativeCurrency,
+} from "./types.js";
 
 const CHAIN_SLUGS = [
   "abstract",
@@ -132,6 +138,7 @@ export const VIEM_CHAINS_BY_SLUG = {
 type LocalChainMetadata = {
   accountActivityModel: AccountActivityModel;
   aliases?: readonly string[];
+  category: ChainCategory;
   coinGeckoPlatformId?: string;
   explorer?: ChainExplorer;
   formerNativeCurrencies?: readonly FormerNativeCurrency[];
@@ -145,12 +152,14 @@ type LocalChainMetadata = {
 const LOCAL_CHAIN_METADATA = {
   abstract: {
     accountActivityModel: "native-account-abstraction",
+    category: "zk",
     coinGeckoPlatformId: "abstract",
     name: "Abstract",
     nativeCoinGeckoId: "ethereum",
   },
   arbitrum: {
     accountActivityModel: "ethereum-eoa",
+    category: "nitro",
     aliases: ["Arbitrum One"],
     coinGeckoPlatformId: "arbitrum-one",
     name: "Arbitrum",
@@ -159,6 +168,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   "arbitrum-nova": {
     accountActivityModel: "ethereum-eoa",
+    category: "nitro",
     coinGeckoPlatformId: "arbitrum-nova",
     name: "Arbitrum Nova",
     nativeCoinGeckoId: "ethereum",
@@ -169,6 +179,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   avalanche: {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l1",
     aliases: ["avalanche c-chain", "avax"],
     coinGeckoPlatformId: "avalanche",
     name: "Avalanche",
@@ -181,6 +192,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   base: {
     accountActivityModel: "ethereum-eoa",
+    category: "op-stack",
     coinGeckoPlatformId: "base",
     mirrorAddresses: ["0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000"],
     name: "Base",
@@ -189,6 +201,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   berachain: {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l1",
     coinGeckoPlatformId: "berachain",
     name: "Berachain",
     nativeCoinGeckoId: "berachain-bera",
@@ -196,6 +209,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   blast: {
     accountActivityModel: "ethereum-eoa",
+    category: "op-stack",
     coinGeckoPlatformId: "blast",
     name: "Blast",
     nativeCoinGeckoId: "ethereum",
@@ -203,6 +217,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   bsc: {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l1",
     aliases: ["binance smart chain", "bnb", "BNB Smart Chain"],
     coinGeckoPlatformId: "binance-smart-chain",
     name: "BNB Chain",
@@ -211,6 +226,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   celo: {
     accountActivityModel: "ethereum-eoa",
+    category: "op-stack",
     coinGeckoPlatformId: "celo",
     mirrorAddresses: ["0x471ece3750da237f93b8e339c536989b8978a438"],
     name: "Celo",
@@ -218,6 +234,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   chiliz: {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l1",
     aliases: ["Chiliz Chain"],
     coinGeckoPlatformId: "chiliz",
     name: "Chiliz",
@@ -229,6 +246,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   "core-dao": {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l1",
     aliases: ["coreDao"],
     coinGeckoPlatformId: "core",
     name: "Core Dao",
@@ -236,6 +254,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   fantom: {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l1",
     aliases: ["fantom opera", "ftm"],
     coinGeckoPlatformId: "fantom",
     name: "Fantom",
@@ -248,6 +267,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   filecoin: {
     accountActivityModel: "cross-vm",
+    category: "alt-l1",
     aliases: ["fevm", "filecoin evm", "fvm"],
     coinGeckoPlatformId: "filecoin",
     name: "Filecoin",
@@ -259,6 +279,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   fraxtal: {
     accountActivityModel: "ethereum-eoa",
+    category: "op-stack",
     aliases: ["frax"],
     coinGeckoPlatformId: "fraxtal",
     name: "Fraxtal",
@@ -278,6 +299,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   gnosis: {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l1",
     aliases: ["gnosis chain"],
     coinGeckoPlatformId: "xdai",
     name: "Gnosis",
@@ -287,6 +309,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   hyperevm: {
     accountActivityModel: "cross-vm",
+    category: "alt-l1",
     aliases: ["hyper evm", "hyperliquid"],
     coinGeckoPlatformId: "hyperevm",
     name: "HyperEVM",
@@ -295,6 +318,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   iotex: {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l1",
     coinGeckoPlatformId: "iotex",
     name: "IoTeX",
     nativeCoinGeckoId: "iotex",
@@ -302,6 +326,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   lightlink: {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l2",
     aliases: ["lightlink phoenix", "LightLink Phoenix Mainnet"],
     coinGeckoPlatformId: "lightlink",
     name: "Lightlink",
@@ -309,6 +334,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   linea: {
     accountActivityModel: "ethereum-eoa",
+    category: "zk",
     aliases: ["Linea Mainnet"],
     coinGeckoPlatformId: "linea",
     name: "Linea",
@@ -317,6 +343,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   mainnet: {
     accountActivityModel: "ethereum-eoa",
+    category: "mainnet",
     aliases: ["eth", "ethereum", "ethereum mainnet"],
     coinGeckoPlatformId: "ethereum",
     name: "Ethereum",
@@ -325,6 +352,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   mode: {
     accountActivityModel: "ethereum-eoa",
+    category: "op-stack",
     aliases: ["Mode Mainnet"],
     coinGeckoPlatformId: "mode",
     name: "Mode",
@@ -337,6 +365,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   monad: {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l1",
     coinGeckoPlatformId: "monad",
     name: "Monad",
     nativeCoinGeckoId: "monad",
@@ -344,6 +373,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   morph: {
     accountActivityModel: "ethereum-eoa",
+    category: "zk",
     coinGeckoPlatformId: "morph-l2",
     name: "Morph",
     nativeCoinGeckoId: "ethereum",
@@ -356,6 +386,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   optimism: {
     accountActivityModel: "ethereum-eoa",
+    category: "op-stack",
     aliases: ["op", "OP Mainnet"],
     coinGeckoPlatformId: "optimistic-ethereum",
     mirrorAddresses: ["0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000"],
@@ -365,6 +396,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   polygon: {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l1",
     aliases: ["matic", "pol"],
     coinGeckoPlatformId: "polygon-pos",
     mirrorAddresses: ["0x0000000000000000000000000000000000001010"],
@@ -374,6 +406,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   robinhood: {
     accountActivityModel: "ethereum-eoa",
+    category: "nitro",
     coinGeckoPlatformId: "robinhood",
     name: "Robinhood Chain",
     nativeCoinGeckoId: "ethereum",
@@ -381,12 +414,14 @@ const LOCAL_CHAIN_METADATA = {
   },
   ronin: {
     accountActivityModel: "ethereum-eoa",
+    category: "op-stack",
     coinGeckoPlatformId: "ronin",
     name: "Ronin",
     nativeCoinGeckoId: "ronin",
   },
   scroll: {
     accountActivityModel: "ethereum-eoa",
+    category: "zk",
     coinGeckoPlatformId: "scroll",
     name: "Scroll",
     nativeCoinGeckoId: "ethereum",
@@ -394,6 +429,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   sei: {
     accountActivityModel: "cross-vm",
+    category: "alt-l1",
     aliases: ["Sei Network"],
     coinGeckoPlatformId: "sei-v2",
     name: "Sei",
@@ -406,6 +442,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   sonic: {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l1",
     coinGeckoPlatformId: "sonic",
     name: "Sonic",
     nativeCoinGeckoId: "sonic-3",
@@ -413,12 +450,14 @@ const LOCAL_CHAIN_METADATA = {
   },
   sophon: {
     accountActivityModel: "native-account-abstraction",
+    category: "zk",
     coinGeckoPlatformId: "sophon",
     name: "Sophon",
     nativeCoinGeckoId: "sophon",
   },
   superseed: {
     accountActivityModel: "ethereum-eoa",
+    category: "op-stack",
     coinGeckoPlatformId: "superseed",
     name: "Superseed",
     nativeCoinGeckoId: "ethereum",
@@ -426,6 +465,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   taiko: {
     accountActivityModel: "ethereum-eoa",
+    category: "zk",
     aliases: ["Taiko Alethia"],
     coinGeckoPlatformId: "taiko",
     name: "Taiko",
@@ -434,6 +474,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   unichain: {
     accountActivityModel: "ethereum-eoa",
+    category: "op-stack",
     coinGeckoPlatformId: "unichain",
     name: "Unichain",
     nativeCoinGeckoId: "ethereum",
@@ -441,6 +482,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   "world-chain": {
     accountActivityModel: "ethereum-eoa",
+    category: "op-stack",
     aliases: ["worldchain"],
     coinGeckoPlatformId: "world-chain",
     name: "World Chain",
@@ -449,6 +491,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   xdc: {
     accountActivityModel: "ethereum-eoa",
+    category: "alt-l1",
     aliases: ["XDC Network"],
     coinGeckoPlatformId: "xdc-network",
     name: "XDC",
@@ -457,6 +500,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   zksync: {
     accountActivityModel: "native-account-abstraction",
+    category: "zk",
     coinGeckoPlatformId: "zksync",
     mirrorAddresses: ["0x000000000000000000000000000000000000800a"],
     name: "ZKsync Era",
@@ -469,6 +513,7 @@ const LOCAL_CHAIN_METADATA = {
   },
   zora: {
     accountActivityModel: "ethereum-eoa",
+    category: "op-stack",
     aliases: ["zora network"],
     coinGeckoPlatformId: "zora-network",
     explorer: {
@@ -507,6 +552,7 @@ const buildChain = (slug: ChainSlug): Chain => {
   return {
     accountActivityModel: metadata.accountActivityModel,
     aliases: aliasesWithViemName(metadata.name, metadata.aliases ?? [], viemChain.name),
+    category: metadata.category,
     chainId: viemChain.id,
     ...(metadata.coinGeckoPlatformId ? { coinGeckoPlatformId: metadata.coinGeckoPlatformId } : {}),
     explorer: metadata.explorer ?? explorerFromViem(viemChain),

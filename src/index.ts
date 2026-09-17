@@ -8,6 +8,7 @@ export { allChains, getChain, getChainByName, getChainBySlug } from "./chains/lo
 export type {
   AccountActivityModel,
   Chain,
+  ChainCategory,
   ChainExplorer,
   FormerNativeCurrency,
   NativeCurrency,
