@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { RAW_KEY_DESCRIPTORS, rawKeyDescriptorsForScheme, schemeForEcosystem } from "./raw-key.js";
+import {
+  RAW_KEY_DESCRIPTORS,
+  rawKeyDescriptorsForScheme,
+  schemeForEcosystem,
+  wifVersionForEcosystem,
+} from "./raw-key.js";
 import { isKnownCoinType } from "./slip44.js";
 
 describe("rawKeyDescriptorsForScheme", () => {
@@ -66,5 +71,21 @@ describe("schemeForEcosystem", () => {
 
   it("returns undefined for an ecosystem outside any raw-key family", () => {
     expect(schemeForEcosystem("cosmos")).toBeUndefined();
+  });
+});
+
+describe("wifVersionForEcosystem", () => {
+  it("matches chainparams SECRET_KEY prefixes", () => {
+    expect(wifVersionForEcosystem("bitcoin")).toBe(0x80);
+    expect(wifVersionForEcosystem("bitcoin-cash")).toBe(0x80);
+    expect(wifVersionForEcosystem("bitcoin-gold")).toBe(0x80);
+    expect(wifVersionForEcosystem("litecoin")).toBe(0xb0);
+    expect(wifVersionForEcosystem("dash")).toBe(0xcc);
+    expect(wifVersionForEcosystem("zcash")).toBe(0x80);
+    expect(wifVersionForEcosystem("verge")).toBe(0x9e);
+  });
+
+  it("is undefined for non-Bitcoin-family ecosystems", () => {
+    expect(wifVersionForEcosystem("evm")).toBeUndefined();
   });
 });

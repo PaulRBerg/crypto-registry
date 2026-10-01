@@ -69,6 +69,8 @@ type BitcoinChainSpec = {
   readonly p2shVersion?: number;
   /** bech32 hrp; present iff the chain supports native segwit. */
   readonly bech32Hrp?: string;
+  /** base58check version byte of the chain's WIF secret key (chainparams `SECRET_KEY`). */
+  readonly wifVersion: number;
 };
 
 // secp256k1 transparent Bitcoin-family chains. Segwit fields are present only where the chain actually deployed
@@ -78,14 +80,21 @@ const BITCOIN_CHAIN_SPECS: readonly BitcoinChainSpec[] = [
     bech32Hrp: "bc",
     coinType: COIN_TYPES.BITCOIN,
     ecosystem: "bitcoin",
+    wifVersion: 0x80,
     p2pkhVersion: 0x00,
     p2shVersion: 0x05,
   },
-  { coinType: COIN_TYPES.BITCOIN_CASH, ecosystem: "bitcoin-cash", p2pkhVersion: 0x00 },
+  {
+    coinType: COIN_TYPES.BITCOIN_CASH,
+    ecosystem: "bitcoin-cash",
+    wifVersion: 0x80,
+    p2pkhVersion: 0x00,
+  },
   {
     bech32Hrp: "btg",
     coinType: COIN_TYPES.BITCOIN_GOLD,
     ecosystem: "bitcoin-gold",
+    wifVersion: 0x80,
     p2pkhVersion: 0x26,
     p2shVersion: 0x17,
   },
@@ -93,12 +102,13 @@ const BITCOIN_CHAIN_SPECS: readonly BitcoinChainSpec[] = [
     bech32Hrp: "ltc",
     coinType: COIN_TYPES.LITECOIN,
     ecosystem: "litecoin",
+    wifVersion: 0xb0,
     p2pkhVersion: 0x30,
     p2shVersion: 0x32,
   },
-  { coinType: COIN_TYPES.DASH, ecosystem: "dash", p2pkhVersion: 0x4c },
-  { coinType: COIN_TYPES.ZCASH, ecosystem: "zcash", p2pkhVersion: [0x1c, 0xb8] },
-  { coinType: COIN_TYPES.VERGE, ecosystem: "verge", p2pkhVersion: 0x1e },
+  { coinType: COIN_TYPES.DASH, ecosystem: "dash", wifVersion: 0xcc, p2pkhVersion: 0x4c },
+  { coinType: COIN_TYPES.ZCASH, ecosystem: "zcash", wifVersion: 0x80, p2pkhVersion: [0x1c, 0xb8] },
+  { coinType: COIN_TYPES.VERGE, ecosystem: "verge", wifVersion: 0x9e, p2pkhVersion: 0x1e },
 ];
 
 function bitcoinDescriptors(spec: BitcoinChainSpec): RawKeyDescriptor[] {
@@ -161,6 +171,10 @@ export const RAW_KEY_DESCRIPTORS: readonly RawKeyDescriptor[] = [
   ...SECP256R1_DESCRIPTORS,
 ];
 
+const WIF_VERSION_BY_ECOSYSTEM: ReadonlyMap<string, number> = new Map(
+  BITCOIN_CHAIN_SPECS.map((spec) => [spec.ecosystem, spec.wifVersion])
+);
+
 const SCHEME_BY_ECOSYSTEM: ReadonlyMap<string, SignatureScheme> = new Map(
   RAW_KEY_DESCRIPTORS.map((descriptor) => [descriptor.ecosystem, descriptor.scheme])
 );
@@ -173,4 +187,12 @@ export function rawKeyDescriptorsForScheme(scheme: SignatureScheme): readonly Ra
 /** The curve a recorded raw-key ecosystem is enumerated under, or `undefined` when the ecosystem has no raw-key family. */
 export function schemeForEcosystem(ecosystem: string): SignatureScheme | undefined {
   return SCHEME_BY_ECOSYSTEM.get(ecosystem);
+}
+
+/**
+ * The WIF secret-key version byte of a Bitcoin-family ecosystem, or `undefined` for any other ecosystem. The version
+ * depends on the chain, not the address kind, so it lives here rather than in the private-key formats.
+ */
+export function wifVersionForEcosystem(ecosystem: string): number | undefined {
+  return WIF_VERSION_BY_ECOSYSTEM.get(ecosystem);
 }

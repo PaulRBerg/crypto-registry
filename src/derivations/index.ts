@@ -86,7 +86,14 @@ export {
   type RawKeyEncodingParams,
   rawKeyDescriptorsForScheme,
   schemeForEcosystem,
+  wifVersionForEcosystem,
 } from "./raw-key.js";
+// Canonical single-account private-key export formats per address kind.
+export {
+  PRIVATE_KEY_FORMATS,
+  type PrivateKeyFormat,
+  privateKeyFormatForAddressKind,
+} from "./private-key-formats.js";
 // Signature schemes + address kinds.
 export {
   ADDRESS_KINDS,
