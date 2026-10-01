@@ -171,10 +171,12 @@ release-dev:
     npm_view_error="$(mktemp "${TMPDIR:-/tmp}/crypto-registry-npm-view.XXXXXX")"
     trap 'rm -f "$npm_view_error"' EXIT
     npm_metadata=""
-    for attempt in 1 2 3 4 5 6; do
+    # npm can take minutes to expose a fresh publish; poll for up to five minutes.
+    for attempt in $(seq 1 60); do
       observed_git_head=""
       if npm_metadata="$(npm view "${package_name}@dev" version gitHead \
         --json \
+        --prefer-online \
         --registry=https://registry.npmjs.org/ \
         --color=false 2>"$npm_view_error")"; then
         observed_git_head="$(jq -er '.gitHead | select(type == "string")' <<< "$npm_metadata" 2>/dev/null || true)"
@@ -182,7 +184,7 @@ release-dev:
           break
         fi
       fi
-      if [[ "$attempt" -eq 6 ]]; then
+      if [[ "$attempt" -eq 60 ]]; then
         if [[ -n "$observed_git_head" ]]; then
           echo "Error: npm dev tag points to commit $observed_git_head, expected $commit_sha" >&2
           exit 1
@@ -191,7 +193,7 @@ release-dev:
         cat "$npm_view_error" >&2
         exit 1
       fi
-      sleep 2
+      sleep 5
     done
     published_version="$(jq -er '.version | select(type == "string")' <<< "$npm_metadata")"
     published_git_head="$(jq -er '.gitHead | select(type == "string")' <<< "$npm_metadata")"
