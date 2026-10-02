@@ -27,6 +27,14 @@ export type FormerNativeCurrency = {
   wrappedNativeAddress?: Address;
 };
 
+/** Operator shutdown of a chain that no longer carries user activity. */
+export type ChainShutdown = {
+  /** Operator deadline for leaving the network, ISO 8601 date (`YYYY-MM-DD`). */
+  since: string;
+  /** Block of the operator's final-state snapshot, when one was published. */
+  finalStateBlock?: number;
+};
+
 /** Explorer URL templates. `{address}` / `{tx_hash}` are substituted by callers. */
 export type ChainExplorer = {
   /** Verified API base URL, when it differs from the explorer page host. */
@@ -93,4 +101,9 @@ export type Chain = {
   coinGeckoPlatformId?: string;
   /** Explorer URL templates. */
   explorer: ChainExplorer;
+  /**
+   * Set when the chain is defunct: its operator shut it down, so its history is
+   * final even if the sequencer still produces empty blocks.
+   */
+  defunct?: ChainShutdown;
 };

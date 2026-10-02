@@ -10,6 +10,7 @@ export type {
   Chain,
   ChainCategory,
   ChainExplorer,
+  ChainShutdown,
   FormerNativeCurrency,
   NativeCurrency,
 } from "./chains/types.js";

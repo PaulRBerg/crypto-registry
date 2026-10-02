@@ -519,6 +519,10 @@
       "category": "op-stack",
       "chainId": 5330,
       "coinGeckoPlatformId": "superseed",
+      "defunct": {
+        "finalStateBlock": 31688848,
+        "since": "2026-08-15"
+      },
       "explorer": {
         "addressUrl": "https://explorer.superseed.xyz/address/{address}",
         "txUrl": "https://explorer.superseed.xyz/tx/{tx_hash}"

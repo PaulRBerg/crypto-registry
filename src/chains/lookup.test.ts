@@ -84,6 +84,16 @@ describe("chain registry", () => {
     expect(getChainBySlug("sophon")?.category).toBe("zk");
   });
 
+  it("marks only operator-shutdown chains as defunct", () => {
+    expect(CHAINS.filter((chain) => chain.defunct).map((chain) => chain.slug)).toEqual([
+      "superseed",
+    ]);
+    expect(getChainBySlug("superseed")?.defunct).toEqual({
+      finalStateBlock: 31_688_848,
+      since: "2026-08-15",
+    });
+  });
+
   it("sources chain ids and native currencies from the supported viem mapping", () => {
     expect(Object.keys(VIEM_CHAINS_BY_SLUG).toSorted()).toEqual(
       CHAINS.map((chain) => chain.slug).toSorted()

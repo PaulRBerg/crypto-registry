@@ -45,6 +45,7 @@ import type {
   Chain,
   ChainCategory,
   ChainExplorer,
+  ChainShutdown,
   FormerNativeCurrency,
 } from "./types.js";
 
@@ -140,6 +141,7 @@ type LocalChainMetadata = {
   aliases?: readonly string[];
   category: ChainCategory;
   coinGeckoPlatformId?: string;
+  defunct?: ChainShutdown;
   explorer?: ChainExplorer;
   formerNativeCurrencies?: readonly FormerNativeCurrency[];
   mirrorAddresses?: readonly Address[];
@@ -459,6 +461,9 @@ const LOCAL_CHAIN_METADATA = {
     accountActivityModel: "ethereum-eoa",
     category: "op-stack",
     coinGeckoPlatformId: "superseed",
+    // Superseed moved to Ethereum mainnet: users had to bridge out by
+    // 2026-08-15, and the 2026-09-17 shutdown notice snapshotted final state.
+    defunct: { finalStateBlock: 31_688_848, since: "2026-08-15" },
     name: "Superseed",
     nativeCoinGeckoId: "ethereum",
     wrappedNativeAddress: "0x4200000000000000000000000000000000000006",
@@ -555,6 +560,7 @@ const buildChain = (slug: ChainSlug): Chain => {
     category: metadata.category,
     chainId: viemChain.id,
     ...(metadata.coinGeckoPlatformId ? { coinGeckoPlatformId: metadata.coinGeckoPlatformId } : {}),
+    ...(metadata.defunct ? { defunct: metadata.defunct } : {}),
     explorer: metadata.explorer ?? explorerFromViem(viemChain),
     ...(metadata.formerNativeCurrencies
       ? { formerNativeCurrencies: metadata.formerNativeCurrencies }
