@@ -454,6 +454,10 @@ const LOCAL_CHAIN_METADATA = {
     accountActivityModel: "native-account-abstraction",
     category: "zk",
     coinGeckoPlatformId: "sophon",
+    // Sophon decommissioned its L2 to rebuild on Base and disabled deposits on
+    // 2026-06-25. The legacy chain stays up only for withdrawals via
+    // claim.sophon.com, with no published final-state block.
+    defunct: { since: "2026-06-25" },
     name: "Sophon",
     nativeCoinGeckoId: "sophon",
   },

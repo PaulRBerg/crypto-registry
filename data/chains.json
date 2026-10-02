@@ -674,6 +674,9 @@
       "category": "zk",
       "chainId": 50104,
       "coinGeckoPlatformId": "sophon",
+      "defunct": {
+        "since": "2026-06-25"
+      },
       "explorer": {
         "addressUrl": "https://explorer.sophon.xyz/address/{address}",
         "txUrl": "https://explorer.sophon.xyz/tx/{tx_hash}"

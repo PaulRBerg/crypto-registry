@@ -86,8 +86,10 @@ describe("chain registry", () => {
 
   it("marks only operator-shutdown chains as defunct", () => {
     expect(CHAINS.filter((chain) => chain.defunct).map((chain) => chain.slug)).toEqual([
+      "sophon",
       "superseed",
     ]);
+    expect(getChainBySlug("sophon")?.defunct).toEqual({ since: "2026-06-25" });
     expect(getChainBySlug("superseed")?.defunct).toEqual({
       finalStateBlock: 31_688_848,
       since: "2026-08-15",
