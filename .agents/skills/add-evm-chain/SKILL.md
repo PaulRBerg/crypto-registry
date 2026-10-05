@@ -5,7 +5,7 @@ name: add-evm-chain
 user-invocable: true
 description:
   Use when adding a new EVM chain to @prb/crypto-registry and propagating it to the evm-atlas skill in
-  ~/projects/agent-skills, including Chainlist/Chrome DevTools research, wrapped-native enrichment, verification,
+  ~/projects/agent-skills. This includes Chainlist/Chrome DevTools research, wrapped-native enrichment, verification,
   commits, and surgical skill publication.
 ---
 
@@ -19,12 +19,12 @@ Add one EVM chain to `@prb/crypto-registry`, then propagate the chain metadata i
 
 ## User-facing communication
 
-This is a composed, two-repository workflow. When invoked directly, it owns one top-level wrapper; `$commit`,
+This is a composed, two-repository workflow. When invoked directly, it owns one top-level wrapper. `$commit`,
 `@publish-skills`, and other nested skills return compact phase subreceipts into it rather than opening separate
 previews or final summaries.
 
-After the harmless repository, tool, and credential-presence preflight resolves the requested chain as far as possible,
-but before the first credential-consuming command, network call, or write, send:
+During the harmless repository, tool, and credential-presence preflight, resolve the requested chain as far as possible.
+After that preflight, but before the first credential-consuming command, network call, or write, send:
 
 ```markdown
 ### ⛓️ EVM chain addition — 🔎 preview
@@ -32,8 +32,8 @@ but before the first credential-consuming command, network call, or write, send:
 
 Use a compact table for the resolved target, source families, RPC verification plan, cache/enrichment mode, credential
 readiness, affected repositories, local write surfaces, and planned external effects. Show only whether
-`ROUTEMESH_API_KEY` is available, never its value. When several metadata fields need evidence, use
-`field | value | source | status`; distinguish `verified`, `single-source`, `conflicting`, and `unknown` rather than
+`ROUTEMESH_API_KEY` is available. Never show its value. When several metadata fields need evidence, use
+`field | value | source | status`. Distinguish `verified`, `single-source`, `conflicting`, and `unknown` rather than
 calling every sourced value cross-checked. A short tree is useful when it clarifies the real propagation path:
 
 ```text
@@ -45,13 +45,13 @@ crypto-registry chain + token data
 During research and validation, report named phase changes. Add counts only when the denominator is fixed from the
 actual plan, for example `⏳ Research — verified 7/10 required metadata fields` or `⏳ Validation — passed 3/4 checks`.
 A request sent, browser opened, retry attempted, or process still running is not progress. After generation, use a
-compact `♻️ Regenerated` subreceipt naming the generated surfaces and the command that produced them; do not imply they
-passed validation yet.
+compact `♻️ Regenerated` subreceipt. In that subreceipt, name the generated surfaces and the command that produced them.
+Do not imply they passed validation yet.
 
 Keep exact commands, helper stdout/stderr, RPC payloads, URLs, chain IDs, contract addresses, hashes, commit IDs, and
 diagnostics undecorated. The helper's stdout must remain one valid JSON object. Public chain identifiers are evidence
 and should remain exact. Never print `.env.keys`, API keys, credential-bearing RPC URLs, personal `included.tsv` rows,
-or private source-repository provenance; summarize private provenance with counts and masked or repo-relative paths.
+or private source-repository provenance. Summarize private provenance with counts and masked or repo-relative paths.
 
 Before each external-publication boundary, group related effects into one target-specific approval rather than asking
 per command:
@@ -68,7 +68,7 @@ Finish with one of these outcomes:
   required checks passed, approved pushes and publication succeeded, and declared installations were verified.
 - `### ⛓️ EVM chain addition — ✅ verified locally · publication pending` when the complete local change set across both
   repositories passed its required checks and only external publication approval or action remains. Replace `pending`
-  with `declined` when the user declined publication; do not imply the full workflow completed.
+  with `declined` when the user declined publication. Do not imply the full workflow completed.
 - `### ⛓️ EVM chain addition — ✅ verified · unchanged` when the requested chain was already represented correctly,
   checks proved that state, and no write or external effect was needed.
 - `### ⛓️ EVM chain addition — ⚠️ partial` when useful artifacts exist but a source field, validation gate, local
@@ -79,31 +79,31 @@ Finish with one of these outcomes:
   resulting artifacts cannot yet be accepted as verified.
 - `### ⛓️ EVM chain addition — ⛔ blocked · not written` when no requested artifact was written because an
   implementation choice, authoritative evidence, credential, or required tool is unavailable.
-- `### ⛓️ EVM chain addition — ↩ reverted` only when local changes were actually rolled back; never imply a pushed
+- `### ⛓️ EVM chain addition — ↩ reverted` only when local changes were actually rolled back. Never imply a pushed
   commit was undone unless the compensating remote action is verified.
 
-Follow the outcome with a compact `surface | status | change | validation | external state` table when multiple surfaces
-were involved. Include the exact chain ID and public contract addresses used as evidence, repo-relative artifact paths,
-generated/hand-authored distinction, source gaps, commit/push state, installation state, and the smallest next action.
-Use the explicit `✅ verified locally · publication pending` outcome only when the complete local change set passed
-every required check; otherwise use `⚠️ partial` or `⚠️ review required` and do not describe the result as ready for
-publication approval.
+When multiple surfaces were involved, follow the outcome with a compact
+`surface | status | change | validation | external state` table. Include the exact chain ID and public contract
+addresses used as evidence, repo-relative artifact paths, generated/hand-authored distinction, source gaps, commit/push
+state, installation state, and the smallest next action. Use the explicit `✅ verified locally · publication pending`
+outcome only when the complete local change set passed every required check. Otherwise, use `⚠️ partial` or
+`⚠️ review required` and do not describe the result as ready for publication approval.
 
 ## Workflow
 
 1. Preflight both repositories.
    - In `crypto-registry`, run `git status --short --branch`.
-   - In `~/projects/agent-skills`, run `git status --short --branch`; use this path even if the prompt says
+   - In `~/projects/agent-skills`, run `git status --short --branch`. Use this path even if the prompt says
      `agents-kills`.
-   - Resolve each current branch, upstream, ahead/behind count, dirty paths, and the commands/tools required by the
-     workflow. Read the current `@publish-skills` runbook before describing or authorizing its effects.
+   - Resolve each repository's current branch, upstream, ahead/behind count, dirty paths, and the commands/tools
+     required by the workflow. Before describing or authorizing its effects, read the current `@publish-skills` runbook.
    - Check only whether required credentials are available. Never print a credential or decrypted environment.
-   - Treat unrelated dirty files as other agents' work. Completion: both repos' starting state is known.
-   - Send the user-facing preview before any subsequent network or write action.
+   - Treat unrelated dirty files as other agents' work. Completion: both repositories' starting state is known.
+   - Before any subsequent network or write action, send the user-facing preview.
 
 2. Research chain metadata.
    - Open `https://chainlist.org/chain/<chainId>` first.
-   - Prefer Chrome DevTools MCP page/network inspection for Chainlist-rendered data when available.
+   - When available, prefer Chrome DevTools MCP page/network inspection for Chainlist-rendered data.
    - Verify every candidate public RPC with `eth_chainId`.
    - Cross-check explorer URLs and IDs with Etherscan V2, Chainscout, RouteMesh, CoinGecko, and direct on-chain reads.
    - Capture: chain ID, slug, name, native currency, RPC URL, explorer URL, explorer family/API URL, wrapped native
@@ -111,7 +111,7 @@ publication approval.
      IDs. Completion: every value used in code has at least one source and RPC verification for chain identity.
 
 3. Check `viem/chains` support.
-   - Confirm the target chain is exported by `viem/chains`.
+   - Confirm that `viem/chains` exports the target chain.
    - If missing, stop and ask whether to bump `viem` or add a local viem-compatible chain object. Completion: the
      implementation path uses an available viem chain definition or has explicit user direction.
 
@@ -124,26 +124,32 @@ publication approval.
      Afterward, compare the actual changed paths with that set and flag unexpected output.
    - Prefer `just enrich`. If it stalls or fails on unrelated chains, run
      `bun scripts/read-erc20-metadata.ts --rpc <url> --chain-id <id> --slug <slug> --address <wrapped-native>` from this
-     skill to diagnose the missing row. Treat the result as complete evidence only when the chain ID matches, `symbol`
-     and `name` are non-empty strings, and `decimals` is a valid integer; a `null` field is an unresolved read, even
-     though the helper exits successfully. Do not merge the diagnostic row into generated `scripts/enriched.json` by
-     hand. If the normal enrichment flow cannot produce the row, stop with the truthful partial or blocked outcome and
-     report the precise enrichment gap.
+     skill to diagnose the missing row. Treat the result as complete evidence only when all conditions below hold:
+     - The chain ID matches.
+     - `symbol` and `name` are non-empty strings.
+     - `decimals` is a valid integer.
+
+     A `null` field is an unresolved read, even though the helper exits successfully. Do not merge the diagnostic row
+     into generated `scripts/enriched.json` by hand. If the normal enrichment flow cannot produce the row, stop with the
+     truthful partial or blocked outcome and report the precise enrichment gap.
+
    - After the hand-authored chain and token inputs are final, preview `data/chains.json` and `data/tokens.json` as the
-     expected `just json-gen` surfaces, run that recipe, and compare the actual changed paths with the preview. Inspect
-     both JSON artifacts for the requested chain and wrapped-native metadata before treating generation as complete.
-   - Do not widen support to every viem chain; add only the requested chain. Completion: generated data reflects the new
+     expected `just json-gen` surfaces. Then run that recipe and compare the actual changed paths with the preview.
+     Before treating generation as complete, inspect both JSON artifacts for the requested chain and wrapped-native
+     metadata.
+   - Do not widen support to every viem chain. Add only the requested chain. Completion: generated data reflects the new
      chain, with generated files changed only by their owning generators.
 
 5. Verify `crypto-registry`.
-   - For fewer than 10 changed JS/TS/JSON files, run `just ox-check <changed files>`; otherwise run `just ox-check`.
+   - For fewer than 10 changed JS/TS/JSON files, run `just ox-check <changed files>`. Otherwise, run `just ox-check`.
    - Run `just typecheck`.
    - Run `just test src/chains/lookup.test.ts src/tokens/registry.test.ts`.
    - Run `just tsc-build`.
-   - Completion: each command passes. If a repository-wide command fails only on unrelated concurrent work, obtain the
-     narrowest equivalent evidence available for the changed surfaces and report the unresolved repository-wide gate as
-     a caveat; do not count a failed command as passed or use a complete outcome without the required validation
-     evidence.
+   - Completion: each command passes. If a repository-wide command fails only on unrelated concurrent work:
+     - Obtain the narrowest equivalent evidence available for the changed surfaces.
+     - Report the unresolved repository-wide gate as a caveat.
+
+     Do not count a failed command as passed. Do not use a complete outcome without the required validation evidence.
 
 6. Commit and push `crypto-registry`.
    - Refresh the branch/upstream state and enumerate every commit that the push would publish.
@@ -153,15 +159,15 @@ publication approval.
      ref before publishing `agent-skills`.
 
 7. Update `~/projects/agent-skills`.
-   - Confirm the pushed `crypto-registry/data/chains.json` contains the requested chain before generating downstream
-     `evm-atlas` data.
+   - Before generating downstream `evm-atlas` data, confirm that the pushed `crypto-registry/data/chains.json` contains
+     the requested chain.
    - Edit `skills/evm-atlas/references/atlas-overlays.json` for the new chain.
    - Run `just evm-atlas-generate`.
    - Run `just prettier-write <changed-markdown-path>...`, then `just prettier-check <changed-markdown-path>...` with
      the exact expected evm-atlas Markdown paths. Verify generated registry data with `just evm-atlas-check`.
    - Inspect only the expected evm-atlas paths and leave unrelated work untouched.
-   - Refresh repository/upstream state, verify the attributable and staged path sets, present the exact publication
-     receipt described above, and obtain approval before external writes and global installation changes.
+   - Refresh repository/upstream state. Verify the attributable and staged path sets. Present the exact publication
+     receipt described above. Before external writes and global installation changes, obtain approval.
    - Invoke `@publish-skills` so only the changed `evm-atlas` skill and its declared targets are propagated. Do not use
      the catalog-wide `just sync` fallback. Completion: the generated evm-atlas artifacts are published after the
      crypto-registry push, the intended upstream refs contain the new commits, and every declared installation target is
@@ -177,5 +183,5 @@ bun scripts/read-erc20-metadata.ts --rpc <url> --chain-id <id> --slug <slug> --a
 ```
 
 The script verifies `eth_chainId`, reads `decimals`, `symbol`, and `name`, lowercases the address, and prints a
-`scripts/enriched.json`-shaped row. It can emit `null` metadata and still exit successfully; apply the completeness gate
-above, and do not treat its output as a replacement for the generated enrichment flow.
+`scripts/enriched.json`-shaped row. It can emit `null` metadata and still exit successfully. Apply the completeness gate
+above. Do not treat its output as a replacement for the generated enrichment flow.

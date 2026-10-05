@@ -1,6 +1,7 @@
 # AGENTS.md
 
-Agent guidance for `@prb/crypto-registry`. Keep changes surgical and the package viem-only at runtime and isomorphic.
+These instructions guide agents who work on `@prb/crypto-registry`. Keep changes surgical. Keep the package viem-only at
+runtime and isomorphic.
 
 ## Stack
 
@@ -12,28 +13,28 @@ Agent guidance for `@prb/crypto-registry`. Keep changes surgical and the package
 ## Commands
 
 - `just typecheck` — `tsgo` over `src/` and `scripts/`.
-- `just ox-check` / `just ox-write` — Oxlint/Oxfmt for JS/TS/JSON; Prettier owns Markdown/YAML.
+- `just ox-check` / `just ox-write` — Oxlint/Oxfmt for JS/TS/JSON. Prettier owns Markdown/YAML.
 - `just test` — Vitest (`src/**/*.test.ts`, `scripts/**/*.test.ts`).
 - `just build` — clean `dist/`, compile with `tsconfig.build.json`, `npm pack`.
 - `just enrich` — regenerate token data through RouteMesh (see below). Requires `ROUTEMESH_API_KEY`, uses the network,
-  and reads an external source dir; not part of the normal build.
+  and reads an external source directory. It is not part of the normal build.
 - `just json-gen` — regenerate committed JSON artifacts for non-TypeScript consumers after hand edits to
   `src/chains/chains.ts` or `scripts/classification.ts`.
 - `just release-dev` — dispatch and verify an on-demand npm development release from clean, current `main`.
 
 ## Development releases
 
-- Agents are pre-authorized to run `just release-dev` without separate confirmation after a validated change to
-  consumer-visible package code, APIs, or registry data has been committed and pushed to `main`. Do not release docs,
-  tests, scripts, tooling, CI-only changes, or a commit already represented by the npm `dev` tag. The initial rollout of
-  this automation is the sole tooling-only bootstrap exception.
+- Agents may run `just release-dev` without separate confirmation after a validated change to consumer-visible package
+  code, APIs, or registry data has been committed and pushed to `main`. Do not release docs, tests, scripts, tooling,
+  CI-only changes, or a commit already represented by the npm `dev` tag. The initial rollout of this automation is the
+  sole tooling-only bootstrap exception.
 - Before dispatching, preview `PaulRBerg/crypto-registry`, `main`, the exact commit, `@prb/crypto-registry`, the stable
   base version, and the npm `dev` tag. Only one release workflow may be active at a time.
-- Use `just release-dev`; it dispatches the exact `origin/main` commit, waits for GitHub Actions, and verifies the npm
+- Use `just release-dev`. It dispatches the exact `origin/main` commit, waits for GitHub Actions, and verifies the npm
   version, dist-tags, and `gitHead`. Report the workflow URL and published version. Never hand-edit a development
   version, run `npm publish` locally, or create development Git tags or GitHub releases.
-- Development versions are derived in CI as `X.Y.Z-dev.YYYYMMDD.N`, using the UTC date and the next package-wide daily
-  counter. `package.json` remains at the stable base, `dev` advances, and `latest` remains stable.
+- CI derives development versions as `X.Y.Z-dev.YYYYMMDD.N`, using the UTC date and the next package-wide daily counter.
+  `package.json` remains at the stable base, `dev` advances, and `latest` remains stable.
 
 ## Lint Rules
 
@@ -42,15 +43,15 @@ After generating or editing code, run these checks **in order**. The `just` reci
 
 **File argument rules:**
 
-- Changed fewer than 10 files? → pass specific paths or globs
-- Changed 10+ files? → omit file arguments to process everything
+- If fewer than 10 files changed, pass specific paths or globs.
+- If 10+ files changed, omit file arguments to process everything.
 
 **Command sequence:**
 
 1. **Identify which file types changed.**
-2. **`just ox-check <files>`** — format + lint JS/TS/JSON (skip if none changed). The generated data modules
-   (`src/tokens/data/`, `scripts/enriched.json`) are excluded in the Ox config, so Oxlint/Oxfmt ignore them even if
-   passed. Auto-fix with `just ox-write`.
+2. **`just ox-check <files>`** — format + lint JS/TS/JSON (skip if none changed). The Ox config excludes the generated
+   data modules (`src/tokens/data/`, `scripts/enriched.json`), so Oxlint/Oxfmt ignore them even if passed. Auto-fix with
+   `just ox-write`.
 3. **`just prettier-check <globs>`** — check Markdown/YAML formatting (skip if no `.md`/`.mdx`/`.yaml`/`.yml` changed).
    Auto-fix with `just prettier-write`.
 4. **`just typecheck`** — `tsgo` over `src/` + `scripts/` (always run on the entire project).
@@ -75,10 +76,11 @@ If any command fails, fix only the errors in files you changed.
 ## Hard constraints
 
 - **Runtime dependencies.** `viem` is the only third-party package allowed in `src/`. Nothing in `src/` may import a
-  `node:*` module; the package must run unchanged in the browser.
+  `node:*` module. The package must run unchanged in the browser.
 - ESM-only. Use explicit `.js` extensions on every relative import in `src/` (e.g.
-  `import { Token } from "./types.js"`); `tsc` emits them verbatim.
-- Addresses are stored lowercased; comparisons are case-insensitive and keccak-free. Do not add EIP-55 checksumming.
+  `import { Token } from "./types.js"`). `tsc` emits them verbatim.
+- The registry stores addresses lowercased. Comparisons are case-insensitive and keccak-free. Do not add EIP-55
+  checksumming.
 
 ## Generated data — do not hand-edit
 
@@ -87,28 +89,28 @@ then run `just enrich`:
 
 - `scripts/classification.ts` — hand-authored spec: stablecoin families (addresses + peg/backing/issuer), exact-contract
   `TICKER_OVERRIDES`, and the documented `DROPPED` list.
-- `src/tokens/aliases.ts` — verified non-callable historical event emitters; codegen treats their historical addresses
+- `src/tokens/aliases.ts` — verified non-callable historical event emitters. Codegen treats their historical addresses
   as documented exclusions and resolves them to same-chain canonical tokens at runtime.
 - `scripts/enrich.ts` — reads the token universe, fetches `decimals`/`symbol`/ `name` on-chain via viem Multicall3,
   writes `enriched.json`, then runs codegen. Re-run codegen only (no network) with `just enrich --cached`.
 - `scripts/codegen.ts` — classifies (precedence: stablecoin > wrapped > mirror > standard) and emits the four data
-  modules. A stablecoin's `ticker` defaults to its enriched on-chain symbol, then applies an exact-contract override;
-  codegen rejects tickers outside the ASCII bare-ticker shape (`^[A-Za-z0-9][A-Za-z0-9_.-]*$`).
+  modules. A stablecoin's `ticker` defaults to its enriched on-chain symbol, then applies an exact-contract override.
+  Codegen rejects tickers outside the ASCII bare-ticker shape (`^[A-Za-z0-9][A-Za-z0-9_.-]*$`).
 - `src/chains/chains.ts` keeps the supported evm-atlas chain set local, maps those slugs to `viem/chains`, and layers
   local Atlas/accounting metadata on top. Do not widen support to every viem chain.
 
-These generated files are excluded in the Ox config to stay compact (one row per line); they are still typechecked.
+The Ox config excludes these generated files to keep them compact (one row per line). They are still typechecked.
 
 `data/tokens.json` and `data/chains.json` are canonical JSON artifacts for non-TypeScript consumers (Go, jq, Python).
-TypeScript consumers should use the typed `@prb/crypto-registry` entry; Node ESM JSON imports need
+TypeScript consumers should use the typed `@prb/crypto-registry` entry. Node ESM JSON imports need
 `with { type: "json" }`. Regenerate them with `just json-gen` after hand edits to `chains.ts`, the stablecoin
 classification, or ticker overrides.
 
 ## Enrichment credentials (dotenvx)
 
 - `.env` contains the encrypted `ROUTEMESH_API_KEY` plus its public key and is safe to commit.
-- `.env.keys` contains `DOTENV_PRIVATE_KEY`, is gitignored, and must never be committed or printed.
-- Set or rotate the key with `env -u ROUTEMESH_API_KEY na dotenvx set ROUTEMESH_API_KEY <value>`; never write a
+- `.env.keys` contains `DOTENV_PRIVATE_KEY` and is gitignored. Never commit or print it.
+- Set or rotate the key with `env -u ROUTEMESH_API_KEY na dotenvx set ROUTEMESH_API_KEY <value>`. Never write a
   plaintext value to `.env`.
 - `just enrich` decrypts `.env` through `dotenvx run`. An existing shell or CI variable takes precedence.
 - `just enrich --cached` does not require a decrypted RouteMesh key.
@@ -119,20 +121,20 @@ classification, or ticker overrides.
 `STABLECOIN_TICKERS_BY_PEG` (fiat-equivalent quote tickers grouped by peg), `PRICE_ASSET_ALIASES` (wrapped/decorated
 ticker → underlying price asset), and `NATIVE_ASSET_CHAINS` (native gas ticker → canonical source-ref chain). These are
 deliberate curated supersets of the on-chain token data: they add fiat-only and exchange-specific tickers (`USD`,
-`BSC-USD`, `LinkUSD`, `mUSD`, `xDAI`) and non-native wrappers (`WBTC`, `WMATIC`, `clBTC`, `wNXM`) that don't exist as
+`BSC-USD`, `LinkUSD`, `mUSD`, `xDAI`) and non-native wrappers (`WBTC`, `WMATIC`, `clBTC`, `wNXM`) that do not exist as
 canonical on-chain symbols. Downstream consumers (e.g. the prb-finance Go tax CLI codegen) treat this as the source of
-truth, so edit the literals here and keep `src/tokens/tickers.test.ts` green.
+truth. Edit the literals here and keep `src/tokens/tickers.test.ts` green.
 
 ## Data provenance & privacy
 
 - The standard-token set is enriched from `included.tsv` files in a sibling repo (`TOKEN_SOURCE_DIR`, default
   `~/projects/prb-finance/onchain/evm/tokens`). Those TSVs contain personal holdings provenance and are **not**
-  committed here; only public on-chain fields (chain id, address, symbol, name, decimals) are baked into the data
-  modules and `enriched.json`.
+  committed here. Only public on-chain fields (chain id, address, symbol, name, decimals) enter the data modules and
+  `enriched.json`.
 - Wrapped natives and native mirrors are derived from the chain registry. Stablecoins are classified by exact on-chain
   symbol against the families in `classification.ts` (so bridged/legacy variants like `USDC.e`/`USDbC` are caught while
   decorated `aUSDC`/`cDAI`/LP tokens are not). Each contract's `ticker` is its current ecosystem ticker, defaulting to
-  the enriched symbol and corrected through `TICKER_OVERRIDES` when that symbol is stale or ambiguous; consumers apply
+  the enriched symbol and corrected through `TICKER_OVERRIDES` when that symbol is stale or ambiguous. Consumers apply
   the newest ticker retroactively rather than preserving historical names. Tickers must satisfy the ASCII bare-ticker
   invariant. `bridged` remains best-effort (symbol/name heuristic plus `FORCE_BRIDGED`).
 
@@ -142,14 +144,15 @@ Treat visual structure as information architecture, not decoration.
 
 - Use one semantic status vocabulary consistently: `🔎 Preview` or read-only, `⏳ Running`, `✅ Verified`, `⚠️ Review`
   for a caveat, approval, risk, or partial result, `⛔ Blocked`, `❓ Unknown`, `↩ Reverted` or rolled back, and
-  `♻️ Rewritten` or regenerated. Pair every status icon with words; never rely on color or emoji alone. Add
-  `— not written` only when no requested artifact was written; otherwise name the partial, preserved, or rollback state.
+  `♻️ Rewritten` or regenerated. Pair every status icon with words. Never rely on color or emoji alone. Add
+  `— not written` only when no requested artifact was written. Otherwise, name the partial, preserved, or rollback
+  state.
 - When skills compose, the outermost user-invoked workflow owns the single top-level preview and final outcome. Nested
   skills return phase updates or compact subreceipts into that wrapper instead of emitting competing top-level previews
   and conclusions. A directly invoked skill uses its full wrapper.
 - Lead with one outcome line. Before credentialed, network, artifact-writing, or external-write commands, show a compact
   preview of the target chain scope, evidence sources, cache mode, credential readiness, local write surfaces, affected
-  repositories, and planned external effects. Report only whether a secret is available; never print or persist its
+  repositories, and planned external effects. Report only whether a secret is available. Never print or persist its
   value.
 - Before a push, publication, destructive action, or global installation change, show the exact repository, branch,
   remote/ref, commits or staged paths in scope, command/effect, and any stable target identifier or confirmation token
@@ -158,18 +161,18 @@ Treat visual structure as information architecture, not decoration.
 - During long work, report evidence-backed phase changes or measured `completed/total` progress only. Finish with a
   receipt covering changed artifacts, generated-versus-hand-authored surfaces, source coverage, validation, external
   state, gaps, and the smallest next action. Distinguish unchanged, no-op, partial, not-written, blocked, and
-  prior-artifacts-preserved outcomes accurately; use `✅ Verified` only after the required evidence and checks exist.
+  prior-artifacts-preserved outcomes accurately. Use `✅ Verified` only after the required evidence and checks exist.
 - Use tables for repeated fields, trees for real propagation or artifact hierarchy, and progress bars only when a
   measured numerator and denominator exist. Never infer progress from elapsed time, activity, retries, or silence.
 - Keep JSON, YAML, exact commands, RPC payloads, URLs, chain IDs, addresses, hashes, commit IDs, confirmation tokens,
   diagnostics, logs, and other machine-consumed or verbatim content undecorated. Public registry identifiers should
-  remain exact when they are evidence; apply masking to private source paths or identifiers before presentation.
+  remain exact when they are evidence. Mask private source paths or identifiers before presentation.
 - Decoration belongs to the agent's chat wrapper, not CLI stdout/stderr, source code, generated registry artifacts, Git
   commits, GitHub text, external queries, or user-authored content unless the task explicitly calls for it.
 
 ## Conventions
 
-- Token types are a discriminated union on `kind`; add new kinds via `src/tokens/types.ts` and a guard, then thread
-  through codegen and lookups.
+- Token types are a discriminated union on `kind`. Add new kinds via `src/tokens/types.ts` and a guard, then include
+  them in codegen and lookups.
 - Registry invariants (unique `(chainId,address)`, valid addresses, sane decimals, classification disjointness) are
-  enforced in `src/tokens/registry.test.ts`; keep them green.
+  enforced in `src/tokens/registry.test.ts`. Keep those tests green.
