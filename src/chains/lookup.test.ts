@@ -96,6 +96,20 @@ describe("chain registry", () => {
     });
   });
 
+  it("records Abstract Etherscan API retirement without marking the chain defunct", () => {
+    const abstractChain = getChainBySlug("abstract");
+
+    expect(abstractChain).toMatchObject({
+      etherscanApiUnsupportedFrom: "2026-11-30",
+      explorer: {
+        addressUrl: "https://abscan.org/address/{address}",
+        apiUrl: "https://block-explorer-api.mainnet.abs.xyz/api",
+        txUrl: "https://abscan.org/tx/{tx_hash}",
+      },
+    });
+    expect(abstractChain?.defunct).toBeUndefined();
+  });
+
   it("sources chain ids and native currencies from the supported viem mapping", () => {
     expect(Object.keys(VIEM_CHAINS_BY_SLUG).toSorted()).toEqual(
       CHAINS.map((chain) => chain.slug).toSorted()

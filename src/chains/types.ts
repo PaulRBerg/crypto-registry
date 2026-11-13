@@ -102,6 +102,11 @@ export type Chain = {
   /** Explorer URL templates. */
   explorer: ChainExplorer;
   /**
+   * UTC date (`YYYY-MM-DD`) from which the Etherscan API service is unavailable.
+   * This does not mean the chain is shut down or the explorer UI is unavailable.
+   */
+  etherscanApiUnsupportedFrom?: string;
+  /**
    * Set when the chain is defunct: its operator shut it down, so its history is
    * final even if the sequencer still produces empty blocks.
    */

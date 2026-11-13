@@ -142,6 +142,7 @@ type LocalChainMetadata = {
   category: ChainCategory;
   coinGeckoPlatformId?: string;
   defunct?: ChainShutdown;
+  etherscanApiUnsupportedFrom?: string;
   explorer?: ChainExplorer;
   formerNativeCurrencies?: readonly FormerNativeCurrency[];
   mirrorAddresses?: readonly Address[];
@@ -156,6 +157,14 @@ const LOCAL_CHAIN_METADATA = {
     accountActivityModel: "native-account-abstraction",
     category: "zk",
     coinGeckoPlatformId: "abstract",
+    // Etherscan API retirement does not indicate explorer UI availability.
+    // Source: https://docs.etherscan.io/supported-chains
+    etherscanApiUnsupportedFrom: "2026-11-30",
+    explorer: {
+      addressUrl: "https://abscan.org/address/{address}",
+      apiUrl: "https://block-explorer-api.mainnet.abs.xyz/api",
+      txUrl: "https://abscan.org/tx/{tx_hash}",
+    },
     name: "Abstract",
     nativeCoinGeckoId: "ethereum",
   },
@@ -565,6 +574,9 @@ const buildChain = (slug: ChainSlug): Chain => {
     chainId: viemChain.id,
     ...(metadata.coinGeckoPlatformId ? { coinGeckoPlatformId: metadata.coinGeckoPlatformId } : {}),
     ...(metadata.defunct ? { defunct: metadata.defunct } : {}),
+    ...(metadata.etherscanApiUnsupportedFrom
+      ? { etherscanApiUnsupportedFrom: metadata.etherscanApiUnsupportedFrom }
+      : {}),
     explorer: metadata.explorer ?? explorerFromViem(viemChain),
     ...(metadata.formerNativeCurrencies
       ? { formerNativeCurrencies: metadata.formerNativeCurrencies }
